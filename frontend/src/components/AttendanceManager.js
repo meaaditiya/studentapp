@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// Add this to import the CSS
 
 const AttendanceManager = () => {
   const [mode, setMode] = useState(null);
@@ -131,20 +132,22 @@ const AttendanceManager = () => {
   };
 
   return (
-    <div>
-      <h2>Attendance Manager</h2>
-      <button onClick={handleCalculateAttendance}>Calculate Attendance</button>
-      <button onClick={() => { resetFields(); setMode('target'); }}>Attendance Target</button>
+    <div className="attendance-manager">
+      <h2 className="title">Attendance Manager</h2>
+      <div className="button-group">
+        <button onClick={handleCalculateAttendance} className="btn">Calculate Attendance</button>
+        <button onClick={() => { resetFields(); setMode('target'); }} className="btn">Attendance Target</button>
+      </div>
 
       {mode === 'calculate' && (
-        <div>
-          <button onClick={() => { setMode('aggregate'); resetFields(); }}>Aggregate</button>
-          <button onClick={() => { setMode('subjectWise'); resetFields(); }}>Subject Wise</button>
+        <div className="sub-button-group">
+          <button onClick={() => { setMode('aggregate'); resetFields(); }} className="btn">Aggregate</button>
+          <button onClick={() => { setMode('subjectWise'); resetFields(); }} className="btn">Subject Wise</button>
         </div>
       )}
 
       {mode === 'aggregate' && (
-        <div>
+        <div className="form-container">
           <h3>Aggregate Attendance</h3>
           <form onSubmit={handleCalculateAggregate}>
             <input
@@ -161,13 +164,13 @@ const AttendanceManager = () => {
               onChange={(e) => setAttendedLectures(e.target.value)}
               required
             />
-            <button type="submit">Calculate</button>
+            <button type="submit" className="btn green">Calculate</button>
           </form>
         </div>
       )}
 
       {mode === 'subjectWise' && (
-        <div>
+        <div className="form-container">
           <h3>Subject Wise Attendance</h3>
           <form onSubmit={handleSubjectWise}>
             <input
@@ -178,7 +181,7 @@ const AttendanceManager = () => {
               required
             />
             {subjects.map((subject, index) => (
-              <div key={index}>
+              <div key={index} className="subject-inputs">
                 <input
                   type="number"
                   placeholder={`Subject ${index + 1} - Conducted Classes`}
@@ -203,13 +206,13 @@ const AttendanceManager = () => {
                 />
               </div>
             ))}
-            <button type="submit">Calculate</button>
+            <button type="submit" className="btn green">Calculate</button>
           </form>
         </div>
       )}
 
       {mode === 'target' && (
-        <div>
+        <div className="form-container">
           <h3>Attendance Target</h3>
           <form onSubmit={handleTargetAttendance}>
             <input
@@ -233,7 +236,7 @@ const AttendanceManager = () => {
               onChange={(e) => setTargetAttendance(e.target.value)}
               required
             />
-            <button type="submit">Calculate Target</button>
+            <button type="submit" className="btn green">Calculate Target</button>
           </form>
         </div>
       )}

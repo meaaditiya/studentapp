@@ -20,7 +20,7 @@ function WeeklyTimetable() {
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/timetable");
+        const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/timetable");
         const timetableData = response.data;
 
         const newTimetable = days.reduce((acc, day) => {
@@ -52,7 +52,7 @@ function WeeklyTimetable() {
     if (currentDay && currentHourIndex !== null && taskInput.trim()) {
       const newEntry = { day: currentDay, hourIndex: currentHourIndex, task: taskInput };
       try {
-        await axios.post("http://localhost:5000/api/timetable", newEntry);
+        await axios.post("https://studentapp-backend-ccks.onrender.com/api/timetable", newEntry);
 
         setTimetable((prevTimetable) => ({
           ...prevTimetable,

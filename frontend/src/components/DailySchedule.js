@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -22,7 +21,7 @@ function DailySchedule() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/tasks");
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -46,14 +45,14 @@ function DailySchedule() {
             text: newTask,
             lastUpdated: new Date().toLocaleString(),
           };
-          await axios.put(`http://localhost:5000/tasks/${tasks[editIndex]._id}`, updatedTask);
+          await axios.put(`https://studentapp-backend-ccks.onrender.com/tasks/${tasks[editIndex]._id}`, updatedTask);
           const updatedTasks = [...tasks];
           updatedTasks[editIndex] = updatedTask;
           setTasks(updatedTasks);
           setEditIndex(null); // Reset after editing
         } else {
           // Add new task
-          const response = await axios.post("http://localhost:5000/tasks", {
+          const response = await axios.post("https://studentapp-backend-ccks.onrender.com/tasks", {
             text: newTask,
             completed: false,
             lastUpdated: new Date().toLocaleString(),
@@ -75,7 +74,7 @@ function DailySchedule() {
           ? { ...task, completed: !task.completed, lastUpdated: new Date().toLocaleString() }
           : task
       );
-      await axios.put(`http://localhost:5000/tasks/${tasks[index]._id}`, {
+      await axios.put(`https://studentapp-backend-ccks.onrender.com/tasks/${tasks[index]._id}`, {
         ...updatedTasks[index],
       });
       setTasks(updatedTasks);
@@ -86,7 +85,7 @@ function DailySchedule() {
 
   const deleteTask = async (index) => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${tasks[index]._id}`);
+      await axios.delete(`https://studentapp-backend-ccks.onrender.com/tasks/${tasks[index]._id}`);
       setTasks(tasks.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting task:", error);
@@ -244,6 +243,5 @@ function DailySchedule() {
     </div>
   );
 }
+
 export default DailySchedule;
-
-

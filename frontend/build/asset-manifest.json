@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/newstudent/static/css/main.b96b85cd.css",
+    "main.js": "/newstudent/static/js/main.49a35ba9.js",
+    "static/js/453.8ab44547.chunk.js": "/newstudent/static/js/453.8ab44547.chunk.js",
+    "static/media/aadiimage.jpeg": "/newstudent/static/media/aadiimage.8fff3fa561f85d0b4705.jpeg",
+    "static/media/aadiimage3.jpg": "/newstudent/static/media/aadiimage3.281d25fb67ef389f2e02.jpg",
+    "index.html": "/newstudent/index.html",
+    "main.b96b85cd.css.map": "/newstudent/static/css/main.b96b85cd.css.map",
+    "main.49a35ba9.js.map": "/newstudent/static/js/main.49a35ba9.js.map",
+    "453.8ab44547.chunk.js.map": "/newstudent/static/js/453.8ab44547.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b96b85cd.css",
+    "static/js/main.49a35ba9.js"
+  ]
+}

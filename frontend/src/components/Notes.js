@@ -17,7 +17,7 @@ function Notes() {
   // Fetch notes from the backend
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/notes"); // Ensure this matches your backend route
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/notes");
       setNotes(response.data);
     } catch (error) {
       console.error("Error fetching notes:", error);
@@ -28,7 +28,7 @@ function Notes() {
     if (noteText.trim()) {
       const { date, dayTime } = getCurrentDateTime(); // Get date and time when the note is added
       try {
-        const response = await axios.post("http://localhost:5000/api/notes", {
+        const response = await axios.post("https://studentapp-backend-ccks.onrender.com/api/notes", {
           text: noteText,
           date,
           dayTime,
@@ -43,7 +43,7 @@ function Notes() {
 
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/notes/${id}`);
+      await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/notes/${id}`);
       setNotes(notes.filter(note => note._id !== id)); // Update state to remove the deleted note
     } catch (error) {
       console.error("Error deleting note:", error);
@@ -55,7 +55,7 @@ function Notes() {
     if (newNoteText !== null && newNoteText.trim()) {
       const { date, dayTime } = getCurrentDateTime(); // Update date and time on edit
       try {
-        const response = await axios.put(`http://localhost:5000/api/notes/${notes[index]._id}`, {
+        const response = await axios.put(`https://studentapp-backend-ccks.onrender.com/api/notes/${notes[index]._id}`, {
           text: newNoteText,
           date,
           dayTime,

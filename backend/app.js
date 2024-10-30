@@ -10,11 +10,16 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Update this with your MongoDB connection string for production
+const mongoDBURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/daily_schedule';
+
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/daily_schedule', {
+mongoose.connect(mongoDBURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+.then(() => console.log('MongoDB connected!'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // Task Schema
 const taskSchema = new mongoose.Schema({
@@ -148,51 +153,52 @@ app.delete('/api/progress/:id', async (req, res) => {
   await Progress.findByIdAndDelete(id);
   res.sendStatus(204);
 });
+
 // Define the schema and model for exam records
 const examSchema = new mongoose.Schema({
-    examName: String,
-    examDate: String,
-    subjects: [String],
-    marks: [Number],
-    maxMarks: [Number],
-  });
-  
-  const Exam = mongoose.model("Exam", examSchema);
-  
-  // API routes
-  
-  // Get all exam records
-  app.get("/api/exams", async (req, res) => {
-    try {
-      const exams = await Exam.find();
-      res.json(exams);
-    } catch (err) {
-      res.status(500).json({ message: "Error fetching exams", error: err });
-    }
-  });
-  
-  // Add a new exam record
-  app.post("/api/exams", async (req, res) => {
-    const { examName, examDate, subjects, marks, maxMarks } = req.body;
-    try {
-      const newExam = new Exam({ examName, examDate, subjects, marks, maxMarks });
-      const savedExam = await newExam.save();
-      res.json(savedExam);
-    } catch (err) {
-      res.status(500).json({ message: "Error adding exam", error: err });
-    }
-  });
-  
-  // Delete an exam record by ID
-  app.delete("/api/exams/:id", async (req, res) => {
-    try {
-      await Exam.findByIdAndDelete(req.params.id);
-      res.json({ message: "Exam deleted successfully" });
-    } catch (err) {
-      res.status(500).json({ message: "Error deleting exam", error: err });
-    }
-  });
+  examName: String,
+  examDate: String,
+  subjects: [String],
+  marks: [Number],
+  maxMarks: [Number],
+});
+
+const Exam = mongoose.model("Exam", examSchema);
+
+// API routes for Exam records
+app.get("/api/exams", async (req, res) => {
+  try {
+    const exams = await Exam.find();
+    res.json(exams);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching exams", error: err });
+  }
+});
+
+// Add a new exam record
+app.post("/api/exams", async (req, res) => {
+  const { examName, examDate, subjects, marks, maxMarks } = req.body;
+  try {
+    const newExam = new Exam({ examName, examDate, subjects, marks, maxMarks });
+    const savedExam = await newExam.save();
+    res.json(savedExam);
+  } catch (err) {
+    res.status(500).json({ message: "Error adding exam", error: err });
+  }
+});
+
+// Delete an exam record by ID
+app.delete("/api/exams/:id", async (req, res) => {
+  try {
+    await Exam.findByIdAndDelete(req.params.id);
+    res.json({ message: "Exam deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting exam", error: err });
+  }
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+

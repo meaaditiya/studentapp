@@ -24,7 +24,7 @@ function MyMarks() {
   // Function to fetch all exam records from backend
   const fetchExamRecords = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/exams");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/exams");
       setExamRecords(response.data);
     } catch (error) {
       console.error("Error fetching exams:", error);
@@ -64,7 +64,7 @@ function MyMarks() {
       maxMarks,
     };
     try {
-      const response = await axios.post("http://localhost:5000/api/exams", newExam);
+      const response = await axios.post("https://studentapp-backend-ccks.onrender.com/api/exams", newExam);
       setExamRecords([...examRecords, response.data]);
       resetForm();
     } catch (error) {
@@ -86,7 +86,7 @@ function MyMarks() {
   const handleDelete = async (index) => {
     const recordToDelete = examRecords[index];
     try {
-      await axios.delete(`http://localhost:5000/api/exams/${recordToDelete._id}`);
+      await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/exams/${recordToDelete._id}`);
       const updatedRecords = examRecords.filter((_, i) => i !== index);
       setExamRecords(updatedRecords);
       setSelectedRecord(null);
@@ -313,3 +313,4 @@ function MyMarks() {
 }
 
 export default MyMarks;
+

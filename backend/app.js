@@ -7,10 +7,11 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Parse JSON bodies
 
-// Update this with your MongoDB connection string for production
+// MongoDB connection string
 const mongoDBURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/daily_schedule';
 
 // MongoDB connection
@@ -60,98 +61,154 @@ const Progress = mongoose.model('Progress', progressSchema);
 
 // API Routes for Tasks
 app.get('/tasks', async (req, res) => {
-  const tasks = await Task.find();
-  res.json(tasks);
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching tasks', error });
+  }
 });
 
 app.post('/tasks', async (req, res) => {
-  const newTask = new Task(req.body);
-  await newTask.save();
-  res.json(newTask);
+  try {
+    const newTask = new Task(req.body);
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding task', error });
+  }
 });
 
 app.put('/tasks/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatedTask = await Task.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(updatedTask);
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating task', error });
+  }
 });
 
 app.delete('/tasks/:id', async (req, res) => {
-  const { id } = req.params;
-  await Task.findByIdAndDelete(id);
-  res.sendStatus(204);
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting task', error });
+  }
 });
 
 // API Routes for Notes
 app.get('/api/notes', async (req, res) => {
-  const notes = await Note.find();
-  res.json(notes);
+  try {
+    const notes = await Note.find();
+    res.json(notes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching notes', error });
+  }
 });
 
 app.post('/api/notes', async (req, res) => {
-  const newNote = new Note(req.body);
-  await newNote.save();
-  res.json(newNote);
+  try {
+    const newNote = new Note(req.body);
+    await newNote.save();
+    res.status(201).json(newNote);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding note', error });
+  }
 });
 
 app.put('/api/notes/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatedNote = await Note.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(updatedNote);
+  try {
+    const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedNote);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating note', error });
+  }
 });
 
 app.delete('/api/notes/:id', async (req, res) => {
-  const { id } = req.params;
-  await Note.findByIdAndDelete(id);
-  res.sendStatus(204);
+  try {
+    await Note.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting note', error });
+  }
 });
 
 // API Routes for Weekly Timetable
 app.get('/api/timetable', async (req, res) => {
-  const timetable = await Timetable.find();
-  res.json(timetable);
+  try {
+    const timetable = await Timetable.find();
+    res.json(timetable);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching timetable', error });
+  }
 });
 
 app.post('/api/timetable', async (req, res) => {
-  const newEntry = new Timetable(req.body);
-  await newEntry.save();
-  res.json(newEntry);
+  try {
+    const newEntry = new Timetable(req.body);
+    await newEntry.save();
+    res.status(201).json(newEntry);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding timetable entry', error });
+  }
 });
 
 app.put('/api/timetable/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatedEntry = await Timetable.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(updatedEntry);
+  try {
+    const updatedEntry = await Timetable.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedEntry);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating timetable entry', error });
+  }
 });
 
 app.delete('/api/timetable/:id', async (req, res) => {
-  const { id } = req.params;
-  await Timetable.findByIdAndDelete(id);
-  res.sendStatus(204);
+  try {
+    await Timetable.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting timetable entry', error });
+  }
 });
 
 // API Routes for Progress Tracker
 app.get('/api/progress', async (req, res) => {
-  const progress = await Progress.find();
-  res.json(progress);
+  try {
+    const progress = await Progress.find();
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching progress', error });
+  }
 });
 
 app.post('/api/progress', async (req, res) => {
-  const newProgress = new Progress(req.body);
-  await newProgress.save();
-  res.json(newProgress);
+  try {
+    const newProgress = new Progress(req.body);
+    await newProgress.save();
+    res.status(201).json(newProgress);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding progress', error });
+  }
 });
 
 app.put('/api/progress/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatedProgress = await Progress.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(updatedProgress);
+  try {
+    const updatedProgress = await Progress.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedProgress);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating progress', error });
+  }
 });
 
 app.delete('/api/progress/:id', async (req, res) => {
-  const { id } = req.params;
-  await Progress.findByIdAndDelete(id);
-  res.sendStatus(204);
+  try {
+    await Progress.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting progress', error });
+  }
 });
 
 // Define the schema and model for exam records
@@ -181,7 +238,7 @@ app.post("/api/exams", async (req, res) => {
   try {
     const newExam = new Exam({ examName, examDate, subjects, marks, maxMarks });
     const savedExam = await newExam.save();
-    res.json(savedExam);
+    res.status(201).json(savedExam);
   } catch (err) {
     res.status(500).json({ message: "Error adding exam", error: err });
   }
@@ -196,9 +253,46 @@ app.delete("/api/exams/:id", async (req, res) => {
     res.status(500).json({ message: "Error deleting exam", error: err });
   }
 });
+const quickLinkSchema = new mongoose.Schema({
+  name: String,
+  url: String,
+});
+
+const QuickLink = mongoose.model('QuickLink', quickLinkSchema);
+
+// Routes
+// Get all quick links
+app.get('/api/quick-links', async (req, res) => {
+  try {
+    const links = await QuickLink.find();
+    res.json(links);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching quick links' });
+  }
+});
+
+// Add a new quick link
+app.post('/api/quick-links', async (req, res) => {
+  const newLink = new QuickLink(req.body);
+  try {
+    const savedLink = await newLink.save();
+    res.status(201).json(savedLink);
+  } catch (error) {
+    res.status(400).json({ message: 'Error adding quick link' });
+  }
+});
+
+// Delete a quick link
+app.delete('/api/quick-links/:id', async (req, res) => {
+  try {
+    await QuickLink.findByIdAndDelete(req.params.id);
+    res.status(204).send(); // No content
+  } catch (error) {
+    res.status(400).json({ message: 'Error deleting quick link' });
+  }
+});
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-

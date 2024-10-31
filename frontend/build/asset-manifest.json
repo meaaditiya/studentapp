@@ -1,17 +1,29 @@
 {
   "files": {
-    "main.css": "/newstudent/static/css/main.b96b85cd.css",
-    "main.js": "/newstudent/static/js/main.dc18c1a4.js",
-    "static/js/453.8ab44547.chunk.js": "/newstudent/static/js/453.8ab44547.chunk.js",
-    "static/media/aadiimage.jpeg": "/newstudent/static/media/aadiimage.8fff3fa561f85d0b4705.jpeg",
-    "static/media/aadiimage3.jpg": "/newstudent/static/media/aadiimage3.281d25fb67ef389f2e02.jpg",
+    "main.css": "/newstudent/static/css/main.592be37f.chunk.css",
+    "main.js": "/newstudent/static/js/main.41fb395b.chunk.js",
+    "main.js.map": "/newstudent/static/js/main.41fb395b.chunk.js.map",
+    "runtime-main.js": "/newstudent/static/js/runtime-main.c4e3a81a.js",
+    "runtime-main.js.map": "/newstudent/static/js/runtime-main.c4e3a81a.js.map",
+    "static/css/2.f524894f.chunk.css": "/newstudent/static/css/2.f524894f.chunk.css",
+    "static/js/2.58351cb6.chunk.js": "/newstudent/static/js/2.58351cb6.chunk.js",
+    "static/js/2.58351cb6.chunk.js.map": "/newstudent/static/js/2.58351cb6.chunk.js.map",
+    "static/js/3.beda396a.chunk.js": "/newstudent/static/js/3.beda396a.chunk.js",
+    "static/js/3.beda396a.chunk.js.map": "/newstudent/static/js/3.beda396a.chunk.js.map",
     "index.html": "/newstudent/index.html",
-    "main.b96b85cd.css.map": "/newstudent/static/css/main.b96b85cd.css.map",
-    "main.dc18c1a4.js.map": "/newstudent/static/js/main.dc18c1a4.js.map",
-    "453.8ab44547.chunk.js.map": "/newstudent/static/js/453.8ab44547.chunk.js.map"
+    "precache-manifest.5c36d80e3d58e401840d8796f5a52aa2.js": "/newstudent/precache-manifest.5c36d80e3d58e401840d8796f5a52aa2.js",
+    "service-worker.js": "/newstudent/service-worker.js",
+    "static/css/2.f524894f.chunk.css.map": "/newstudent/static/css/2.f524894f.chunk.css.map",
+    "static/css/main.592be37f.chunk.css.map": "/newstudent/static/css/main.592be37f.chunk.css.map",
+    "static/js/2.58351cb6.chunk.js.LICENSE.txt": "/newstudent/static/js/2.58351cb6.chunk.js.LICENSE.txt",
+    "static/media/aadiimage.jpeg": "/newstudent/static/media/aadiimage.4d6ccd77.jpeg",
+    "static/media/aadiimage3.jpg": "/newstudent/static/media/aadiimage3.9ad4ae67.jpg"
   },
   "entrypoints": [
-    "static/css/main.b96b85cd.css",
-    "static/js/main.dc18c1a4.js"
+    "static/js/runtime-main.c4e3a81a.js",
+    "static/css/2.f524894f.chunk.css",
+    "static/js/2.58351cb6.chunk.js",
+    "static/css/main.592be37f.chunk.css",
+    "static/js/main.41fb395b.chunk.js"
   ]
 }

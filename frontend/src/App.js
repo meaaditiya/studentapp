@@ -45,7 +45,7 @@ function App() {
           <Sidebar isVisible={isSidebarVisible} />
           <main className="content">
             <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/" element={<Navigate to="/Dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/schedule" element={<DailySchedule />} />
               <Route path="/notes" element={<Notes />} />

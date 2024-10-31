@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+import { useTheme } from "../components/ThemeContext"; // Adjust the import path for useTheme
 
-function Header() {
+function Header({ toggleSidebar }) {
+  const { changeTheme } = useTheme();
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -11,14 +12,17 @@ function Header() {
 
   return (
     <header className="header">
+      <button className="menu-toggle" onClick={toggleSidebar}>
+        |||
+      </button>
       <h1>Student Management System</h1>
-      <div className="clock">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" stroke="#fca311" strokeWidth="2" fill="none" />
-          <line x1="12" y1="12" x2="12" y2="6" stroke="#fca311" strokeWidth="2" />
-          <line x1="12" y1="12" x2="16" y2="12" stroke="#fca311" strokeWidth="2" />
-        </svg>
-        <span className="clock-face">{time.toLocaleTimeString()}</span>
+      <div className="clock">{time.toLocaleTimeString()}</div>
+      <div className="theme-selection">
+        <button onClick={() => changeTheme("light")}>Light</button>
+        <button onClick={() => changeTheme("dark")}>Dark</button>
+        <button onClick={() => changeTheme("blue")}>Blue</button>
+        <button onClick={() => changeTheme("green")}>Green</button>
+        <button onClick={() => changeTheme("red")}>Red</button>
       </div>
     </header>
   );

@@ -24,7 +24,7 @@ function MyMarks() {
   // Function to fetch all exam records from backend
   const fetchExamRecords = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/exams/");
+      const response = await axios.get("http://192.168.1.42:5000/api/exams/");
       setExamRecords(response.data);
     } catch (error) {
       console.error("Error fetching exams:", error);
@@ -64,7 +64,7 @@ function MyMarks() {
       maxMarks,
     };
     try {
-      const response = await axios.post("http://localhost:5000/api/exams/", newExam);
+      const response = await axios.post("http://192.168.1.42:5000/api/exams/", newExam);
       setExamRecords([...examRecords, response.data]);
       resetForm();
     } catch (error) {
@@ -85,13 +85,16 @@ function MyMarks() {
 
   const handleDelete = async (index) => {
     const recordToDelete = examRecords[index];
-    try {
-      await axios.delete(`http://localhost:5000/api/exams/${recordToDelete._id}`);
-      const updatedRecords = examRecords.filter((_, i) => i !== index);
-      setExamRecords(updatedRecords);
-      setSelectedRecord(null);
-    } catch (error) {
-      console.error("Error deleting exam:", error);
+    const confirmDelete = window.prompt("Are you sure? Type 'yes' to delete record");
+    if (confirmDelete === "yes") {
+      try {
+        await axios.delete(`http://192.168.1.42:5000/api/exams/${recordToDelete._id}`);
+        const updatedRecords = examRecords.filter((_, i) => i !== index);
+        setExamRecords(updatedRecords);
+        setSelectedRecord(null);
+      } catch (error) {
+        console.error("Error deleting exam:", error);
+      }
     }
   };
 
@@ -287,21 +290,37 @@ function MyMarks() {
               </tr>
             </thead>
             <tbody>
-              {selectedRecord.subjects.map((subject, i) => (
-                <tr key={i}>
-                  <td>{subject}</td>
-                  <td>{selectedRecord.marks[i]}</td>
-                  <td>{selectedRecord.maxMarks[i]}</td>
-                  <td>{calculatePercentage(selectedRecord.marks[i], selectedRecord.maxMarks[i])}%</td>
-                </tr>
-              ))}
+              {selectedRecord.subjects.map((subject, index) => {
+                const percentage = calculatePercentage(
+                  selectedRecord.marks[index],
+                  selectedRecord.maxMarks[index]
+                );
+                return (
+                  <tr key={index}>
+                    <td>{subject}</td>
+                    <td>{selectedRecord.marks[index]}</td>
+                    <td>{selectedRecord.maxMarks[index]}</td>
+                    <td>
+                      <div style={getRingFillStyle(percentage)}>
+                        <div style={innerCircleStyle}></div>
+                        <div style={ringPercentageStyle}>{percentage}%</div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
               <tr>
-                <td colSpan="2">Total</td>
+                <td colSpan="2">Total Marks</td>
                 <td>
                   {totalMarks(selectedRecord.marks)} / {totalMaxMarks(selectedRecord.maxMarks)}
                 </td>
                 <td>
-                  {calculatePercentage(totalMarks(selectedRecord.marks), totalMaxMarks(selectedRecord.maxMarks))}%
+                  <div style={getRingFillStyle(calculatePercentage(totalMarks(selectedRecord.marks), totalMaxMarks(selectedRecord.maxMarks)))}>
+                    <div style={innerCircleStyle}></div>
+                    <div style={ringPercentageStyle}>
+                      {calculatePercentage(totalMarks(selectedRecord.marks), totalMaxMarks(selectedRecord.maxMarks))}%
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>

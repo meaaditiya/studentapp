@@ -10,15 +10,29 @@ const Dashboard = () => {
   const [linkName, setLinkName] = useState('');
   const [linkURL, setLinkURL] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const API_BASE_URL = 'http://localhost:5000/api/quick-links'; // Make sure this URL is correct for your backend
+  const API_BASE_URL = 'http://192.168.1.42:5000/api/quick-links'; // Updated to your IP address
 
   // Fetch all quick links from the backend
   useEffect(() => {
-    fetch(API_BASE_URL)
-      .then(response => response.json())
-      .then(data => setLinks(data))
-      .catch(error => console.error('Error fetching quick links:', error));
+    const fetchLinks = async () => {
+      try {
+        const response = await fetch(API_BASE_URL);
+        if (!response.ok) {
+          throw new Error('Failed to fetch quick links');
+        }
+        const data = await response.json();
+        setLinks(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLinks();
   }, []);
 
   // Add a new quick link
@@ -33,13 +47,16 @@ const Dashboard = () => {
           },
           body: JSON.stringify({ name: linkName, url: linkURL }),
         });
+        if (!response.ok) {
+          throw new Error('Failed to add quick link');
+        }
         const newLink = await response.json();
         setLinks([...links, newLink]);
         setLinkName('');
         setLinkURL('');
         setShowForm(false);
       } catch (error) {
-        console.error('Error adding quick link:', error);
+        setError(error.message);
       }
     }
   };
@@ -52,7 +69,7 @@ const Dashboard = () => {
       });
       setLinks(links.filter(link => link._id !== id));
     } catch (error) {
-      console.error('Error deleting quick link:', error);
+      setError('Failed to delete quick link');
     }
   };
 
@@ -88,68 +105,78 @@ const Dashboard = () => {
     <div className="dashboard" style={dashboardStyle}>
       <h1 style={titleStyle}>Welcome to Student Manager</h1>
 
-      {/* Quick Links Display */}
-      <div className="quick-links-container">
-        {links.map((link) => (
-          <div key={link._id} className="link-wrapper">
-            <a
-              href={link.url}
-              className="circle-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {link.name}
-            </a>
-            <button onClick={() => handleDeleteLink(link._id)} className="quick-delete-button">X</button>
-          </div>
-        ))}
+      {/* Error Message */}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
 
-        {/* Add Shortcut Button in the Same Row */}
-        <div className="add-shortcut-container">
-          <div
-            className="circle-link add-shortcut"
-            onClick={() => setShowForm(!showForm)}
-          >
-            <span>+</span>
-          </div>
-          <p className="add-quick-links-text" style={{ color: 'black' }}>Add Quick Links</p>
-        </div>
-      </div>
+      {/* Loading State */}
+      {loading ? (
+        <div>Loading quick links...</div>
+      ) : (
+        <>
+          {/* Quick Links Display */}
+          <div className="quick-links-container">
+            {links.map((link) => (
+              <div key={link._id} className="link-wrapper">
+                <a
+                  href={link.url}
+                  className="circle-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.name}
+                </a>
+                <button onClick={() => handleDeleteLink(link._id)} className="quick-delete-button">X</button>
+              </div>
+            ))}
 
-      {/* Quick Links Form on Right Side */}
-      {showForm && (
-        <div className="add-link-form">
-          <input
-            type="text"
-            placeholder="Link Name"
-            value={linkName}
-            onChange={(e) => setLinkName(e.target.value)}
-          />
-          <input
-            type="url"
-            placeholder="Link URL"
-            value={linkURL}
-            onChange={(e) => setLinkURL(e.target.value)}
-          />
-          <button onClick={handleAddLink}>Add Link</button>
-        </div>
+            {/* Add Shortcut Button in the Same Row */}
+            <div className="add-shortcut-container">
+              <div
+                className="circle-link add-shortcut"
+                onClick={() => setShowForm(!showForm)}
+              >
+                <span>+</span>
+              </div>
+              <p className="add-quick-links-text" style={{ color: 'black' }}>Add Quick Links</p>
+            </div>
+          </div>
+
+          {/* Quick Links Form on Right Side */}
+          {showForm && (
+            <div className="add-link-form">
+              <input
+                type="text"
+                placeholder="Link Name"
+                value={linkName}
+                onChange={(e) => setLinkName(e.target.value)}
+              />
+              <input
+                type="url"
+                placeholder="Link URL"
+                value={linkURL}
+                onChange={(e) => setLinkURL(e.target.value)}
+              />
+              <button onClick={handleAddLink}>Add Link</button>
+            </div>
+          )}
+
+          {/* Grid Container */}
+          <div className="grid-container">
+            <Link to="/attendancemanager" className="box">
+              <img src={backgroundImage3} alt="Attendance Manager" className="box-image" />
+              <p className="box-text">Attendance Manager</p>
+            </Link>
+            <Link to="/cgpacalculator" className="box">
+              <img src={backgroundImage2} alt="CGPA Calculator" className="box-image" />
+              <p className="box-text">CGPA Calculator</p>
+            </Link>
+            <Link to="/timer" className="box">
+              <img src={backgroundImage4} alt="Timer" className="box-image" />
+              <p className="box-text">Timer</p>
+            </Link>
+          </div>
+        </>
       )}
-
-      {/* Grid Container */}
-      <div className="grid-container">
-        <Link to="/attendancemanager" className="box">
-          <img src={backgroundImage3} alt="Attendance Manager" className="box-image" />
-          <p className="box-text">Attendance Manager</p>
-        </Link>
-        <Link to="/cgpacalculator" className="box">
-          <img src={backgroundImage2} alt="CGPA Calculator" className="box-image" />
-          <p className="box-text">CGPA Calculator</p>
-        </Link>
-        <Link to="/timer" className="box">
-          <img src={backgroundImage4} alt="Timer" className="box-image" />
-          <p className="box-text">Timer</p>
-        </Link>
-      </div>
     </div>
   );
 };

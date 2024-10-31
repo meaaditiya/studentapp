@@ -40,14 +40,6 @@ const noteSchema = new mongoose.Schema({
 
 const Note = mongoose.model('Note', noteSchema);
 
-// Weekly Timetable Schema
-const timetableSchema = new mongoose.Schema({
-  day: { type: String, required: true },
-  hourIndex: { type: Number, required: true },
-  task: { type: String, required: true },
-});
-
-const Timetable = mongoose.model('Timetable', timetableSchema);
 
 // Progress Tracker Schema
 const progressSchema = new mongoose.Schema({
@@ -135,7 +127,19 @@ app.delete('/api/notes/:id', async (req, res) => {
   }
 });
 
+// Weekly Timetable Schema
+const timetableSchema = new mongoose.Schema({
+  day: { type: String, required: true },
+  hourIndex: { type: Number, required: true },
+  task: { type: String, required: true },
+});
+
+// Create Timetable model
+const Timetable = mongoose.model("Timetable", timetableSchema);
+
 // API Routes for Weekly Timetable
+
+// Get all timetable entries
 app.get('/api/timetable', async (req, res) => {
   try {
     const timetable = await Timetable.find();
@@ -145,6 +149,7 @@ app.get('/api/timetable', async (req, res) => {
   }
 });
 
+// Add a new timetable entry
 app.post('/api/timetable', async (req, res) => {
   try {
     const newEntry = new Timetable(req.body);
@@ -155,6 +160,7 @@ app.post('/api/timetable', async (req, res) => {
   }
 });
 
+// Update an existing timetable entry
 app.put('/api/timetable/:id', async (req, res) => {
   try {
     const updatedEntry = await Timetable.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -164,6 +170,7 @@ app.put('/api/timetable/:id', async (req, res) => {
   }
 });
 
+// Delete a timetable entry
 app.delete('/api/timetable/:id', async (req, res) => {
   try {
     await Timetable.findByIdAndDelete(req.params.id);

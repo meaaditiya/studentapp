@@ -75,7 +75,7 @@ function Timer() {
       {/* Time Input Fields for Countdown (conditionally rendered) */}
       {isCountdown && !isActive && (
         <div className="time-inputs">
-          <label>Hours</label>
+          <label></label>
           <input
             type="number"
             name="hours"
@@ -83,7 +83,7 @@ function Timer() {
             onChange={handleTimeChange}
             placeholder="HH"
           />
-          <label>Minutes</label>
+          <label>:</label>
           <input
             type="number"
             name="minutes"
@@ -91,7 +91,7 @@ function Timer() {
             onChange={handleTimeChange}
             placeholder="MM"
           />
-          <label>Seconds</label>
+          <label>:</label>
           <input
             type="number"
             name="seconds"

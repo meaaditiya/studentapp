@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
- // Ensure the CSS file is imported
 
 const AttendanceManager = () => {
   const [mode, setMode] = useState(null);
@@ -10,6 +9,8 @@ const AttendanceManager = () => {
   const [targetAttendance, setTargetAttendance] = useState('');
   const [result, setResult] = useState('');
   const [resultColor, setResultColor] = useState('black');
+  const [showCalculateButtons, setShowCalculateButtons] = useState(false);
+  const [showTargetForm, setShowTargetForm] = useState(false);
 
   const resetFields = () => {
     setTotalLectures('');
@@ -24,19 +25,24 @@ const AttendanceManager = () => {
   const handleCalculateAttendance = () => {
     resetFields();
     setMode('calculate');
+    setShowCalculateButtons(!showCalculateButtons);
+    setShowTargetForm(false); // Hide target form when switching to calculate
+  };
+
+  const handleAttendanceTarget = () => {
+    resetFields();
+    setMode('target');
+    setShowTargetForm(!showTargetForm);
+    setShowCalculateButtons(false); // Hide calculate buttons when switching to target
   };
 
   const validateInput = (total, attended) => {
-    if (total <= 0 || attended < 0 || attended > total) {
-      return false; // Validation failed
-    }
-    return true; // Validation passed
+    return total > 0 && attended >= 0 && attended <= total;
   };
 
   const handleCalculateAggregate = (e) => {
     e.preventDefault();
 
-    // Validate inputs before proceeding
     if (!validateInput(Number(totalLectures), Number(attendedLectures))) {
       setResult('Please enter valid total and attended lectures.');
       setResultColor('red');
@@ -61,7 +67,7 @@ const AttendanceManager = () => {
       const attended = parseInt(subject.attended) || 0;
 
       if (conducted < attended) {
-        valid = false; // If any subject has attended greater than conducted, mark as invalid
+        valid = false;
         break;
       }
 
@@ -84,7 +90,6 @@ const AttendanceManager = () => {
   const handleTargetAttendance = (e) => {
     e.preventDefault();
 
-    // Validate inputs for target attendance
     if (!validateInput(Number(totalLectures), Number(attendedLectures))) {
       setResult('Please enter valid total and attended lectures.');
       setResultColor('red');
@@ -104,7 +109,6 @@ const AttendanceManager = () => {
     let adjustedAttended = Number(attendedLectures);
 
     if (currentAttendance < targetAttendance) {
-      // Calculate how many additional lectures need to be attended
       while ((adjustedAttended / adjustedTotal) * 100 < targetAttendance) {
         additionalLectures += 1;
         adjustedTotal += 1;
@@ -114,12 +118,11 @@ const AttendanceManager = () => {
       setResult(message);
       setResultColor('red');
     } else {
-      // Calculate how many lectures can be missed while staying above the target
       let lecturesCanMiss = 0;
       while ((adjustedAttended / (adjustedTotal + lecturesCanMiss)) * 100 >= targetAttendance) {
         lecturesCanMiss += 1;
       }
-      lecturesCanMiss -= 1; // Subtract one because the loop overshoots by one lecture
+      lecturesCanMiss -= 1;
       const message = `You can miss up to ${lecturesCanMiss} lectures and still meet your attendance target.`;
       setResult(message);
       setResultColor('green');
@@ -136,10 +139,10 @@ const AttendanceManager = () => {
       <h2 className="attendance-title">Attendance Manager</h2>
       <div className="attendance-button-group">
         <button onClick={handleCalculateAttendance} className="attendance-btn">Calculate Attendance</button>
-        <button onClick={() => { resetFields(); setMode('target'); }} className="attendance-btn">Attendance Target</button>
+        <button onClick={handleAttendanceTarget} className="attendance-btn">Attendance Target</button>
       </div>
 
-      {mode === 'calculate' && (
+      {showCalculateButtons && (
         <div className="attendance-sub-button-group">
           <button onClick={() => { setMode('aggregate'); resetFields(); }} className="attendance-btn">Aggregate</button>
           <button onClick={() => { setMode('subjectWise'); resetFields(); }} className="attendance-btn">Subject Wise</button>
@@ -211,7 +214,7 @@ const AttendanceManager = () => {
         </div>
       )}
 
-      {mode === 'target' && (
+      {showTargetForm && mode === 'target' && (
         <div className="attendance-form-container">
           <h3>Attendance Target</h3>
           <form onSubmit={handleTargetAttendance}>

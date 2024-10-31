@@ -15,12 +15,14 @@ function WeeklyTimetable() {
   const [taskInput, setTaskInput] = useState("");
   const [currentDay, setCurrentDay] = useState(days[0]);
   const [currentHourIndex, setCurrentHourIndex] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   // Fetch timetable data from the API
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/timetable");
+        const response = await axios.get("http://192.168.1.42:5000/api/timetable");
         const timetableData = response.data;
 
         const newTimetable = days.reduce((acc, day) => {
@@ -42,17 +44,24 @@ function WeeklyTimetable() {
     fetchTimetable();
   }, []);
 
-  const handleEdit = (day, hourIndex) => {
+  const handleEdit = (day, hourIndex, event) => {
     setCurrentDay(day);
     setCurrentHourIndex(hourIndex);
     setTaskInput(timetable[day][hourIndex]);
+    setIsEditing(true);
+
+    const cellRect = event.target.getBoundingClientRect();
+    setPosition({
+      top: cellRect.top + window.scrollY,
+      left: cellRect.right + window.scrollX + 10, // Adding some offset
+    });
   };
 
   const handleAddTask = async () => {
     if (currentDay && currentHourIndex !== null && taskInput.trim()) {
       const newEntry = { day: currentDay, hourIndex: currentHourIndex, task: taskInput };
       try {
-        await axios.post("http://localhost:5000/api/timetable", newEntry);
+        await axios.post("http://192.168.1.42:5000/api/timetable", newEntry);
 
         setTimetable((prevTimetable) => ({
           ...prevTimetable,
@@ -60,10 +69,39 @@ function WeeklyTimetable() {
             index === currentHourIndex ? taskInput : entry
           ),
         }));
-        setTaskInput(""); // Clear input after adding
+        setTaskInput("");
+        setIsEditing(false);
       } catch (error) {
         console.error("Error adding task:", error);
         alert("Could not add task.");
+      }
+    }
+  };
+
+  const handleClearTask = async () => {
+    if (currentDay && currentHourIndex !== null) {
+      try {
+        const entryToDelete = await axios.get(`http://192.168.1.42:5000/api/timetable`, {
+          params: { day: currentDay, hourIndex: currentHourIndex },
+        });
+
+        const entryId = entryToDelete.data[0]._id; // Assuming _id is present in the entry returned
+
+        if (entryId) {
+          await axios.delete(`http://192.168.1.42:5000/api/timetable/${entryId}`);
+
+          setTimetable((prevTimetable) => ({
+            ...prevTimetable,
+            [currentDay]: prevTimetable[currentDay].map((entry, index) =>
+              index === currentHourIndex ? "" : entry
+            ),
+          }));
+          setTaskInput(""); // Clear input after removing
+          setIsEditing(false); // Hide input form after clearing
+        }
+      } catch (error) {
+        console.error("Error clearing task:", error);
+        alert("Could not clear task.");
       }
     }
   };
@@ -93,7 +131,7 @@ function WeeklyTimetable() {
                 {formatTime(hour)} - {formatTime(hour + 1)}
               </td>
               {days.map((day) => (
-                <td key={day} onClick={() => handleEdit(day, hourIndex)}>
+                <td key={day} onClick={(event) => handleEdit(day, hourIndex, event)}>
                   {timetable[day][hourIndex] || ""}
                 </td>
               ))}
@@ -101,35 +139,39 @@ function WeeklyTimetable() {
           ))}
         </tbody>
       </table>
-      <div className="input-section">
-        <select
-          value={currentDay}
-          onChange={(e) => setCurrentDay(e.target.value)}
-        >
-          {days.map((day) => (
-            <option key={day} value={day}>
-              {day}
-            </option>
-          ))}
-        </select>
-        <select
-          value={currentHourIndex}
-          onChange={(e) => setCurrentHourIndex(Number(e.target.value))}
-        >
-          {hours.map((hour, index) => (
-            <option key={index} value={index}>
-              {formatTime(hour)} - {formatTime(hour + 1)}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          value={taskInput}
-          onChange={(e) => setTaskInput(e.target.value)}
-          placeholder="Enter task..."
-        />
-        <button onClick={handleAddTask}>Add Task</button>
-      </div>
+
+      {isEditing && (
+        <div className="input-section" style={{ position: 'absolute', top: position.top, left: position.left }}>
+          <select
+            value={currentDay}
+            onChange={(e) => setCurrentDay(e.target.value)}
+          >
+            {days.map((day) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
+          <select
+            value={currentHourIndex}
+            onChange={(e) => setCurrentHourIndex(Number(e.target.value))}
+          >
+            {hours.map((hour, index) => (
+              <option key={index} value={index}>
+                {formatTime(hour)} - {formatTime(hour + 1)}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={taskInput}
+            onChange={(e) => setTaskInput(e.target.value)}
+            placeholder="Enter task..."
+          />
+          <button onClick={handleAddTask}>Add Task</button>
+          <button onClick={handleClearTask} style={{ marginLeft: '10px' }}>Clear Task</button>
+        </div>
+      )}
     </div>
   );
 }

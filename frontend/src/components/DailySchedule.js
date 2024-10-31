@@ -4,7 +4,7 @@ import axios from "axios";
 function DailySchedule() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [editIndex, setEditIndex] = useState(null); // New state to track editing
+  const [editIndex, setEditIndex] = useState(null); // State to track editing
   const [completionPercentage, setCompletionPercentage] = useState(0);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ function DailySchedule() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks"); // Change URL to localhost
+      const response = await axios.get("http://192.168.1.42:5000/tasks"); // Change URL to your IP address
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -45,14 +45,14 @@ function DailySchedule() {
             text: newTask,
             lastUpdated: new Date().toLocaleString(),
           };
-          await axios.put(`http://localhost:5000/tasks/${tasks[editIndex]._id}`, updatedTask); // Change URL to localhost
+          await axios.put(`http://192.168.1.42:5000/tasks/${tasks[editIndex]._id}`, updatedTask); // Change URL to your IP address
           const updatedTasks = [...tasks];
           updatedTasks[editIndex] = updatedTask;
           setTasks(updatedTasks);
           setEditIndex(null); // Reset after editing
         } else {
           // Add new task
-          const response = await axios.post("http://localhost:5000/tasks", {
+          const response = await axios.post("http://192.168.1.42:5000/tasks", {
             text: newTask,
             completed: false,
             lastUpdated: new Date().toLocaleString(),
@@ -74,9 +74,9 @@ function DailySchedule() {
           ? { ...task, completed: !task.completed, lastUpdated: new Date().toLocaleString() }
           : task
       );
-      await axios.put(`http://localhost:5000/tasks/${tasks[index]._id}`, {
+      await axios.put(`http://192.168.1.42:5000/tasks/${tasks[index]._id}`, {
         ...updatedTasks[index],
-      }); // Change URL to localhost
+      }); // Change URL to your IP address
       setTasks(updatedTasks);
     } catch (error) {
       console.error("Error toggling task:", error);
@@ -85,7 +85,7 @@ function DailySchedule() {
 
   const deleteTask = async (index) => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${tasks[index]._id}`); // Change URL to localhost
+      await axios.delete(`http://192.168.1.42:5000/tasks/${tasks[index]._id}`); // Change URL to your IP address
       setTasks(tasks.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting task:", error);

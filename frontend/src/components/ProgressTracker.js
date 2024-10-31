@@ -14,7 +14,7 @@ const ProgressTracker = () => {
   // Fetch progress from API on component mount
   useEffect(() => {
     const fetchProgress = async () => {
-      const response = await axios.get('http://localhost:5000/api/progress');
+      const response = await axios.get('http://192.168.1.42:5000/api/progress'); // Updated to your IP address
       setProgressList(response.data);
     };
 
@@ -39,7 +39,7 @@ const ProgressTracker = () => {
       if (isEditing) {
         // Update existing progress
         const progressToUpdate = progressList[currentEditIndex]._id;
-        await axios.put(`http://localhost:5000/api/progress/${progressToUpdate}`, updatedProgress);
+        await axios.put(`http://192.168.1.42:5000/api/progress/${progressToUpdate}`, updatedProgress);
         const updatedList = [...progressList];
         updatedList[currentEditIndex] = updatedProgress;
         setProgressList(updatedList);
@@ -47,7 +47,7 @@ const ProgressTracker = () => {
         setCurrentEditIndex(null);
       } else {
         // Add new progress
-        const response = await axios.post('http://localhost:5000/api/progress', updatedProgress);
+        const response = await axios.post('http://192.168.1.42:5000/api/progress', updatedProgress);
         setProgressList([...progressList, response.data]);
       }
 
@@ -71,7 +71,7 @@ const ProgressTracker = () => {
 
   const handleDeleteProgress = async (index) => {
     const progressToDelete = progressList[index]._id;
-    await axios.delete(`http://localhost:5000/api/progress/${progressToDelete}`);
+    await axios.delete(`http://192.168.1.42:5000/api/progress/${progressToDelete}`); // Updated to your IP address
     const updatedList = progressList.filter((_, i) => i !== index);
     setProgressList(updatedList);
     if (isEditing && currentEditIndex === index) {

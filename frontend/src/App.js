@@ -12,6 +12,7 @@ import MyMarks from './components/MyMarks';
 import Header from './components/Header';
 import CGPACalculator from './components/CGPACalculator';
 import AttendanceManager from "./components/AttendanceManager";
+import MarkAttendance from "./components/MarkAttendance";
 
 function App() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -55,6 +56,7 @@ function App() {
               <Route path="/mymarks" element={<MyMarks />} />
               <Route path="/cgpacalculator" element={<CGPACalculator />} />
               <Route path="/attendancemanager" element={<AttendanceManager />} />
+              <Route path="/markattendance" element={<MarkAttendance />} />
             </Routes>
           </main>
         </div>

@@ -298,6 +298,49 @@ app.delete('/api/quick-links/:id', async (req, res) => {
     res.status(400).json({ message: 'Error deleting quick link' });
   }
 });
+// Subject schema with a unique attendance entry per subject
+const attendanceSchema = new mongoose.Schema({
+  date: String,
+  status: String, // "present" or "absent"
+});
+
+const subjectSchema = new mongoose.Schema({
+  name: String,
+  attendance: [attendanceSchema],
+});
+
+const Subject = mongoose.model("Subject", subjectSchema);
+
+// Get all subjects
+app.get("/api/subjects", async (req, res) => {
+  const subjects = await Subject.find();
+  res.json(subjects);
+});
+
+// Add a new subject
+app.post("/api/subjects", async (req, res) => {
+  const subject = new Subject({ name: req.body.name, attendance: [] });
+  await subject.save();
+  res.json(subject);
+});
+
+// Delete a subject
+app.delete("/api/subjects/:id", async (req, res) => {
+  await Subject.findByIdAndDelete(req.params.id);
+  res.json({ message: "Subject deleted" });
+});
+
+// Mark attendance (multiple records allowed per day)
+app.post("/api/subjects/:id/attendance", async (req, res) => {
+  const { date, status } = req.body;
+  const subject = await Subject.findById(req.params.id);
+
+  if (!subject) return res.status(404).json({ message: "Subject not found" });
+
+  subject.attendance.push({ date, status });
+  await subject.save();
+  res.json(subject);
+});
 
 // Start the server
 app.listen(PORT, () => {

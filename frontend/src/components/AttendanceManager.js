@@ -86,22 +86,35 @@ const AttendanceManager = () => {
     setResult(message);
     setResultColor(attendance >= 75 ? 'green' : 'red');
   };
-
   const handleTargetAttendance = (e) => {
     e.preventDefault();
 
+    // New validation: target attendance must be less than 100
+    if (targetAttendance >= 100) {
+        setResult('Target attendance cannot be 100% or more.');
+        setResultColor('red');
+        return;
+    }
+
     if (!validateInput(Number(totalLectures), Number(attendedLectures))) {
-      setResult('Please enter valid total and attended lectures.');
-      setResultColor('red');
-      return;
+        setResult('Please enter valid total and attended lectures.');
+        setResultColor('red');
+        return;
     }
 
     const currentAttendance = (Number(attendedLectures) / Number(totalLectures)) * 100;
 
-    if (targetAttendance <= 0 || targetAttendance > 100) {
-      setResult('Please enter a valid target attendance percentage.');
-      setResultColor('red');
-      return;
+    // Additional validation: Cannot set target attendance to 100% if conducted > attended
+    if (targetAttendance === 100 && Number(totalLectures) > Number(attendedLectures)) {
+        setResult('You cannot set target attendance to 100% if you have not attended all conducted lectures.');
+        setResultColor('red');
+        return;
+    }
+
+    if (targetAttendance <= 0 || targetAttendance >=100) {  // Updated this condition
+        setResult('Please enter a valid target attendance percentage (0-99).');
+        setResultColor('red');
+        return;
     }
 
     let additionalLectures = 0;
@@ -109,25 +122,26 @@ const AttendanceManager = () => {
     let adjustedAttended = Number(attendedLectures);
 
     if (currentAttendance < targetAttendance) {
-      while ((adjustedAttended / adjustedTotal) * 100 < targetAttendance) {
-        additionalLectures += 1;
-        adjustedTotal += 1;
-        adjustedAttended += 1;
-      }
-      const message = `You need to attend ${additionalLectures} more lectures to reach your target attendance.`;
-      setResult(message);
-      setResultColor('red');
+        while ((adjustedAttended / adjustedTotal) * 100 < targetAttendance) {
+            additionalLectures += 1;
+            adjustedTotal += 1;
+            adjustedAttended += 1;
+        }
+        const message = `You need to attend ${additionalLectures} more lectures to reach your target attendance.`;
+        setResult(message);
+        setResultColor('red');
     } else {
-      let lecturesCanMiss = 0;
-      while ((adjustedAttended / (adjustedTotal + lecturesCanMiss)) * 100 >= targetAttendance) {
-        lecturesCanMiss += 1;
-      }
-      lecturesCanMiss -= 1;
-      const message = `You can miss up to ${lecturesCanMiss} lectures and still meet your attendance target.`;
-      setResult(message);
-      setResultColor('green');
+        let lecturesCanMiss = 0;
+        while ((adjustedAttended / (adjustedTotal + lecturesCanMiss)) * 100 >= targetAttendance) {
+            lecturesCanMiss += 1;
+        }
+        lecturesCanMiss -= 1;
+        const message = `You can miss up to ${lecturesCanMiss} lectures and still meet your attendance target.`;
+        setResult(message);
+        setResultColor('green');
     }
-  };
+};
+
 
   const handleSubjectCountChange = (count) => {
     setSubjectCount(count);

@@ -1280,6 +1280,9 @@ table tr:last-child {
     padding: 8px 16px;
   }
 }
+/* Dashboard container styling */
+
+/* Dashboard container styling */
 
 /* Dashboard container styling */
 .dashboard {
@@ -1460,7 +1463,7 @@ table tr:last-child {
 }
 /* Attendance Manager Container */
 
-/* Attendance Manager Container */
+
 .attendance-manager {
   max-width: 600px;
   margin: 0 auto;
@@ -1569,4 +1572,3 @@ input[type="text"]:focus {
     width: 100%;
   }
 }
-

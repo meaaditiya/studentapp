@@ -15,6 +15,7 @@ const Sidebar = ({ isVisible }) => {
         <li><a href="/cgpacalculator">CGPA Calculator</a></li>
         <li><a href="/attendancemanager">Attendance Manager</a></li>
         <li><a href ="/markattendance">Mark Attendance</a></li>
+        <li><a href="/pdfmanager">Document Manager</a></li>
       </ul>
     </div>
   );

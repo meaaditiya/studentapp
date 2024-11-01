@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const multer = require('multer');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -340,6 +341,67 @@ app.post("/api/subjects/:id/attendance", async (req, res) => {
   subject.attendance.push({ date, status });
   await subject.save();
   res.json(subject);
+});
+
+// Define the PDF schema
+const pdfSchema = new mongoose.Schema({
+  name: String,
+  data: Buffer,
+  createdAt: { type: Date, default: Date.now }
+});
+
+const PDF = mongoose.model('PDF', pdfSchema);
+
+// Configure Multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Upload PDF
+app.post('/api/upload', upload.single('pdf'), async (req, res) => {
+  try {
+    const newPDF = new PDF({
+      name: req.file.originalname,
+      data: req.file.buffer
+    });
+    await newPDF.save();
+    res.status(200).json({ message: 'PDF uploaded successfully!' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to upload PDF' });
+  }
+});
+
+// Fetch all PDFs
+app.get('/api/pdfs', async (req, res) => {
+  try {
+    const pdfs = await PDF.find({}, 'name _id');
+    res.status(200).json(pdfs);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch PDFs' });
+  }
+});
+
+// Fetch single PDF by ID and render as file download
+app.get('/api/pdfs/:id', async (req, res) => {
+  try {
+    const pdf = await PDF.findById(req.params.id);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${pdf.name}"`
+    });
+    res.send(pdf.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch PDF' });
+  }
+});
+
+// Delete PDF by ID
+app.delete('/api/pdfs/:id', async (req, res) => {
+  try {
+    await PDF.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'PDF deleted successfully!' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete PDF' });
+  }
 });
 
 // Start the server

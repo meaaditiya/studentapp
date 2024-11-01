@@ -27,7 +27,7 @@ function MyMarks() {
       const response = await axios.get("http://192.168.1.42:5000/api/exams/");
       setExamRecords(response.data);
     } catch (error) {
-      console.error("Error fetching exams:", error);
+     /* console.error("Error fetching exams:", error);*/
     }
   };
 
@@ -68,7 +68,7 @@ function MyMarks() {
       setExamRecords([...examRecords, response.data]);
       resetForm();
     } catch (error) {
-      console.error("Error saving exam:", error);
+     /* console.error("Error saving exam:", error);*/
     }
   };
 
@@ -93,7 +93,7 @@ function MyMarks() {
         setExamRecords(updatedRecords);
         setSelectedRecord(null);
       } catch (error) {
-        console.error("Error deleting exam:", error);
+       /* console.error("Error deleting exam:", error);*/
       }
     }
   };

@@ -36,7 +36,7 @@ function WeeklyTimetable() {
 
         setTimetable(newTimetable);
       } catch (error) {
-        console.error("Error fetching timetable:", error);
+        /*console.error("Error fetching timetable:", error);*/
         alert("Could not fetch timetable data.");
       }
     };
@@ -72,7 +72,7 @@ function WeeklyTimetable() {
         setTaskInput("");
         setIsEditing(false);
       } catch (error) {
-        console.error("Error adding task:", error);
+       /* console.error("Error adding task:", error);*/
         alert("Could not add task.");
       }
     }
@@ -100,7 +100,7 @@ function WeeklyTimetable() {
           setIsEditing(false); // Hide input form after clearing
         }
       } catch (error) {
-        console.error("Error clearing task:", error);
+       /* console.error("Error clearing task:", error);*/
         alert("Could not clear task.");
       }
     }

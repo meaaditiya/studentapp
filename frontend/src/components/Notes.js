@@ -20,7 +20,7 @@ function Notes() {
       const response = await axios.get("http://192.168.1.42:5000/api/notes"); // Updated to your IP address
       setNotes(response.data);
     } catch (error) {
-      console.error("Error fetching notes:", error);
+     /* console.error("Error fetching notes:", error);*/
     }
   };
 
@@ -36,7 +36,7 @@ function Notes() {
         setNotes([...notes, response.data]); // Add the newly created note to the state
         setNoteText("");
       } catch (error) {
-        console.error("Error adding note:", error);
+       /* console.error("Error adding note:", error);*/
       }
     }
   };
@@ -46,7 +46,7 @@ function Notes() {
       await axios.delete(`http://192.168.1.42:5000/api/notes/${id}`); // Updated to your IP address
       setNotes(notes.filter(note => note._id !== id)); // Update state to remove the deleted note
     } catch (error) {
-      console.error("Error deleting note:", error);
+     /* console.error("Error deleting note:", error);*/
     }
   };
 
@@ -62,7 +62,7 @@ function Notes() {
         });
         setNotes(notes.map((note, i) => (i === index ? response.data : note))); // Update the edited note in state
       } catch (error) {
-        console.error("Error editing note:", error);
+       /* console.error("Error editing note:", error);*/
       }
     }
   };

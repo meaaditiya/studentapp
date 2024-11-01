@@ -17,7 +17,7 @@ const AttendanceComponent = () => {
       const response = await axios.get("http://192.168.1.42:5000/api/subjects");
       setSubjects(response.data);
     } catch (error) {
-      console.error("Error fetching subjects:", error);
+      /*console.error("Error fetching subjects:", error);*/
     }
   };
 
@@ -28,7 +28,7 @@ const AttendanceComponent = () => {
       setSubjects([...subjects, response.data]);
       setNewSubject("");
     } catch (error) {
-      console.error("Error adding subject:", error);
+      /*console.error("Error adding subject:", error);*/
     }
   };
 
@@ -42,7 +42,7 @@ const AttendanceComponent = () => {
       await axios.delete(`http://192.168.1.42:5000/api/subjects/${subjectId}`);
       setSubjects(subjects.filter((subject) => subject._id !== subjectId));
     } catch (error) {
-      console.error("Error deleting subject:", error);
+      /*console.error("Error deleting subject:", error);*/
     }
   };
 
@@ -57,7 +57,7 @@ const AttendanceComponent = () => {
       setAttendanceDate("");
       setStatus("present");
     } catch (error) {
-      console.error("Error marking attendance:", error);
+     /* console.error("Error marking attendance:", error);*/
     }
   };
 

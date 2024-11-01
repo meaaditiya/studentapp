@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
- // Replace with your actual CSS file name
+// Replace with your actual CSS file name
 
 const PDFManager = () => {
   const [pdfs, setPdfs] = useState([]);
@@ -13,10 +13,10 @@ const PDFManager = () => {
   // Fetch all PDFs
   const fetchPDFs = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/pdfs');
+      const res = await axios.get('http://192.168.1.42:5000/api/pdfs'); // Updated URL
       setPdfs(res.data);
     } catch (error) {
-      console.error("Failed to fetch PDFs");
+     /* console.error("Failed to fetch PDFs");*/
     }
   };
 
@@ -31,28 +31,28 @@ const PDFManager = () => {
     formData.append('pdf', file);
 
     try {
-      await axios.post('http://localhost:5000/api/upload', formData);
+      await axios.post('http://192.168.1.42:5000/api/upload', formData); // Updated URL
       fetchPDFs();
       alert("PDF uploaded successfully");
     } catch (error) {
-      console.error("Failed to upload PDF");
+     /* console.error("Failed to upload PDF");*/
     }
   };
 
   // Delete PDF
   const deletePDF = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/pdfs/${id}`);
+      await axios.delete(`http://192.168.1.42:5000/api/pdfs/${id}`); // Updated URL
       fetchPDFs();
       alert("PDF deleted successfully");
     } catch (error) {
-      console.error("Failed to delete PDF");
+      /*console.error("Failed to delete PDF");*/
     }
   };
 
   // Open PDF in Edge
   const openPDF = (id) => {
-    window.open(`http://localhost:5000/api/pdfs/${id}`, '_blank');
+    window.open(`http://192.168.1.42:5000/api/pdfs/${id}`, '_blank'); // Updated URL
   };
 
   return (

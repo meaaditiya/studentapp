@@ -23,8 +23,9 @@ function DailySchedule() {
     try {
       const response = await axios.get("http://192.168.1.42:5000/tasks"); // Change URL to your IP address
       setTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
+    } // eslint-disable-next-line no-console
+    catch (error) {
+     /* console.error("Error fetching tasks:", error);*/
     }
   };
 
@@ -61,9 +62,10 @@ function DailySchedule() {
         }
         setNewTask(""); // Reset input field
       }
-    } catch (error) {
-      console.error("Error adding/editing task:", error);
-      alert("An error occurred. Please try again."); // Optional user feedback
+    } // eslint-disable-next-line no-console
+    catch (error) {
+    /*  console.error("Error adding/editing task:", error);
+      alert("An error occurred. Please try again."); // Optional user feedback*/
     }
   };
 
@@ -78,8 +80,9 @@ function DailySchedule() {
         ...updatedTasks[index],
       }); // Change URL to your IP address
       setTasks(updatedTasks);
-    } catch (error) {
-      console.error("Error toggling task:", error);
+    } // eslint-disable-next-line no-console
+    catch (error) {
+      /*console.error("Error toggling task:", error);*/
     }
   };
 
@@ -87,8 +90,9 @@ function DailySchedule() {
     try {
       await axios.delete(`http://192.168.1.42:5000/tasks/${tasks[index]._id}`); // Change URL to your IP address
       setTasks(tasks.filter((_, i) => i !== index));
-    } catch (error) {
-      console.error("Error deleting task:", error);
+    } // eslint-disable-next-line no-console
+    catch (error) {
+      /*console.error("Error deleting task:", error);*/
     }
   };
 

@@ -22,7 +22,7 @@ function WeeklyTimetable() {
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/timetable");
+        const response = await axios.get("http://192.168.1.42:5000/api/timetable");
         const timetableData = response.data;
 
         const newTimetable = days.reduce((acc, day) => {
@@ -61,7 +61,7 @@ function WeeklyTimetable() {
     if (currentDay && currentHourIndex !== null && taskInput.trim()) {
       const newEntry = { day: currentDay, hourIndex: currentHourIndex, task: taskInput };
       try {
-        await axios.post("https://studentapp-backend-ccks.onrender.com/api/timetable", newEntry);
+        await axios.post("http://192.168.1.42:5000/api/timetable", newEntry);
 
         setTimetable((prevTimetable) => ({
           ...prevTimetable,
@@ -81,14 +81,14 @@ function WeeklyTimetable() {
   const handleClearTask = async () => {
     if (currentDay && currentHourIndex !== null) {
       try {
-        const entryToDelete = await axios.get(`https://studentapp-backend-ccks.onrender.com/api/timetable`, {
+        const entryToDelete = await axios.get(`http://192.168.1.42:5000/api/timetable`, {
           params: { day: currentDay, hourIndex: currentHourIndex },
         });
 
         const entryId = entryToDelete.data[0]._id; // Assuming _id is present in the entry returned
 
         if (entryId) {
-          await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/timetable/${entryId}`);
+          await axios.delete(`http://192.168.1.42:5000/api/timetable/${entryId}`);
 
           setTimetable((prevTimetable) => ({
             ...prevTimetable,

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// Replace with your actual CSS file name
 
 const PDFManager = () => {
   const [pdfs, setPdfs] = useState([]);
@@ -13,10 +12,10 @@ const PDFManager = () => {
   // Fetch all PDFs
   const fetchPDFs = async () => {
     try {
-      const res = await axios.get('https://studentapp-backend-ccks.onrender.com/api/pdfs'); // Updated URL
+      const res = await axios.get('http://192.168.1.42:5000/api/pdfs'); // Updated URL
       setPdfs(res.data);
     } catch (error) {
-     /* console.error("Failed to fetch PDFs");*/
+      /* console.error("Failed to fetch PDFs");*/
     }
   };
 
@@ -31,18 +30,18 @@ const PDFManager = () => {
     formData.append('pdf', file);
 
     try {
-      await axios.post('https://studentapp-backend-ccks.onrender.com/api/upload', formData); // Updated URL
+      await axios.post('http://192.168.1.42:5000/api/upload', formData); // Updated URL
       fetchPDFs();
       alert("PDF uploaded successfully");
     } catch (error) {
-     /* console.error("Failed to upload PDF");*/
+      /* console.error("Failed to upload PDF");*/
     }
   };
 
   // Delete PDF
   const deletePDF = async (id) => {
     try {
-      await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/pdfs/${id}`); // Updated URL
+      await axios.delete(`http://192.168.1.42:5000/api/pdfs/${id}`); // Updated URL
       fetchPDFs();
       alert("PDF deleted successfully");
     } catch (error) {
@@ -52,7 +51,7 @@ const PDFManager = () => {
 
   // Open PDF in Edge
   const openPDF = (id) => {
-    window.open(`https://studentapp-backend-ccks.onrender.com/api/pdfs/${id}`, '_blank'); // Updated URL
+    window.open(`http://192.168.1.42:5000/api/pdfs/${id}`, '_blank'); // Updated URL
   };
 
   return (
@@ -66,7 +65,7 @@ const PDFManager = () => {
       <ul className="pdf-list">
         {pdfs.map((pdf) => (
           <li key={pdf._id} className="pdf-list-item">
-            {pdf.name}
+            <span className="pdf-title">{pdf.name}</span>
             <div className="pdf-list-buttons">
               <button className="pdf-view-button" onClick={() => openPDF(pdf._id)}>View</button>
               <button className="pdf-delete-button" onClick={() => deletePDF(pdf._id)}>Delete</button>

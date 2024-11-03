@@ -16,18 +16,16 @@ function MyMarks() {
   const [subjectIndex, setSubjectIndex] = useState(0);
   const [selectedRecord, setSelectedRecord] = useState(null);
 
-  // Fetch existing exam records on component mount
   useEffect(() => {
     fetchExamRecords();
   }, []);
 
-  // Function to fetch all exam records from backend
   const fetchExamRecords = async () => {
     try {
-      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/exams/");
+      const response = await axios.get("http://192.168.1.42:5000/api/exams/");
       setExamRecords(response.data);
     } catch (error) {
-     /* console.error("Error fetching exams:", error);*/
+      console.error("Error fetching exams:", error);
     }
   };
 
@@ -64,11 +62,11 @@ function MyMarks() {
       maxMarks,
     };
     try {
-      const response = await axios.post("https://studentapp-backend-ccks.onrender.com/api/exams/", newExam);
+      const response = await axios.post("http://192.168.1.42:5000/api/exams/", newExam);
       setExamRecords([...examRecords, response.data]);
       resetForm();
     } catch (error) {
-     /* console.error("Error saving exam:", error);*/
+      console.error("Error saving exam:", error);
     }
   };
 
@@ -88,12 +86,12 @@ function MyMarks() {
     const confirmDelete = window.prompt("Are you sure? Type 'yes' to delete record");
     if (confirmDelete === "yes") {
       try {
-        await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/exams/${recordToDelete._id}`);
+        await axios.delete(`http://192.168.1.42:5000/api/exams/${recordToDelete._id}`);
         const updatedRecords = examRecords.filter((_, i) => i !== index);
         setExamRecords(updatedRecords);
         setSelectedRecord(null);
       } catch (error) {
-       /* console.error("Error deleting exam:", error);*/
+        console.error("Error deleting exam:", error);
       }
     }
   };
@@ -113,6 +111,7 @@ function MyMarks() {
       height: "60px",
       borderRadius: "50%",
       background: `conic-gradient(${ringColor} ${percentage * 3.6}deg, lightgray 0deg)`,
+      position: "relative", // Set position relative for inner elements
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -124,11 +123,14 @@ function MyMarks() {
     height: "48px",
     borderRadius: "50%",
     backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const ringPercentageStyle = {
     position: "absolute",
-    fontSize: "1.2em",
+    fontSize: "1em",
     fontWeight: "bold",
     textAlign: "center",
   };
@@ -237,8 +239,9 @@ function MyMarks() {
                     <td>{maxMarks[index]}</td>
                     <td>
                       <div style={getRingFillStyle(percentage)}>
-                        <div style={innerCircleStyle}></div>
-                        <div style={ringPercentageStyle}>{percentage}%</div>
+                        <div style={innerCircleStyle}>
+                          <div style={ringPercentageStyle}>{percentage}%</div>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -251,9 +254,10 @@ function MyMarks() {
                 </td>
                 <td>
                   <div style={getRingFillStyle(calculatePercentage(totalMarks(marks), totalMaxMarks(maxMarks)))}>
-                    <div style={innerCircleStyle}></div>
-                    <div style={ringPercentageStyle}>
-                      {calculatePercentage(totalMarks(marks), totalMaxMarks(maxMarks))}%
+                    <div style={innerCircleStyle}>
+                      <div style={ringPercentageStyle}>
+                        {calculatePercentage(totalMarks(marks), totalMaxMarks(maxMarks))}%
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -274,59 +278,68 @@ function MyMarks() {
             </button>
             <button onClick={() => handleDelete(index)}>Delete</button>
           </p>
+          {selectedRecord === examRecords[index] && (
+            <table>
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Marks</th>
+                  <th>Max Marks</th>
+                  <th>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {record.subjects.map((subject, subIndex) => {
+                  const percentage = calculatePercentage(
+                    record.marks[subIndex],
+                    record.maxMarks[subIndex]
+                  );
+                  return (
+                    <tr key={subIndex}>
+                      <td>{subject}</td>
+                      <td>{record.marks[subIndex]}</td>
+                      <td>{record.maxMarks[subIndex]}</td>
+                      <td>
+                        <div style={getRingFillStyle(percentage)}>
+                          <div style={innerCircleStyle}>
+                            <div style={ringPercentageStyle}>{percentage}%</div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+                <tr>
+                  <td colSpan="2">Total Marks</td>
+                  <td>
+                    {totalMarks(record.marks)} / {totalMaxMarks(record.maxMarks)}
+                  </td>
+                  <td>
+                    <div
+                      style={getRingFillStyle(
+                        calculatePercentage(
+                          totalMarks(record.marks),
+                          totalMaxMarks(record.maxMarks)
+                        )
+                      )}
+                    >
+                      <div style={innerCircleStyle}>
+                        <div style={ringPercentageStyle}>
+                          {calculatePercentage(
+                            totalMarks(record.marks),
+                            totalMaxMarks(record.maxMarks)
+                          )}
+                          %
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
         </div>
       ))}
-
-      {selectedRecord && (
-        <div>
-          <h3>{selectedRecord.examName} Record</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Subject</th>
-                <th>Marks</th>
-                <th>Max Marks</th>
-                <th>Percentage</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedRecord.subjects.map((subject, index) => {
-                const percentage = calculatePercentage(
-                  selectedRecord.marks[index],
-                  selectedRecord.maxMarks[index]
-                );
-                return (
-                  <tr key={index}>
-                    <td>{subject}</td>
-                    <td>{selectedRecord.marks[index]}</td>
-                    <td>{selectedRecord.maxMarks[index]}</td>
-                    <td>
-                      <div style={getRingFillStyle(percentage)}>
-                        <div style={innerCircleStyle}></div>
-                        <div style={ringPercentageStyle}>{percentage}%</div>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-              <tr>
-                <td colSpan="2">Total Marks</td>
-                <td>
-                  {totalMarks(selectedRecord.marks)} / {totalMaxMarks(selectedRecord.maxMarks)}
-                </td>
-                <td>
-                  <div style={getRingFillStyle(calculatePercentage(totalMarks(selectedRecord.marks), totalMaxMarks(selectedRecord.maxMarks)))}>
-                    <div style={innerCircleStyle}></div>
-                    <div style={ringPercentageStyle}>
-                      {calculatePercentage(totalMarks(selectedRecord.marks), totalMaxMarks(selectedRecord.maxMarks))}%
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 }

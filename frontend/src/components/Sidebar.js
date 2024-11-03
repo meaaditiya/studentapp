@@ -1,21 +1,76 @@
 import React from 'react';
-// Ensure you're importing your CSS
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faCalendar, faStickyNote, faTable, faChartBar, faClock, faGraduationCap, faCalculator, faUserCheck, faBook, faFilePdf, faVideo } from '@fortawesome/free-solid-svg-icons'; 
+// You can add more icons based on your need.
 
 const Sidebar = ({ isVisible }) => {
   return (
     <div className={`sidebar ${isVisible ? 'open' : 'hidden'}`}>
       <ul>
-        <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/schedule">Daily Schedule</a></li>
-        <li><a href="/notes">Notes</a></li>
-        <li><a href="/timetable">Weekly Timetable</a></li>
-        <li><a href="/progress">Progress Tracker</a></li>
-        <li><a href="/timer">Timer</a></li>
-        <li><a href="/mymarks">My Marks</a></li>
-        <li><a href="/cgpacalculator">CGPA Calculator</a></li>
-        <li><a href="/attendancemanager">Attendance Manager</a></li>
-        <li><a href ="/markattendance">Mark Attendance</a></li>
-        <li><a href="/pdfmanager">Document Manager</a></li>
+        <li>
+          <a href="/dashboard">
+            <FontAwesomeIcon icon={faHome} /> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="/schedule">
+            <FontAwesomeIcon icon={faCalendar} /> Daily Schedule
+          </a>
+        </li>
+        <li>
+          <a href="/notes">
+            <FontAwesomeIcon icon={faStickyNote} /> Notes
+          </a>
+        </li>
+        <li>
+          <a href="/timetable">
+            <FontAwesomeIcon icon={faTable} /> Weekly Timetable
+          </a>
+        </li>
+        <li>
+          <a href="/progress">
+            <FontAwesomeIcon icon={faChartBar} /> Progress Tracker
+          </a>
+        </li>
+        <li>
+          <a href="/timer">
+            <FontAwesomeIcon icon={faClock} /> Timer
+          </a>
+        </li>
+        <li>
+          <a href="/mymarks">
+            <FontAwesomeIcon icon={faGraduationCap} /> My Marks
+          </a>
+        </li>
+        <li>
+          <a href="/cgpacalculator">
+            <FontAwesomeIcon icon={faCalculator} /> CGPA Calculator
+          </a>
+        </li>
+        <li>
+          <a href="/attendancemanager">
+            <FontAwesomeIcon icon={faUserCheck} /> Attendance Calculator
+          </a>
+        </li>
+        <li>
+          <a href="/markattendance">
+            <FontAwesomeIcon icon={faBook} /> Mark Attendance
+          </a>
+        </li>
+        <li>
+          <a href="/pdfmanager">
+            <FontAwesomeIcon icon={faFilePdf} /> Document Manager
+          </a>
+        </li>
+        <li>
+          <a href="/youtubeembed">
+            <FontAwesomeIcon icon={faVideo} /> YouTube Videos
+          </a>
+        </li>
+        <li></li>
+        <li></li>
+        <li></li>
+
       </ul>
     </div>
   );

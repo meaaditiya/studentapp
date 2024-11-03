@@ -150,7 +150,7 @@ const AttendanceManager = () => {
 
   return (
     <div className="attendance-manager">
-      <h2 className="attendance-title">Attendance Manager</h2>
+      <h2 className="attendance-title">Attendence Calculator</h2>
       <div className="attendance-button-group">
         <button onClick={handleCalculateAttendance} className="attendance-btn">Calculate Attendance</button>
         <button onClick={handleAttendanceTarget} className="attendance-btn">Attendance Target</button>

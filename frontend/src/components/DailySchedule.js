@@ -21,7 +21,7 @@ function DailySchedule() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/tasks"); // Change URL to your IP address
+      const response = await axios.get("http://192.168.1.42:5000/tasks"); // Change URL to your IP address
       setTasks(response.data);
     } // eslint-disable-next-line no-console
     catch (error) {
@@ -46,14 +46,14 @@ function DailySchedule() {
             text: newTask,
             lastUpdated: new Date().toLocaleString(),
           };
-          await axios.put(`https://studentapp-backend-ccks.onrender.com/tasks/${tasks[editIndex]._id}`, updatedTask); // Change URL to your IP address
+          await axios.put(`http://192.168.1.42:5000/tasks/${tasks[editIndex]._id}`, updatedTask); // Change URL to your IP address
           const updatedTasks = [...tasks];
           updatedTasks[editIndex] = updatedTask;
           setTasks(updatedTasks);
           setEditIndex(null); // Reset after editing
         } else {
           // Add new task
-          const response = await axios.post("https://studentapp-backend-ccks.onrender.com/tasks", {
+          const response = await axios.post("http://192.168.1.42:5000/tasks", {
             text: newTask,
             completed: false,
             lastUpdated: new Date().toLocaleString(),
@@ -76,7 +76,7 @@ function DailySchedule() {
           ? { ...task, completed: !task.completed, lastUpdated: new Date().toLocaleString() }
           : task
       );
-      await axios.put(`https://studentapp-backend-ccks.onrender.com/tasks/${tasks[index]._id}`, {
+      await axios.put(`http://192.168.1.42:5000/tasks/${tasks[index]._id}`, {
         ...updatedTasks[index],
       }); // Change URL to your IP address
       setTasks(updatedTasks);
@@ -88,7 +88,7 @@ function DailySchedule() {
 
   const deleteTask = async (index) => {
     try {
-      await axios.delete(`https://studentapp-backend-ccks.onrender.com/tasks/${tasks[index]._id}`); // Change URL to your IP address
+      await axios.delete(`http://192.168.1.42:5000/tasks/${tasks[index]._id}`); // Change URL to your IP address
       setTasks(tasks.filter((_, i) => i !== index));
     } // eslint-disable-next-line no-console
     catch (error) {

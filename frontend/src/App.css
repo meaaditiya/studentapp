@@ -4,6 +4,7 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #f0f4f8;
   color: #333;
+   
 }
 
 /* App Container */
@@ -15,7 +16,7 @@ body {
 }
 /* Header styling */
 /* Header styling */
-.header {
+header {
   position: fixed;
   top: 0;
   left: 0;
@@ -39,6 +40,9 @@ body {
   padding-left: 1rem;
   text-align: left;
   flex: 1;
+  position: relative;
+ 
+  
 }
 
 /* Clock container styling to center */
@@ -55,19 +59,81 @@ body {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   color: #e9c46a;
+  margin-left: -20px;
+  margin-right: 20px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    padding: 0.5rem;
+/* Updated Media Query for Mobile Devices */
+@media (max-width: 600px) {
+  header {
+    padding: 0.5rem 1rem; /* Reduce padding for smaller screens */
+    border-bottom: 20px solid #282c34; /* Adjust border to fit mobile design */
+    margin: 0; /* Remove margin */
   }
-  .header h1, .header .clock {
-    padding: 0.5rem;
-    text-align: center;
+
+  .header h1 {
+    font-size: 0.9rem; /* Slightly smaller title for mobile */
+    padding-left: 0; /* Remove left padding */
+    text-align: center; /* Center-align title for better appearance */
+    position: relative;
+    left: 15px; /* Center-align title horizontally */
+    top:20px;
+  }
+
+  .header .clock-container {
+    display: flex;
+    justify-content: center; /* Center the clock horizontally */
+    margin-top: 0.5rem; /* Space above the clock */
+  }
+
+  .header .clock {
+    font-size: 0.9rem; /* Reduce clock font size for mobile */
+    margin-left: 0; /* Adjust margins for proper alignment */
+    margin-right: 0;
+    position: relative;
+    top: 25px; /* Fine-tune vertical alignment */
+  }
+
+  .header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adjust space between buttons for a compact layout */
+    position: relative;
+    top: 10px; /* Adjust vertical positioning */
+    justify-content: center; /* Center the buttons horizontally */
+  }
+
+  .navigate-back {
+    background-color: #61dafb; /* Light blue for button background */
+    border: none;
+    padding: 5px 12px; /* Adjust padding for mobile */
+    cursor: pointer;
+    font-size: 12px; /* Smaller font size for mobile */
+    margin-top: 10px; /* Adjust top margin for spacing */
+    color: #282c34; /* Dark text for better contrast */
+    position: relative;
+    left: 10px; /* Center-align button horizontally */
   }
 }
+@media (max-width: 400px) {
+  /* Hide the refresh button on mobile devices */
+  .refresh-button {
+    display: none; /* Hide the refresh button on mobile */
+  }
+  .header-buttons{
+    position: relative;
+    right: 10px;
+  }
+  .header h1{
+  
+    text-decoration: none;
+    position: relative;
+   left:-85px;
+    top:-12px;
+  }
+
+}
+
 
 /* Sidebar styling */
 .sidebar {
@@ -86,6 +152,7 @@ body {
   z-index: 999;
   transform: translateX(0); /* Sidebar is visible by default */
   transition: transform 0.3s ease; /* Smooth transition for visibility */
+  overflow-y: auto; /* Enables vertical scrolling within the sidebar */
 }
 
 /* Hide sidebar on both desktop and mobile */
@@ -124,6 +191,34 @@ body {
   padding-left: 2rem;
 }
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 240px;
+    height: 100vh;
+    transform: translateX(-100%); /* Sidebar hidden by default on mobile */
+  }
+
+  .sidebar.open {
+    transform: translateX(0); /* Sidebar visible when toggled open */
+  }
+}
+/* Custom Scrollbar for WebKit browsers */
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  background-color: #f1f1f1; /* Background of the scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #2a9d8f; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #21867a; /* Darker shade on hover */
+}
+
+
 /* Sidebar Toggle Button */
 .menu-toggle {
   position: absolute;
@@ -155,6 +250,7 @@ body {
 .main-layout {
   display: flex;
   transition: margin-left 0.3s ease; /* Smooth transition for sidebar */
+  height:100vh;
 }
 
 /* Content Styling */
@@ -164,14 +260,47 @@ body {
   padding: 2rem;
   margin-top: 70px; /* Adjust this based on the header's height */
   background-color: #ffffff;
-  min-height: 100vh;
+  min-height: 0;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
   transition: margin-left 0.3s ease; /* Smooth transition for margin */
+  overflow-y: auto; 
 }
+/* Custom Scrollbar for WebKit browsers (Chrome, Safari) */
+.content::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  background-color: rgba(0, 0, 0, 0.05); /* Background of the scrollbar */
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: #2a9d8f; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+  border: 3px solid transparent; /* Creates space around the thumb */
+  border-color: transparent; /* Fallback */
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background-color: #21867a; /* Darker shade on hover */
+}
+
+/* Custom Scrollbar for Firefox */
+.content {
+  scrollbar-width: thin; /* Use 'thin' for a slim scrollbar */
+  scrollbar-color: #2a9d8f rgba(0, 0, 0, 0.05); /* Thumb color and track color */
+}
+
+/* Optional: Add smooth scrolling */
+.content {
+  scroll-behavior: smooth; /* Smooth scrolling effect */
+}
+
+/* Custom Scrollbar for WebKit browsers in content area */
+
+
 
 /* When sidebar is hidden, content takes full width */
 .main-layout.sidebar-hidden .content {
   margin-left: 0;
+  
 }
 
 /* Media Queries for Responsive Design */
@@ -604,6 +733,21 @@ body {
 
 .progress-item button:hover {
   background-color: #21867a;
+}
+.toggle-form-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #45a049;
+  color: white;
+  border: none;
+
+  cursor: pointer;
+  font-size: 24px; /* Adjust size as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Media Queries */
@@ -1081,7 +1225,7 @@ td:hover {
   }
 
   table {
-    font-size: 12px;
+    font-size: 9px;
   }
 
   th, td {
@@ -1181,8 +1325,7 @@ table tr:last-child {
 
 /* Progress circle styling */
 .ring-progress {
-  position: relative;
-  width: 60px;
+ 
   height: 60px;
   border-radius: 50%;
   display: flex;
@@ -1191,7 +1334,7 @@ table tr:last-child {
 }
 
 .inner-circle {
-  width: 48px;
+  width: 70px;
   height: 48px;
   border-radius: 50%;
   background-color: white;
@@ -1281,10 +1424,6 @@ table tr:last-child {
   }
 }
 /* Dashboard container styling */
-
-/* Dashboard container styling */
-
-/* Dashboard container styling */
 .dashboard {
   height: 100vh;
   background-size: cover;
@@ -1295,31 +1434,52 @@ table tr:last-child {
   align-items: center;
   justify-content: flex-start;
   padding: 20px;
+  position: relative;
 }
 
-.title {
+.title-dashboard {
+  margin-top: 17px; /* Reduce margin above the title */
   font-size: 3rem;
   font-weight: bold;
   text-transform: uppercase;
   z-index: 10;
   background-image: linear-gradient(270deg, #FF512F, #F09819, #4CAF50, #2196F3);
   background-size: 400% 400%;
-  WebkitBackgroundClip: text;
-  WebkitTextFillColor: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation: vibrantColor 5s ease infinite;
-  margin-top: 20px;
+}
+
+.snippet-box {
+  width: 80%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 200px; /* Reduced margin */
+  
 }
 
 .quick-links-container {
   display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.link-wrapper {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin: 20px 0;
-  gap: 10px;
+  position: relative;
 }
 
 .circle-link {
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-color: #fff;
   color: black;
@@ -1337,6 +1497,13 @@ table tr:last-child {
   transform: scale(1.1);
 }
 
+.add-shortcut {
+  background-color: #2196F3;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
 .add-shortcut-container {
   display: flex;
   flex-direction: column;
@@ -1346,15 +1513,26 @@ table tr:last-child {
 .add-quick-links-text {
   margin-top: 5px;
   font-size: 0.8rem;
-  color: black; /* Changed to black */
-  text-align: center;
+  color: black;
 }
 
-.add-shortcut {
-  background-color: #2196F3;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
+.quick-delete-button {
+  background-color: #E0F7FA;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.quick-delete-button:hover {
+  background-color: red;
 }
 
 .add-link-form {
@@ -1392,45 +1570,25 @@ table tr:last-child {
 .add-link-form button:hover {
   background-color: #45a049;
 }
-.quick-delete-button {
-  background-color: #E0F7FA;
-  color: black; /* Set text color to white */
-  border: none; /* Remove default border */
-  border-radius: 50%; /* Make the button round */
-  width: 30px; /* Set a smaller width */
-  height: 30px; /* Set a smaller height */
-  display: flex; /* Use flexbox for centering */
-  align-items: center; /* Center content vertically */
-  justify-content: center; /* Center content horizontally */
-  cursor: pointer; /* Change cursor to pointer */
-  transition: background-color 0.3s ease; /* Smooth background color transition */
-  margin-left:12px;
-}
 
-.quick-delete-button:hover {
-  background-color: red; /* Change background color on hover */
-}
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: center;
   gap: 20px;
-  width: 80%;
-  margin: auto;
+  flex-wrap: wrap;
+  margin-top: -90px;
+  margin-bottom: 20px; /* Reduced margin */
 }
 
 .box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: #ffffff;
+  width: 250px;
+  height: 350px;
+  background-color: white;
   border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
-  height: 300px;
-  padding: 0px;
-  text-decoration: none;
-  color: black;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none; /* Removes underline from text */
 }
 
 .box:hover {
@@ -1440,138 +1598,228 @@ table tr:last-child {
 
 .box-image {
   width: 100%;
-  height: 170px;
+  height: 250px;
   object-fit: cover;
-  border-radius: 10px 10px 0 0;
-  margin-bottom: 10px;
 }
 
 .box-text {
   font-size: 1.2rem;
-}
-
-@keyframes vibrantColor {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes vibrantColor {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-/* Attendance Manager Container */
-
-
-.attendance-manager {
-  max-width: 600px;
-  margin: 0 auto;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-/* Title */
-.attendance-title {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.5em;
   font-weight: bold;
+  padding: 10px;
+  color: black;
 }
 
-/* Button Group */
-.attendance-button-group {
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .title-dashboard {
+    font-size: 2.5rem; /* Reduce title size for medium screens */
+  }
+
+  .grid-container {
+    flex-direction: column; /* Stack boxes vertically on smaller screens */
+    align-items: center; /* Center the items */
+  }
+
+  .box {
+    width: 90%; /* Full width on small screens */
+    height: auto; /* Adjust height to content */
+  }
+}
+
+@media (max-width: 768px) {
+  .title-dashboard {
+    font-size: 2rem; /* Further reduce title size for small screens */
+  }
+
+  .snippet-box {
+    width: 90%; /* Make snippet box full width on small screens */
+    padding: 10px; /* Reduce padding */
+  }
+
+  .add-link-form {
+    width: 90%; /* Make form full width */
+  }
+
+  .add-link-form input {
+    width: 100%; /* Full width for inputs */
+  }
+}
+
+@media (max-width: 480px) {
+  .title-dashboard {
+    font-size: 1.5rem; /* Further reduce title size for very small screens */
+  }
+
+  .box {
+    width: 100%; /* Full width on very small screens */
+  }
+}
+@media (max-width: 1200px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 icons per row */
+    gap: 10px;
+  }
+
+  .box {
+    width: 80px; /* Small icon size */
+    height: 80px;
+    border-radius: 50%; /* Circular shape */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #f5f5f5; /* Soft off-white background */
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    transition: transform 0.4s ease-in-out; /* Smooth hover animation */
+    z-index: 1; /* Ensure content stays above the border */
+  }
+
+  /* Aesthetic animated border */
+  .box::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E0C3FC, #8EC5FC, #C2E9FB, #F9F9F9); /* Soft, modern gradient */
+    background-size: 200% 200%;
+    z-index: -1; /* Keep border behind the content */
+    animation: subtleGradientMove 6s ease infinite; /* Slower, subtle animation */
+  }
+
+  .box-image {
+    display: none; /* Hide image for small screens */
+  }
+
+  .box-text {
+    font-size: 0.8rem; /* Smaller text */
+    font-weight: bold;
+    color: #333; /* Soft black for text */
+    z-index: 2; /* Ensure text stays on top */
+  }
+
+  /* Keyframes for the subtle gradient animation */
+  @keyframes subtleGradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Subtle hover effect */
+  .box:hover {
+    transform: scale(1.08); /* Slight zoom on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+  }
+}
+
+
+/* Attendance Manager Styles */
+.attendance-manager {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Title Styling */
+.attendance-title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #28a745;
+}
+
+/* Button Group Layout */
+.attendance-button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Spacing between buttons */
   margin-bottom: 20px;
 }
 
-/* Calculate Attendance Button */
+/* Button Styles */
 .attendance-btn {
-  padding: 10px 20px;
-  width: 100%;
-  max-width: 300px;
-  margin: 5px 0;
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
-  background-color: #28a745;
+  border-radius: 8px; /* Rounded corners */
+  background-color: #28a745; /* Green background */
   color: white;
   font-weight: bold;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
 }
 
 .attendance-btn:hover {
-  background-color: #218838;
+  background-color: #218838; /* Darker green on hover */
+  transform: translateY(-2px);
 }
 
-/* Sub Button Group for Aggregate and Subject Wise */
-.attendance-sub-button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.attendance-sub-button-group .attendance-btn {
-  width: 100%;
-  max-width: 280px;
-  margin: 5px 0;
-}
-
-/* Form Container */
+/* Advanced Container Styles for Forms */
 .attendance-form-container {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+ 
+  width: 100%;
 }
 
-/* Input Styles */
-input[type="number"],
-input[type="text"] {
-  width: calc(50% - 10px);
+/* Form Input Styling */
+.attendance-form-container input {
+  width: 100%;
   padding: 10px;
-  margin: 5px;
-  border: 1px solid #ced4da;
+  margin: 10px 0;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
-  transition: border-color 0.3s;
 }
 
-input[type="number"]:focus,
-input[type="text"]:focus {
-  border-color: #28a745;
-  outline: none;
-}
-
-/* Subject Inputs */
+/* Subject Input Group Styling */
 .attendance-subject-inputs {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 10px;
 }
 
-/* Result Message */
-.attendance-result {
-  text-align: center;
-  font-weight: bold;
+/* Result Message Styling */
+p {
   margin-top: 20px;
-  font-size: 1.1em;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  input[type="number"],
-  input[type="text"] {
-    width: 100%;
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+  .attendance-manager {
+    padding: 20px; /* Reduce padding on smaller screens */
+  }
+
+  .attendance-btn {
+    font-size: 0.9em; /* Smaller buttons on mobile */
+    padding: 8px;
+  }
+
+  .attendance-form-container input {
+    padding: 8px; /* Smaller padding for input fields */
   }
 }
+
 .pdf-manager {
   max-width: 600px;
   margin: 20px auto;
@@ -1597,7 +1845,9 @@ input[type="text"]:focus {
 }
 
 /* Button styling */
-.pdf-upload-button, .pdf-view-button, .pdf-delete-button {
+.pdf-upload-button,
+.pdf-view-button,
+.pdf-delete-button {
   background-color: #28a745;
   color: white;
   border: none;
@@ -1608,7 +1858,9 @@ input[type="text"]:focus {
   margin-left: 10px;
 }
 
-.pdf-upload-button:hover, .pdf-view-button:hover, .pdf-delete-button:hover {
+.pdf-upload-button:hover,
+.pdf-view-button:hover,
+.pdf-delete-button:hover {
   background-color: #218838;
 }
 
@@ -1626,14 +1878,606 @@ input[type="text"]:focus {
   border-bottom: 1px solid #eee;
 }
 
+/* Title styling with ellipsis */
+.pdf-title {
+  flex: 1; /* Allow title to grow */
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Show ellipsis for overflow text */
+  margin-right: 10px; /* Space between title and buttons */
+}
+
 /* Responsive styling */
 @media (max-width: 600px) {
   .pdf-manager {
-      padding: 15px;
+    padding: 15px;
   }
 
-  .pdf-upload-button, .pdf-view-button, .pdf-delete-button {
-      padding: 8px 12px;
-      font-size: 14px;
+  .pdf-upload-button,
+  .pdf-view-button,
+  .pdf-delete-button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  /* Adjust the list item to handle smaller screens */
+  .pdf-list-item {
+    flex-wrap: nowrap; /* Prevent wrapping to a new line */
+    overflow: hidden; /* Prevent overflow from the list item */
+  }
+
+  /* Ensuring title fits smaller screens */
+  .pdf-title {
+    max-width: calc(100% - 100px); /* Reserve space for buttons */
+  }
+}
+
+/* Container to center the loading popup on the screen */
+/* Full screen container */
+
+/* Full screen container */
+.loading-container {
+  position: fixed; /* Fixed to prevent scrolling */
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional: dark overlay for contrast */
+  backdrop-filter: blur(10px); /* Blurs the entire background */
+  z-index: 1000; /* Ensures it overlays all other content */
+}
+
+/* Blurred background overlay */
+.blurred-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+/* Replace with your actual image */
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px); /* Additional blur for image background */
+  z-index: -1; /* Keeps it behind the loading content */
+}
+
+/* Popup container for loading content */
+.loading-popup {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading text styling */
+.loading-text {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #fff;
+}
+
+/* Centered image styling */
+.centered-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.centered-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 5px solid #fff;
+}
+
+/* Full-width loading bar */
+.loading-bar {
+  width: 80%; /* Adjust width as needed */
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 20px;
+}
+
+/* Loading progress animation */
+.loading-progress {
+  width: 0;
+  height: 100%;
+  background-color: #218838;
+  animation: loading 1s infinite ease-in-out;
+}
+
+/* Keyframes for loading progress animation */
+@keyframes loading {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .loading-text {
+    font-size: 1.2em;
+  }
+
+  .centered-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-text {
+    font-size: 1em;
+  }
+
+  .centered-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* YouTubeEmbed.css */
+.youtube-embed-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.add-video {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-video input {
+  padding: 10px;
+  font-size: 16px;
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-video button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-video button:hover {
+  background-color: #218838;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.video-item {
+  position: relative;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.video-item:hover {
+  transform: translateY(-5px);
+}
+
+.delete-video-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.delete-video-button:hover {
+  background-color: #ff3333;
+}
+
+.video-title {
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .add-video {
+    flex-direction: column; /* Stack the inputs and button vertically */
+  }
+
+  .add-video input,
+  .add-video button {
+    width: 100%; /* Full width for inputs and button */
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .video-item {
+    width: 100%; /* Full width for video items */
+  }
+}
+
+@media (max-width: 480px) {
+  .video-title {
+    font-size: 14px; /* Slightly smaller font size for titles */
+  }
+
+  .delete-video-button {
+    font-size: 18px; /* Smaller font size for delete button */
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.header {
+ 
+  background-color: #282c34; /* Dark background for a modern look */
+  color: #ffffff; /* White text for contrast */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  border-bottom: 10px solid #282c34;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between buttons */
+}
+
+.menu-toggle{
+  background-color: #61dafb; /* Light blue for buttons */
+  color: #282c34; /* Dark text for buttons */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 10pxpx; /* Button padding */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+;}
+
+.menu-toggle:hover{
+  background-color: #21a1f1; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+header h1 {
+  font-size: 20px; /* Adjusted size for responsiveness */
+  margin: 0; /* Remove default margin */
+ /* Allows the title to grow and take available space */
+ position: relative;
+ left:500px;
+
+  
+}
+
+.clock {
+  font-size: 16px; /* Clock font size */
+  font-weight: 300; /* Lighter weight for elegance */
+  opacity: 0.9; /* Slight transparency for a softer look */
+  margin-left: 20px; /* Space to the left for better positioning */
+}
+.navigate-back {
+  background-color: #ccc;
+  border: none;
+  padding: 2.5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  position: relative;
+  top: 6px; /* Move the button slightly lower */
+  margin-top: 14px;
+  margin-left: 20px;
+  background-color: #61dafb; /* Light blue for buttons */
+  color: #282c34; /* Dark text for buttons */
+
+}
+
+.navigate-back:hover {
+  background-color: #bbb;
+  background-color: #21a1f1; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight scale effect on hover */
+}
+.refresh-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+ /* Change to your preferred color */
+  transition: color 0.3s;
+  position:relative;
+  top:16px;
+  margin-left:-20px;
+}
+
+.refresh-button:hover {
+  color: #007bff; /* Change color on hover */
+  background: none;
+}
+.youtube-embed-container {
+  position: relative;
+  padding: 20px;
+}
+
+.add-video-button {
+  position: absolute;
+  top: -14px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-video-button:hover {
+  background-color: #45a049;
+}
+
+.add-video-form {
+  position: absolute;
+  top: 80px;  /* Position below the button */
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.add-video-form input {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 250px;
+}
+
+.add-video-form button {
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  position:relative;
+  
+}
+
+.add-video-form button:hover {
+  background-color: #45a049;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .video-item {
+    width: 100%;  /* Make videos full width on small screens */
+  }
+
+  .add-video-form {
+    width: 90%;  /* Make the form responsive */
+  }
+}
+.attendance2 {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-summary {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-summary-box p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.attendance-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.attendance-btn {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.attendance-btn:hover {
+  background-color: #45a049;
+}
+
+.add-subject-form,
+.mark-attendance-form {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-input {
+  padding: 10px;
+  margin: 10px;
+  width: calc(100% - 40px);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+.attendance-table th {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.attendance-table td {
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 16px;
+}
+
+.attendance-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.attendance-table tr:hover {
+  background-color: #e9f5e9;
+}
+
+.attendance-summary-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ 
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+.attendance-summary-box p {
+  margin: 0;
+}
+
+.attendance-summary-box strong {
+  font-size: 20px;
+}
+
+.attendance-summary-box .attendance-percentage {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.attendance-summary h3 {
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: #333;
+}
+
+.attendance-summary h3::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background-color: #4CAF50;
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .attendance2 {
+    padding: 15px;
+  }
+
+  .attendance-summary-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .attendance-summary-box p {
+    margin-bottom: 10px;
+  }
+
+  .attendance-controls {
+    flex-direction: column;
+  }
+
+  .attendance-btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .attendance-input {
+    width: 100%;
+  }
+
+  .attendance-table th,
+  .attendance-table td {
+    padding: 10px;
   }
 }

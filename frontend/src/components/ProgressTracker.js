@@ -10,11 +10,12 @@ const ProgressTracker = () => {
   const [note, setNote] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentEditIndex, setCurrentEditIndex] = useState(null);
+  const [isFormVisible, setIsFormVisible] = useState(false); // New state to control form visibility
 
   // Fetch progress from API on component mount
   useEffect(() => {
     const fetchProgress = async () => {
-      const response = await axios.get('https://studentapp-backend-ccks.onrender.com/api/progress'); // Updated to your IP address
+      const response = await axios.get('http://192.168.1.42:5000/api/progress'); // Updated to your IP address
       setProgressList(response.data);
     };
 
@@ -39,7 +40,7 @@ const ProgressTracker = () => {
       if (isEditing) {
         // Update existing progress
         const progressToUpdate = progressList[currentEditIndex]._id;
-        await axios.put(`https://studentapp-backend-ccks.onrender.com/api/progress/${progressToUpdate}`, updatedProgress);
+        await axios.put(`http://192.168.1.42:5000/api/progress/${progressToUpdate}`, updatedProgress);
         const updatedList = [...progressList];
         updatedList[currentEditIndex] = updatedProgress;
         setProgressList(updatedList);
@@ -47,7 +48,7 @@ const ProgressTracker = () => {
         setCurrentEditIndex(null);
       } else {
         // Add new progress
-        const response = await axios.post('https://studentapp-backend-ccks.onrender.com/api/progress', updatedProgress);
+        const response = await axios.post('http://192.168.1.42:5000/api/progress', updatedProgress);
         setProgressList([...progressList, response.data]);
       }
 
@@ -55,6 +56,7 @@ const ProgressTracker = () => {
       setSubject('');
       setPercentage('');
       setNote('');
+      setIsFormVisible(false); // Hide the form after submission
     } else {
       alert('Please enter both subject and progress percentage');
     }
@@ -67,11 +69,12 @@ const ProgressTracker = () => {
     setNote(progressToEdit.note);
     setIsEditing(true);
     setCurrentEditIndex(index);
+    setIsFormVisible(true); // Show form when editing
   };
 
   const handleDeleteProgress = async (index) => {
     const progressToDelete = progressList[index]._id;
-    await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/progress/${progressToDelete}`); // Updated to your IP address
+    await axios.delete(`http://192.168.1.42:5000/api/progress/${progressToDelete}`); // Updated to your IP address
     const updatedList = progressList.filter((_, i) => i !== index);
     setProgressList(updatedList);
     if (isEditing && currentEditIndex === index) {
@@ -80,36 +83,51 @@ const ProgressTracker = () => {
       setSubject('');
       setPercentage('');
       setNote('');
+      setIsFormVisible(false); // Hide the form if editing the deleted item
     }
+  };
+
+  // Function to toggle the form visibility
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
   };
 
   return (
     <div className="progress-tracker">
       <h2>Your Progress Tracker</h2>
-      <div className="progress-form">
-        <input
-          type="text"
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          placeholder="Enter subject"
-        />
-        <input
-          type="number"
-          value={percentage}
-          onChange={(e) => setPercentage(e.target.value)}
-          placeholder="Progress (%)"
-          min="0"
-          max="100"
-        />
-        <textarea
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="Add a note..."
-        ></textarea>
-        <button onClick={handleAddOrUpdateProgress}>
-          {isEditing ? 'Update Progress' : 'Add Progress'}
-        </button>
-      </div>
+
+      {/* Circular button to toggle the form */}
+      <button className="toggle-form-button" onClick={toggleFormVisibility}>
+        {isFormVisible ? '-' : '+'} {/* Change icon based on visibility */}
+      </button>
+
+      {/* Conditional rendering of the progress form */}
+      {isFormVisible && (
+        <div className="progress-form">
+          <input
+            type="text"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            placeholder="Enter subject"
+          />
+          <input
+            type="number"
+            value={percentage}
+            onChange={(e) => setPercentage(e.target.value)}
+            placeholder="Progress (%)"
+            min="0"
+            max="100"
+          />
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Add a note..."
+          ></textarea>
+          <button onClick={handleAddOrUpdateProgress}>
+            {isEditing ? 'Update Progress' : 'Add Progress'}
+          </button>
+        </div>
+      )}
 
       <ul className="progress-list">
         {progressList.map((progress, index) => (

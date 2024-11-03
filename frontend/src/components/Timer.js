@@ -1,11 +1,36 @@
 import React, { useState, useEffect } from "react";
 
 function Timer() {
-  const [time, setTime] = useState(0); // time in seconds
-  const [isActive, setIsActive] = useState(false);
-  const [isCountdown, setIsCountdown] = useState(false);
-  const [isPaused, setIsPaused] = useState(false); // For toggling between Pause and Resume
-  const [inputTime, setInputTime] = useState({ hours: "", minutes: "", seconds: "" });
+  // Initializing state with values from localStorage, or default values if not present
+  const [time, setTime] = useState(() => {
+    const savedTime = localStorage.getItem("timer-time");
+    return savedTime ? JSON.parse(savedTime) : 0;
+  });
+  const [isActive, setIsActive] = useState(() => {
+    const savedIsActive = localStorage.getItem("timer-isActive");
+    return savedIsActive ? JSON.parse(savedIsActive) : false;
+  });
+  const [isPaused, setIsPaused] = useState(() => {
+    const savedIsPaused = localStorage.getItem("timer-isPaused");
+    return savedIsPaused ? JSON.parse(savedIsPaused) : false;
+  });
+  const [isCountdown, setIsCountdown] = useState(() => {
+    const savedIsCountdown = localStorage.getItem("timer-isCountdown");
+    return savedIsCountdown ? JSON.parse(savedIsCountdown) : false;
+  });
+  const [inputTime, setInputTime] = useState(() => {
+    const savedInputTime = localStorage.getItem("timer-inputTime");
+    return savedInputTime ? JSON.parse(savedInputTime) : { hours: "", minutes: "", seconds: "" };
+  });
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("timer-time", JSON.stringify(time));
+    localStorage.setItem("timer-isActive", JSON.stringify(isActive));
+    localStorage.setItem("timer-isPaused", JSON.stringify(isPaused));
+    localStorage.setItem("timer-isCountdown", JSON.stringify(isCountdown));
+    localStorage.setItem("timer-inputTime", JSON.stringify(inputTime));
+  }, [time, isActive, isPaused, isCountdown, inputTime]);
 
   // Total input time in seconds for countdown
   const totalTime = (parseInt(inputTime.hours || 0) * 3600) +

@@ -14,8 +14,15 @@ import CGPACalculator from './components/CGPACalculator';
 import AttendanceManager from "./components/AttendanceManager";
 import MarkAttendance from "./components/MarkAttendance";
 import PDFManager from "./components/PDFManager";
-function App() {
+import Loading from './components/Loading';
+import YouTubeEmbed from "./components/YouTubeEmbed";
+
+
+
+const App = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasDashboardLoadedOnce, setHasDashboardLoadedOnce] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -24,30 +31,54 @@ function App() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setIsSidebarVisible(false); // Hide sidebar on smaller screens
+        setIsSidebarVisible(false);
       } else {
-        setIsSidebarVisible(true); // Show sidebar on larger screens
+        setIsSidebarVisible(true);
       }
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Check initial size
+    handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+
+    if ((currentPath === '/' || currentPath === '/dashboard') && !hasDashboardLoadedOnce) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+        setHasDashboardLoadedOnce(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setIsLoading(false);
+    }
+  }, [hasDashboardLoadedOnce]);
+
+  const handleMainClick = () => {
+    if (window.innerWidth < 768) {
+      setIsSidebarVisible(false);
+    }
+  };
   return (
+  
     <Router>
       <div className="app">
         <Header toggleSidebar={toggleSidebar} />
         <div className={`main-layout ${isSidebarVisible ? '' : 'sidebar-hidden'}`}>
           <Sidebar isVisible={isSidebarVisible} />
-          <main className="content">
+          <main className="content" onClick={handleMainClick}>
             <Routes>
-              <Route path="/" element={<Navigate to="/Dashboard" />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route
+                path="/dashboard"
+                element={isLoading ? <Loading /> : <Dashboard />}
+              />
               <Route path="/schedule" element={<DailySchedule />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/timetable" element={<WeeklyTimetable />} />
@@ -57,13 +88,14 @@ function App() {
               <Route path="/cgpacalculator" element={<CGPACalculator />} />
               <Route path="/attendancemanager" element={<AttendanceManager />} />
               <Route path="/markattendance" element={<MarkAttendance />} />
-              <Route path="/pdfmanager" element={<PDFManager/>}/>
+              <Route path="/pdfmanager" element={<PDFManager />} />
+              <Route path="/youtubeembed" element={<YouTubeEmbed />} />
             </Routes>
           </main>
         </div>
       </div>
     </Router>
   );
-}
+};
 
 export default App;

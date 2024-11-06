@@ -149,8 +149,8 @@ const ProgressTracker = () => {
               {progress.note && <p className="note">{progress.note}</p>}
               <p className="last-updated">Last Updated: {progress.lastUpdated}</p>
             </div>
-            <button onClick={() => handleEditProgress(index)}>Edit</button>
-            <button onClick={() => handleDeleteProgress(index)}>Delete</button>
+            <button id = "progress-edit" onClick={() => handleEditProgress(index)}>Edit</button>
+            <button id = "progress-delete" onClick={() => handleDeleteProgress(index)}>Delete</button>
           </li>
         ))}
       </ul>

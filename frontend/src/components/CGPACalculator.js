@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const CGPACalculator = () => {
   const [totalSubjects, setTotalSubjects] = useState(0);
@@ -11,6 +11,13 @@ const CGPACalculator = () => {
   const [subjectType, setSubjectType] = useState('');
   const [internalMarks, setInternalMarks] = useState('');
   const [externalMarks, setExternalMarks] = useState('');
+
+  // Refs to manage focus
+  const creditRef = useRef(null);
+  const typeRef = useRef(null);
+  const internalRef = useRef(null);
+  const externalRef = useRef(null);
+  const addSubjectRef = useRef(null);
 
   // Handle initial input of number of subjects
   const handleSubjectCountSubmit = () => {
@@ -140,7 +147,7 @@ const CGPACalculator = () => {
             onChange={(e) => setSubjectCount(Number(e.target.value))}
             min="1"
           />
-          <button onClick={handleSubjectCountSubmit}>Submit</button>
+          <button className="submit-btn" onClick={handleSubjectCountSubmit}>Submit</button>
         </div>
       ) : null}
 
@@ -151,14 +158,21 @@ const CGPACalculator = () => {
           <label>Credit Score: </label>
           <input
             type="number"
+            ref={creditRef}
             value={creditScore}
             onChange={(e) => setCreditScore(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && typeRef.current.focus()}
             min="1"
           />
           <br />
 
           <label>Subject Type: </label>
-          <select value={subjectType} onChange={(e) => setSubjectType(e.target.value)}>
+          <select
+            ref={typeRef}
+            value={subjectType}
+            onChange={(e) => setSubjectType(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && internalRef.current.focus()}
+          >
             <option value="">Select</option>
             <option value="Theory">Theory</option>
             <option value="Practical">Practical</option>
@@ -168,8 +182,10 @@ const CGPACalculator = () => {
           <label>Internal Marks: </label>
           <input
             type="number"
+            ref={internalRef}
             value={internalMarks}
             onChange={(e) => setInternalMarks(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && externalRef.current.focus()}
             min="0"
             max={subjectType === 'Theory' ? 30 : 50}
           />
@@ -178,14 +194,16 @@ const CGPACalculator = () => {
           <label>External Marks: </label>
           <input
             type="number"
+            ref={externalRef}
             value={externalMarks}
             onChange={(e) => setExternalMarks(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && addSubjectRef.current.focus()}
             min="0"
             max={subjectType === 'Theory' ? 70 : 50}
           />
           <br />
 
-          <button onClick={handleAddSubject}>Add Subject</button>
+          <button className="addsub-btn"ref={addSubjectRef} onClick={handleAddSubject}>Add Subject</button>
         </div>
       )}
 
@@ -216,16 +234,16 @@ const CGPACalculator = () => {
               fill="transparent"
               strokeDasharray={`${fillPercentage}, ${circleCircumference}`}
               strokeLinecap="round"
-              transform="rotate(-90 60 60)" // Rotate to make the progress start from the top
+              transform="rotate(-90 60 60)"
             />
-            <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="18" fill="#000">
+            <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="18" fill={ringColor}>
               {percentage}%
             </text>
           </svg>
-
-          <button onClick={handleReset}>Calculate Another</button>
         </div>
       )}
+
+      <button className="reset-btn" onClick={handleReset}>Reset</button>
     </div>
   );
 };

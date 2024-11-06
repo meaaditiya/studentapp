@@ -160,14 +160,14 @@ function DailySchedule() {
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
       />
-      <button onClick={addOrEditTask}>
+      <button id="addoredit" onClick={addOrEditTask}>
         {editIndex !== null ? "Edit Task" : "Add Task"}
       </button>
 
       <ul>
         {tasks.map((task, index) => (
           <li key={index} className={task.completed ? "completed" : ""}>
-            <input
+            <input className="checkbox1"
               type="checkbox"
               checked={task.completed}
               onChange={() => toggleTask(index)}

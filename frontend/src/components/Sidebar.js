@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faCalendar, faStickyNote, faTable, faChartBar, faClock, faGraduationCap, faCalculator, faUserCheck, faBook, faFilePdf, faVideo } from '@fortawesome/free-solid-svg-icons'; 
+import { AiOutlineTable } from 'react-icons/ai'; 
 // You can add more icons based on your need.
 
 const Sidebar = ({ isVisible }) => {
@@ -67,9 +68,19 @@ const Sidebar = ({ isVisible }) => {
             <FontAwesomeIcon icon={faVideo} /> YouTube Videos
           </a>
         </li>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>
+  <a href="/exceltables">
+    <AiOutlineTable /> Excel Tables
+  </a>
+</li>
+        <li><br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        
+        </li>
+        
 
       </ul>
     </div>

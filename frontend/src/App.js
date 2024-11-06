@@ -16,6 +16,7 @@ import MarkAttendance from "./components/MarkAttendance";
 import PDFManager from "./components/PDFManager";
 import Loading from './components/Loading';
 import YouTubeEmbed from "./components/YouTubeEmbed";
+import ExcelTables from "./components/ExcelTables";
 
 
 
@@ -90,6 +91,7 @@ const App = () => {
               <Route path="/markattendance" element={<MarkAttendance />} />
               <Route path="/pdfmanager" element={<PDFManager />} />
               <Route path="/youtubeembed" element={<YouTubeEmbed />} />
+              <Route path="/exceltables" element={<ExcelTables/>}/>
             </Routes>
           </main>
         </div>

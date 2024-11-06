@@ -1,3 +1,4 @@
+
 // server.js
 const express = require('express');
 const mongoose = require('mongoose');
@@ -6,6 +7,8 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const XLSX = require("xlsx");
+const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -125,56 +128,44 @@ app.delete('/api/notes/:id', async (req, res) => {
   }
 });
 
-// Weekly Timetable Schema
+
+
+// Define the Timetable schema and model
 const timetableSchema = new mongoose.Schema({
-  day: { type: String, required: true },
-  hourIndex: { type: Number, required: true },
-  task: { type: String, required: true },
+  headers: [String],
+  data: [[String]], // Array of arrays to store rows of timetable data
 });
 
-// Create Timetable model
 const Timetable = mongoose.model("Timetable", timetableSchema);
 
-// API Routes for Weekly Timetable
-
-// Get all timetable entries
-app.get('/api/timetable', async (req, res) => {
+// GET endpoint to retrieve the timetable data
+app.get("/api/timetable", async (req, res) => {
   try {
-    const timetable = await Timetable.find();
-    res.json(timetable);
+    const timetable = await Timetable.findOne();
+    if (timetable) {
+      res.json({ headers: timetable.headers, data: timetable.data });
+    } else {
+      res.json({ headers: [], data: [] }); // Send empty data if no timetable exists
+    }
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching timetable', error });
+    console.error("Error fetching timetable:", error);
+    res.status(500).send("Error fetching timetable data.");
   }
 });
 
-// Add a new timetable entry
-app.post('/api/timetable', async (req, res) => {
-  try {
-    const newEntry = new Timetable(req.body);
-    await newEntry.save();
-    res.status(201).json(newEntry);
-  } catch (error) {
-    res.status(500).json({ message: 'Error adding timetable entry', error });
-  }
-});
+// POST endpoint to save timetable data
+app.post("/api/timetable", async (req, res) => {
+  const { headers, data } = req.body;
 
-// Update an existing timetable entry
-app.put('/api/timetable/:id', async (req, res) => {
   try {
-    const updatedEntry = await Timetable.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updatedEntry);
+    // Remove any existing timetable data before saving the new one
+    await Timetable.deleteMany();
+    const newTimetable = new Timetable({ headers, data });
+    await newTimetable.save();
+    res.send("Timetable uploaded successfully!");
   } catch (error) {
-    res.status(500).json({ message: 'Error updating timetable entry', error });
-  }
-});
-
-// Delete a timetable entry
-app.delete('/api/timetable/:id', async (req, res) => {
-  try {
-    await Timetable.findByIdAndDelete(req.params.id);
-    res.sendStatus(204);
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting timetable entry', error });
+    console.error("Error saving timetable:", error);
+    res.status(500).send("Could not upload timetable.");
   }
 });
 
@@ -296,12 +287,14 @@ app.delete('/api/quick-links/:id', async (req, res) => {
     res.status(400).json({ message: 'Error deleting quick link' });
   }
 });
-// Subject schema with a unique attendance entry per subject
+
+// Attendance schema for individual attendance records
 const attendanceSchema = new mongoose.Schema({
   date: String,
   status: String, // "present" or "absent"
 });
 
+// Subject schema, which includes an array of attendance records
 const subjectSchema = new mongoose.Schema({
   name: String,
   attendance: [attendanceSchema],
@@ -311,35 +304,57 @@ const Subject = mongoose.model("Subject", subjectSchema);
 
 // Get all subjects
 app.get("/api/subjects", async (req, res) => {
-  const subjects = await Subject.find();
-  res.json(subjects);
+  try {
+    const subjects = await Subject.find();
+    res.json(subjects);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching subjects" });
+  }
 });
 
 // Add a new subject
 app.post("/api/subjects", async (req, res) => {
-  const subject = new Subject({ name: req.body.name, attendance: [] });
-  await subject.save();
-  res.json(subject);
+  try {
+    const subject = new Subject({ name: req.body.name, attendance: [] });
+    await subject.save();
+    res.json(subject);
+  } catch (error) {
+    res.status(500).json({ message: "Error adding subject" });
+  }
 });
 
 // Delete a subject
 app.delete("/api/subjects/:id", async (req, res) => {
-  await Subject.findByIdAndDelete(req.params.id);
-  res.json({ message: "Subject deleted" });
+  try {
+    await Subject.findByIdAndDelete(req.params.id);
+    res.json({ message: "Subject deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting subject" });
+  }
 });
 
-// Mark attendance (multiple records allowed per day)
-app.post("/api/subjects/:id/attendance", async (req, res) => {
-  const { date, status } = req.body;
-  const subject = await Subject.findById(req.params.id);
+// Mark attendance for multiple lectures at once
+app.post("/api/subjects/:id/attendance/batch", async (req, res) => {
+  const { attendanceRecords } = req.body; // Array of { date, status } objects
 
-  if (!subject) return res.status(404).json({ message: "Subject not found" });
+  try {
+    const subject = await Subject.findById(req.params.id);
 
-  subject.attendance.push({ date, status });
-  await subject.save();
-  res.json(subject);
+    if (!subject) {
+      return res.status(404).json({ message: "Subject not found" });
+    }
+
+    // Push each attendance record into the subject's attendance array
+    attendanceRecords.forEach(record => {
+      subject.attendance.push({ date: record.date, status: record.status });
+    });
+
+    await subject.save();
+    res.json(subject);
+  } catch (error) {
+    res.status(500).json({ message: "Error marking attendance" });
+  }
 });
-
 // Define the PDF schema
 const pdfSchema = new mongoose.Schema({
   name: String,
@@ -447,6 +462,61 @@ app.delete('/api/videos/:videoId', async (req, res) => {
 });
 
 
+
+let excelTables = [];
+
+const DATA_FILE_PATH = path.join(__dirname, "excelTablesData.json");
+
+// Load data from file on server start
+const loadData = () => {
+  if (fs.existsSync(DATA_FILE_PATH)) {
+    const rawData = fs.readFileSync(DATA_FILE_PATH);
+    excelTables = JSON.parse(rawData);
+  }
+};
+
+// Save data to file
+const saveData = () => {
+  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(excelTables, null, 2));
+};
+
+// Call loadData on startup
+loadData();
+
+app.use(express.json());
+
+// Get all tables
+app.get("/tables", (req, res) => {
+  res.json(excelTables);
+});
+
+// Add a new table
+app.post("/tables", (req, res) => {
+  const { headers, data, title } = req.body;
+  if (!title || !headers || !data) {
+    return res.status(400).json({ error: "Missing table data" });
+  }
+
+  const newTable = { headers, data, title };
+  excelTables.push(newTable);
+  saveData(); // Save to file after modification
+  res.status(201).json({ message: "Table added successfully" });
+});
+
+// Delete a table by title
+app.delete("/tables/:title", (req, res) => {
+  const { title } = req.params;
+
+  const initialLength = excelTables.length;
+  excelTables = excelTables.filter((table) => table.title !== title);
+
+  if (excelTables.length < initialLength) {
+    saveData(); // Save to file after deletion
+    res.status(200).json({ message: "Table deleted successfully" });
+  } else {
+    res.status(404).json({ error: "Table not found" });
+  }
+});
 
 // Start the server
 app.listen(PORT, () => {

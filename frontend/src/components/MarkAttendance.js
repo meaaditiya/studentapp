@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
- // Separate CSS file for modern styling
 
 const AttendanceComponent = () => {
   const [subjects, setSubjects] = useState([]);
@@ -8,8 +7,10 @@ const AttendanceComponent = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [attendanceDate, setAttendanceDate] = useState("");
   const [status, setStatus] = useState("present");
+  const [lectureCount, setLectureCount] = useState(1); // New state for the number of lectures
   const [showMarkAttendance, setShowMarkAttendance] = useState(false);
   const [showAddSubject, setShowAddSubject] = useState(false);
+  const [showAttendanceTable, setShowAttendanceTable] = useState(true); // New state for table visibility
 
   useEffect(() => {
     fetchSubjects();
@@ -20,7 +21,7 @@ const AttendanceComponent = () => {
       const response = await axios.get("http://192.168.1.42:5000/api/subjects");
       setSubjects(response.data);
     } catch (error) {
-      // console.error("Error fetching subjects:", error);
+      console.error("Error fetching subjects:", error);
     }
   };
 
@@ -30,9 +31,9 @@ const AttendanceComponent = () => {
       const response = await axios.post("http://192.168.1.42:5000/api/subjects", { name: newSubject });
       setSubjects([...subjects, response.data]);
       setNewSubject("");
-      setShowAddSubject(false); // Close form after adding
+      setShowAddSubject(false);
     } catch (error) {
-      // console.error("Error adding subject:", error);
+      console.error("Error adding subject:", error);
     }
   };
 
@@ -46,23 +47,34 @@ const AttendanceComponent = () => {
       await axios.delete(`http://192.168.1.42:5000/api/subjects/${subjectId}`);
       setSubjects(subjects.filter((subject) => subject._id !== subjectId));
     } catch (error) {
-      // console.error("Error deleting subject:", error);
+      console.error("Error deleting subject:", error);
     }
   };
 
   const handleMarkAttendance = async () => {
-    if (!selectedSubject || !attendanceDate) return;
+    if (!selectedSubject || !attendanceDate || lectureCount < 1) return;
     try {
-      const response = await axios.post(`http://192.168.1.42:5000/api/subjects/${selectedSubject}/attendance`, {
-        date: attendanceDate,
-        status,
-      });
+      const attendanceRecords = [];
+      for (let i = 0; i < lectureCount; i++) {
+        const attendanceRecord = {
+          date: new Date(new Date(attendanceDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          status,
+        };
+        attendanceRecords.push(attendanceRecord);
+      }
+
+      const response = await axios.post(
+        `http://192.168.1.42:5000/api/subjects/${selectedSubject}/attendance/batch`,
+        { attendanceRecords }
+      );
+
       setSubjects(subjects.map((subject) => (subject._id === selectedSubject ? response.data : subject)));
       setAttendanceDate("");
       setStatus("present");
-      setShowMarkAttendance(false); // Close form after marking attendance
+      setLectureCount(1);
+      setShowMarkAttendance(false);
     } catch (error) {
-      // console.error("Error marking attendance:", error);
+      console.error("Error marking attendance:", error);
     }
   };
 
@@ -102,6 +114,9 @@ const AttendanceComponent = () => {
         </button>
         <button onClick={() => setShowMarkAttendance(!showMarkAttendance)} className="attendance-btn">
           {showMarkAttendance ? "Close Mark Attendance" : "Mark Attendance"}
+        </button>
+        <button onClick={() => setShowAttendanceTable(!showAttendanceTable)} className="attendance-btn">
+          {showAttendanceTable ? "Hide Attendance" : "Show Attendance"}
         </button>
       </div>
 
@@ -145,42 +160,52 @@ const AttendanceComponent = () => {
             <option value="present">Present</option>
             <option value="absent">Absent</option>
           </select>
+          <input
+            type="number"
+            min="1"
+            value={lectureCount}
+            onChange={(e) => setLectureCount(Number(e.target.value))}
+            placeholder="Number of lectures"
+            className="attendance-input"
+          />
           <button onClick={handleMarkAttendance} className="attendance-btn">Submit</button>
         </div>
       )}
 
-      <table className="attendance-table">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Total Classes</th>
-            <th>Present</th>
-            <th>Attendance (%)</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {subjects.map((subject) => {
-            const { total, presentCount, attendancePercentage } = calculateAttendance(subject.attendance);
-            return (
-              <tr key={subject._id}>
-                <td>{subject.name}</td>
-                <td>{total}</td>
-                <td>{presentCount}</td>
-                <td>{attendancePercentage}%</td>
-                <td>
-                  <button
-                    onClick={() => handleDeleteSubject(subject._id)}
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {showAttendanceTable && (
+        <table className="attendance-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Total Classes</th>
+              <th>Present</th>
+              <th>Attendance (%)</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subjects.map((subject) => {
+              const { total, presentCount, attendancePercentage } = calculateAttendance(subject.attendance);
+              return (
+                <tr key={subject._id}>
+                  <td>{subject.name}</td>
+                  <td>{total}</td>
+                  <td>{presentCount}</td>
+                  <td>{attendancePercentage}%</td>
+                  <td>
+                    <button
+                      onClick={() => handleDeleteSubject(subject._id)}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

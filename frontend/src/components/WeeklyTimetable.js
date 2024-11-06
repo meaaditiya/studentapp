@@ -1,42 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
-const hours = Array.from({ length: 18 }, (_, i) => i + 6); // 6 AM to 12 AM
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+import * as XLSX from "xlsx"; // Import XLSX for Excel file handling
 
 function WeeklyTimetable() {
-  const [timetable, setTimetable] = useState(
-    days.reduce((acc, day) => {
-      acc[day] = Array(18).fill("");
-      return acc;
-    }, {})
-  );
+  const [excelData, setExcelData] = useState([]);
+  const [columnHeaders, setColumnHeaders] = useState([]);
+  const [dragging, setDragging] = useState(false); // State to handle drag-and-drop events
+  const [showUploader, setShowUploader] = useState(false); // State to toggle file upload visibility
 
-  const [taskInput, setTaskInput] = useState("");
-  const [currentDay, setCurrentDay] = useState(days[0]);
-  const [currentHourIndex, setCurrentHourIndex] = useState(0);
-  const [isEditing, setIsEditing] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  // Fetch timetable data from the API
+  // Fetch timetable data from the server when the component loads
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
         const response = await axios.get("http://192.168.1.42:5000/api/timetable");
-        const timetableData = response.data;
+        const { headers, data } = response.data;
 
-        const newTimetable = days.reduce((acc, day) => {
-          acc[day] = Array(18).fill("");
-          return acc;
-        }, {});
-
-        timetableData.forEach((entry) => {
-          newTimetable[entry.day][entry.hourIndex] = entry.task;
-        });
-
-        setTimetable(newTimetable);
+        setColumnHeaders(headers);
+        setExcelData(data);
       } catch (error) {
-        /*console.error("Error fetching timetable:", error);*/
         alert("Could not fetch timetable data.");
       }
     };
@@ -44,133 +25,127 @@ function WeeklyTimetable() {
     fetchTimetable();
   }, []);
 
-  const handleEdit = (day, hourIndex, event) => {
-    setCurrentDay(day);
-    setCurrentHourIndex(hourIndex);
-    setTaskInput(timetable[day][hourIndex]);
-    setIsEditing(true);
+  // Handle file upload and parse the Excel file
+  const handleFileUpload = (file) => {
+    const reader = new FileReader();
 
-    const cellRect = event.target.getBoundingClientRect();
-    setPosition({
-      top: cellRect.top + window.scrollY,
-      left: cellRect.right + window.scrollX + 10, // Adding some offset
-    });
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName], {
+        header: 1,
+      });
+
+      if (worksheet.length > 0) {
+        const headers = worksheet[0];
+        const dataRows = worksheet.slice(1);
+
+        setColumnHeaders(headers);
+        setExcelData(dataRows);
+
+        saveTimetable(headers, dataRows);
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
-  const handleAddTask = async () => {
-    if (currentDay && currentHourIndex !== null && taskInput.trim()) {
-      const newEntry = { day: currentDay, hourIndex: currentHourIndex, task: taskInput };
-      try {
-        await axios.post("http://192.168.1.42:5000/api/timetable", newEntry);
-
-        setTimetable((prevTimetable) => ({
-          ...prevTimetable,
-          [currentDay]: prevTimetable[currentDay].map((entry, index) =>
-            index === currentHourIndex ? taskInput : entry
-          ),
-        }));
-        setTaskInput("");
-        setIsEditing(false);
-      } catch (error) {
-       /* console.error("Error adding task:", error);*/
-        alert("Could not add task.");
-      }
+  const saveTimetable = async (headers, data) => {
+    try {
+      await axios.post("http://192.168.1.42:5000/api/timetable", { headers, data });
+      alert("Timetable uploaded successfully!");
+    } catch (error) {
+      alert("Could not upload timetable.");
     }
   };
 
-  const handleClearTask = async () => {
-    if (currentDay && currentHourIndex !== null) {
-      try {
-        const entryToDelete = await axios.get(`http://192.168.1.42:5000/api/timetable`, {
-          params: { day: currentDay, hourIndex: currentHourIndex },
-        });
-
-        const entryId = entryToDelete.data[0]._id; // Assuming _id is present in the entry returned
-
-        if (entryId) {
-          await axios.delete(`http://192.168.1.42:5000/api/timetable/${entryId}`);
-
-          setTimetable((prevTimetable) => ({
-            ...prevTimetable,
-            [currentDay]: prevTimetable[currentDay].map((entry, index) =>
-              index === currentHourIndex ? "" : entry
-            ),
-          }));
-          setTaskInput(""); // Clear input after removing
-          setIsEditing(false); // Hide input form after clearing
-        }
-      } catch (error) {
-       /* console.error("Error clearing task:", error);*/
-        alert("Could not clear task.");
-      }
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      handleFileUpload(file);
     }
   };
 
-  const formatTime = (hour) => {
-    const period = hour >= 12 ? "PM" : "AM";
-    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-    return `${formattedHour} ${period}`;
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragging(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setDragging(false);
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const toggleUploader = () => {
+    setShowUploader(!showUploader);
   };
 
   return (
     <div className="weekly-timetable">
       <h2>Weekly Timetable</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Time & Day</th>
-            {days.map((day) => (
-              <th key={day}>{day}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {hours.map((hour, hourIndex) => (
-            <tr key={hour}>
-              <td>
-                {formatTime(hour)} - {formatTime(hour + 1)}
-              </td>
-              {days.map((day) => (
-                <td key={day} onClick={(event) => handleEdit(day, hourIndex, event)}>
-                  {timetable[day][hourIndex] || ""}
-                </td>
+
+      {/* Circular plus button to toggle file uploader */}
+      <button
+        className="plus-button"
+        onClick={toggleUploader}
+        title={showUploader ? "Hide Upload Area" : "Show Upload Area"}
+      >
+        {showUploader ? "−" : "+"} {/* Change the icon based on state */}
+      </button>
+
+      {/* Conditionally render file input and drag-drop area */}
+      {showUploader && (
+        <div className="upload-area">
+          {/* File input */}
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileChange}
+            className="custom-file-input"
+          />
+
+          {/* Drag and drop area */}
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`drag-drop-area ${dragging ? "dragging" : ""}`}
+          >
+            {dragging ? "Drop the file here..." : "Or drag and drop an Excel file here"}
+          </div>
+        </div>
+      )}
+
+      {/* Display Excel Data */}
+      {excelData.length > 0 && (
+        <table>
+          <thead>
+            <tr>
+              {columnHeaders.map((header, index) => (
+                <th key={index}>{header}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {isEditing && (
-        <div className="input-section" style={{ position: 'absolute', top: position.top, left: position.left }}>
-          <select
-            value={currentDay}
-            onChange={(e) => setCurrentDay(e.target.value)}
-          >
-            {days.map((day) => (
-              <option key={day} value={day}>
-                {day}
-              </option>
+          </thead>
+          <tbody>
+            {excelData.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex}>{cell}</td>
+                ))}
+              </tr>
             ))}
-          </select>
-          <select
-            value={currentHourIndex}
-            onChange={(e) => setCurrentHourIndex(Number(e.target.value))}
-          >
-            {hours.map((hour, index) => (
-              <option key={index} value={index}>
-                {formatTime(hour)} - {formatTime(hour + 1)}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            value={taskInput}
-            onChange={(e) => setTaskInput(e.target.value)}
-            placeholder="Enter task..."
-          />
-          <button onClick={handleAddTask}>Add Task</button>
-          <button onClick={handleClearTask} style={{ marginLeft: '10px' }}>Clear Task</button>
-        </div>
+          </tbody>
+        </table>
       )}
     </div>
   );

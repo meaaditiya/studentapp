@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import './App.css';
+
 import Dashboard from './components/DashBoard';
 import Sidebar from './components/Sidebar';
 import DailySchedule from './components/DailySchedule';
@@ -17,6 +18,8 @@ import PDFManager from "./components/PDFManager";
 import Loading from './components/Loading';
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import ExcelTables from "./components/ExcelTables";
+import CalendarComponent from './components/CalendarComponent';
+import DSALists from "./components/DSALists";
 
 
 
@@ -92,6 +95,8 @@ const App = () => {
               <Route path="/pdfmanager" element={<PDFManager />} />
               <Route path="/youtubeembed" element={<YouTubeEmbed />} />
               <Route path="/exceltables" element={<ExcelTables/>}/>
+              <Route path="/calendarcomponent" element={<CalendarComponent/>}/>
+              <Route path="/dsalists" element={<DSALists/>}/> 
             </Routes>
           </main>
         </div>

@@ -518,7 +518,177 @@ app.delete("/tables/:title", (req, res) => {
   }
 });
 
+
+// Define a CalendarTask Schema
+const calendarTaskSchema = new mongoose.Schema({
+  date: String, // Storing date as a string (e.g., '2024-11-07')
+  tasks: [String], // Array of tasks for each date
+});
+
+const CalendarTask = mongoose.model('CalendarTask', calendarTaskSchema);
+
+// Routes
+// Fetch tasks for a specific date
+app.get('/api/calendar-tasks/:date', async (req, res) => {
+  const { date } = req.params;
+  try {
+    const taskData = await CalendarTask.findOne({ date });
+    res.json(taskData || { date, tasks: [] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch tasks' });
+  }
+});
+
+// Add a new task
+app.post('/api/calendar-tasks', async (req, res) => {
+  const { date, task } = req.body;
+  try {
+    const taskData = await CalendarTask.findOneAndUpdate(
+      { date },
+      { $push: { tasks: task } },
+      { upsert: true, new: true }
+    );
+    res.json(taskData);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add task' });
+  }
+});
+
+app.delete('/api/calendar-tasks', async (req, res) => {
+  const { date, task } = req.query; // Extract from query instead of body
+  try {
+    const taskData = await CalendarTask.findOneAndUpdate(
+      { date }, // Match the date
+      { $pull: { tasks: task } }, // Remove the task from tasks array
+      { new: true }
+    );
+    if (!taskData) {
+      return res.status(404).json({ error: 'Task or date not found' });
+    }
+    res.json(taskData); // Send back the updated task list
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete task' });
+  }
+});
+// Question Schema
+const questionSchema = new mongoose.Schema({
+  number: String,
+  name: String,
+  link: String,
+  description: String,
+});
+
+// List Schema
+const listSchema = new mongoose.Schema({
+  name: String,
+  questions: [questionSchema],
+});
+
+const List = mongoose.model('List', listSchema);
+
+// Middleware to ensure lists exist
+const ensureListExists = async (req, res, next) => {
+  const { listKey } = req.params;
+  try {
+    let list = await List.findOne({ name: listKey });
+    if (!list) {
+      // If list doesn't exist, create it
+      list = new List({ name: listKey, questions: [] });
+      await list.save();
+    }
+    next();
+  } catch (err) {
+    res.status(500).json({ error: 'Error ensuring list existence' });
+  }
+};
+
+// API Endpoints
+
+// Fetch all lists
+app.get('/api/lists', async (req, res) => {
+  try {
+    const lists = await List.find({});
+    res.json(lists);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch lists' });
+  }
+});
+
+// Add a question to a list
+app.post('/api/lists/:listKey/add', ensureListExists, async (req, res) => {
+  const { listKey } = req.params;
+  const { number, name, link, description } = req.body;
+
+  try {
+    const list = await List.findOne({ name: listKey });
+    list.questions.push({ number, name, link, description });
+    await list.save();
+    res.status(201).json({ message: 'Question added successfully', list });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add question' });
+  }
+});
+
+// Move a question from one list to another
+app.put('/api/lists/:fromList/move/:questionId/:toList', async (req, res) => {
+  const { fromList, questionId, toList } = req.params;
+
+  try {
+    const sourceList = await List.findOne({ name: fromList });
+    const targetList = await List.findOne({ name: toList });
+
+    if (!sourceList || !targetList) {
+      return res.status(404).json({ error: 'Source or target list not found' });
+    }
+
+    const question = sourceList.questions.id(questionId);
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found in source list' });
+    }
+
+    // Remove question from source list
+    sourceList.questions.pull(questionId);
+    await sourceList.save();
+
+    // Add question to target list
+    targetList.questions.push(question);
+    await targetList.save();
+
+    res.json({ message: 'Question moved successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to move question' });
+  }
+});
+
+// Delete a question from a list
+app.delete('/api/lists/:listKey/delete/:questionId', async (req, res) => {
+  const { listKey, questionId } = req.params;
+
+  try {
+    const list = await List.findOne({ name: listKey });
+
+    if (!list) {
+      return res.status(404).json({ error: 'List not found' });
+    }
+
+    const question = list.questions.id(questionId);
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found in list' });
+    }
+
+    // Remove the question from the list
+    list.questions.pull(questionId);
+    await list.save();
+
+    res.json({ message: 'Question deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete question' });
+  }
+});
+
+
+
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(5000, '0.0.0.0',() => {
+  console.log(`Server is running on http://localhost:${PORT} and http://192.168.1.42:${PORT}`);
 });  

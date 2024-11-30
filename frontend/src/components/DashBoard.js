@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const API_BASE_URL = 'http://192.168.1.42:5000/api/quick-links'; // Updated to your IP address
+  const API_BASE_URL = 'http://192.168.1.35:5000/api/quick-links'; // Updated to your IP address
 
   useEffect(() => {
     const fetchLinks = async () => {

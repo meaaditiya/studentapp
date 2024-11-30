@@ -1,13 +1,25 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCalendar, faStickyNote, faTable, faChartBar, faClock, faGraduationCap, faCalculator, faUserCheck, faBook, faFilePdf, faVideo } from '@fortawesome/free-solid-svg-icons'; 
-import { AiOutlineTable } from 'react-icons/ai'; 
-// You can add more icons based on your need.
+import { 
+  faHome, 
+  faCalendar, 
+  faStickyNote, 
+  faTable, 
+  faChartBar, 
+  faClock, 
+  faGraduationCap, 
+  faCalculator, 
+  faUserCheck, 
+  faBook, 
+  faFilePdf, 
+  faVideo 
+} from '@fortawesome/free-solid-svg-icons'; 
+import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
 
 const Sidebar = ({ isVisible }) => {
   return (
     <div className={`sidebar ${isVisible ? 'open' : 'hidden'}`}>
-      <ul>
+      <ul className="sidebar-list">
         <li>
           <a href="/dashboard">
             <FontAwesomeIcon icon={faHome} /> Dashboard
@@ -69,19 +81,23 @@ const Sidebar = ({ isVisible }) => {
           </a>
         </li>
         <li>
-  <a href="/exceltables">
-    <AiOutlineTable /> Excel Tables
-  </a>
-</li>
-        <li><br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        
+          <a href="/exceltables">
+            <AiOutlineTable /> Excel Tables
+          </a>
         </li>
-        
-
+        <li>
+          <a href="/calendarcomponent">
+            <AiOutlineCalendar /> Calendar
+          </a>
+        </li>
+        <li>
+          <a href="/dsalists">
+            <AiOutlineCalendar /> DSA List
+          </a>
+        </li>
+        <li> <br></br>
+        <br></br>
+<br></br>        </li>
       </ul>
     </div>
   );

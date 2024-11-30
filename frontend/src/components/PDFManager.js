@@ -12,10 +12,10 @@ const PDFManager = () => {
   // Fetch all PDFs
   const fetchPDFs = async () => {
     try {
-      const res = await axios.get('http://192.168.1.42:5000/api/pdfs'); // Updated URL
+      const res = await axios.get('http://192.168.1.35:5000/api/pdfs'); // Updated URL
       setPdfs(res.data);
     } catch (error) {
-      /* console.error("Failed to fetch PDFs");*/
+      /* console.error("Failed to fetch PDFs"); */
     }
   };
 
@@ -30,28 +30,28 @@ const PDFManager = () => {
     formData.append('pdf', file);
 
     try {
-      await axios.post('http://192.168.1.42:5000/api/upload', formData); // Updated URL
+      await axios.post('http://192.168.1.35:5000/api/upload', formData); // Updated URL
       fetchPDFs();
-      alert("PDF uploaded successfully");
+      alert('PDF uploaded successfully');
     } catch (error) {
-      /* console.error("Failed to upload PDF");*/
+      /* console.error("Failed to upload PDF"); */
     }
   };
 
   // Delete PDF
   const deletePDF = async (id) => {
     try {
-      await axios.delete(`http://192.168.1.42:5000/api/pdfs/${id}`); // Updated URL
+      await axios.delete(`http://192.168.1.35:5000/api/pdfs/${id}`); // Fixed URL interpolation
       fetchPDFs();
-      alert("PDF deleted successfully");
+      alert('PDF deleted successfully');
     } catch (error) {
-      /*console.error("Failed to delete PDF");*/
+      /* console.error("Failed to delete PDF"); */
     }
   };
 
   // Open PDF in Edge
   const openPDF = (id) => {
-    window.open(`http://192.168.1.42:5000/api/pdfs/${id}`, '_blank'); // Updated URL
+    window.open(`http://192.168.1.35:5000/api/pdfs/${id}`, '_blank'); // Fixed URL interpolation
   };
 
   return (
@@ -59,7 +59,9 @@ const PDFManager = () => {
       <h1 className="pdf-manager-title">Document Manager</h1>
 
       <input type="file" className="pdf-file-input" onChange={handleFileChange} />
-      <button className="pdf-upload-button" onClick={uploadPDF}>Upload Document</button>
+      <button className="pdf-upload-button" onClick={uploadPDF}>
+        Upload Document
+      </button>
 
       <h2 className="pdf-list-title">Available Documents</h2>
       <ul className="pdf-list">
@@ -67,8 +69,12 @@ const PDFManager = () => {
           <li key={pdf._id} className="pdf-list-item">
             <span className="pdf-title">{pdf.name}</span>
             <div className="pdf-list-buttons">
-              <button className="pdf-view-button" onClick={() => openPDF(pdf._id)}>View</button>
-              <button className="pdf-delete-button" onClick={() => deletePDF(pdf._id)}>Delete</button>
+              <button className="pdf-view-button" onClick={() => openPDF(pdf._id)}>
+                View
+              </button>
+              <button className="pdf-delete-button" onClick={() => deletePDF(pdf._id)}>
+                Delete
+              </button>
             </div>
           </li>
         ))}

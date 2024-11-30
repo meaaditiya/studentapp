@@ -18,7 +18,7 @@ const AttendanceComponent = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("http://192.168.1.42:5000/api/subjects");
+      const response = await axios.get("http://192.168.1.35:5000/api/subjects");
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -28,7 +28,7 @@ const AttendanceComponent = () => {
   const handleAddSubject = async () => {
     if (!newSubject) return;
     try {
-      const response = await axios.post("http://192.168.1.42:5000/api/subjects", { name: newSubject });
+      const response = await axios.post("http://192.168.1.35:5000/api/subjects", { name: newSubject });
       setSubjects([...subjects, response.data]);
       setNewSubject("");
       setShowAddSubject(false);
@@ -44,7 +44,7 @@ const AttendanceComponent = () => {
       return;
     }
     try {
-      await axios.delete(`http://192.168.1.42:5000/api/subjects/${subjectId}`);
+      await axios.delete(`http://192.168.1.35:5000/api/subjects/${subjectId}`);
       setSubjects(subjects.filter((subject) => subject._id !== subjectId));
     } catch (error) {
       console.error("Error deleting subject:", error);
@@ -64,7 +64,7 @@ const AttendanceComponent = () => {
       }
 
       const response = await axios.post(
-        `http://192.168.1.42:5000/api/subjects/${selectedSubject}/attendance/batch`,
+        `http://192.168.1.35:5000/api/subjects/${selectedSubject}/attendance/batch`,
         { attendanceRecords }
       );
 

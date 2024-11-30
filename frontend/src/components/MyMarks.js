@@ -22,7 +22,7 @@ function MyMarks() {
 
   const fetchExamRecords = async () => {
     try {
-      const response = await axios.get("http://192.168.1.42:5000/api/exams/");
+      const response = await axios.get("http://192.168.1.35:5000/api/exams/");
       setExamRecords(response.data);
     } catch (error) {
       console.error("Error fetching exams:", error);
@@ -62,7 +62,7 @@ function MyMarks() {
       maxMarks,
     };
     try {
-      const response = await axios.post("http://192.168.1.42:5000/api/exams/", newExam);
+      const response = await axios.post("http://192.168.1.35:5000/api/exams/", newExam);
       setExamRecords([...examRecords, response.data]);
       resetForm();
     } catch (error) {
@@ -86,7 +86,7 @@ function MyMarks() {
     const confirmDelete = window.prompt("Are you sure? Type 'yes' to delete record");
     if (confirmDelete === "yes") {
       try {
-        await axios.delete(`http://192.168.1.42:5000/api/exams/${recordToDelete._id}`);
+        await axios.delete(`http://192.168.1.35:5000/api/exams/${recordToDelete._id}`);
         const updatedRecords = examRecords.filter((_, i) => i !== index);
         setExamRecords(updatedRecords);
         setSelectedRecord(null);
@@ -271,12 +271,12 @@ function MyMarks() {
       <h2>Recorded Exams</h2>
       {examRecords.map((record, index) => (
         <div key={index}>
-          <p>
-            {record.examName} - {record.examDate}
-            <button onClick={() => handleShowRecord(index)}>
+          <p id="para">
+            {record.examName} - {record.examDate}<br></br>
+            <button  id="record" onClick={() => handleShowRecord(index)}>
               {selectedRecord === examRecords[index] ? "Hide Record" : "Show Record"}
             </button>
-            <button onClick={() => handleDelete(index)}>Delete</button>
+            <button id="deletemark" onClick={() => handleDelete(index)}>Delete</button>
           </p>
           {selectedRecord === examRecords[index] && (
             <table>

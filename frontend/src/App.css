@@ -395,7 +395,7 @@ header {
 }
 
 .daily-schedule li.completed span {
-  text-decoration: line-through;
+  
   color: #888;
 }
 
@@ -480,8 +480,60 @@ header {
   flex: 1;
 }
 
+#hello li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+}
 
+#hello li.completed {
+ 
+  color: #888;
+}
 
+#tasktext {
+  /* This will break long words into new lines */
+  
+  
+  max-width: 60%; /* Adjust to control wrapping */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  
+}
+
+.checkbox1 {
+  margin-right: 10px;
+}
+
+.buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.buttons button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #008080;
+  color: white;
+  cursor: pointer;
+}
+
+.buttons button:hover {
+  background-color: #005757;
+}
+
+/* Small date styling */
+#hello li small {
+  color: #888;
+  font-size: 0.8em;
+  margin-top: 5px;
+  display: block;
+}
 /* Notes */
 .notes textarea {
   width: 100%;
@@ -1454,7 +1506,9 @@ table tr:last-child {
 .recorded-exams button:hover {
   background-color: #e04040;
 }
-
+#para{
+  word-wrap:break-word;
+}
 /* Media query for smaller screens */
 @media (max-width: 768px) {
   .my-marks {
@@ -1490,6 +1544,33 @@ table tr:last-child {
   button {
     font-size: 14px;
     padding: 8px 16px;
+  }
+  
+}
+@media(max-width:560px){
+  #record{
+   
+    position:relative;
+    top:3px;
+    left:3px;
+    
+  }
+  #deletemark{
+    
+    position:relative;
+    top:3px;
+    left:3px;
+    
+  }
+  #para{
+    word-wrap:break-word;
+  }
+}
+@media(max-width:480px){
+  #record{
+    position:relative;
+    top:3px;
+    left:3px;
   }
 }
 /* Dashboard container styling */
@@ -2888,4 +2969,179 @@ header h1 {
   .table-title {
     font-size: 16px;
   }
+}
+/* CalendarTest.css */
+/* General Calendar Container */
+.calendar-test-container {
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: auto;
+  background-color: #2b2f3a; /* Dark gray background */
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  color: #e0e6ed; /* Light gray text */
+}
+
+.calendar-test-title {
+  font-size: 26px;
+  color: #ffffff; /* White text color */
+  margin-bottom: 20px;
+}
+
+/* Calendar Component */
+.calendar-component {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #444c57; /* Dark border */
+}
+
+/* Month Header Styling */
+.react-calendar__navigation button {
+  color: black; /* White text */
+  background-color: #3a3f4b; /* Darker background */
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  padding: 10px;
+}
+
+.react-calendar__navigation button:enabled:hover {
+  background-color: #5a6675; /* Dark blue-gray on hover */
+}
+
+/* Weekday Names */
+.react-calendar__month-view__weekdays {
+  color: black; /* White text for weekday names */
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* General Calendar Styling */
+.react-calendar__tile {
+  background-color: #3a3f4b; /* Dark tile background */
+  color: black; /* Light gray text */
+  border-radius: 8px;
+}
+
+.react-calendar__tile:enabled:hover {
+  background-color: #56657b; /* Dark blue-gray on hover */
+}
+
+.react-calendar__tile--active {
+  background-color: #61a4ff; /* Bright blue for selected date */
+  color: #ffffff; /* White text for selected date */
+}
+
+.react-calendar__tile--now {
+  background-color: #ffdd57; /* Yellow for today’s date */
+  color: #000000; /* Black text for today */
+  font-weight: bold;
+}
+
+/* Weekend Dates */
+.react-calendar__month-view__days__day--weekend {
+  color: #ff7b7b; /* Lighter red color for weekends */
+}
+/* Task Popup Styling */
+.task-popup {
+  position: absolute;
+  background-color: #3a3f4b;
+  border: 1px solid #444c57;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  width: 300px;
+  padding: 20px;
+  text-align: left;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  color: #e0e6ed; /* Light text */
+}
+
+.task-popup h3 {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.task-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.task-item {
+  background-color: #556677; /* Darker green-gray background for tasks */
+  border: 1px solid #707c88; /* Light gray-blue border */
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+}
+
+.delete-task-button {
+  background-color: #ff4d4f;
+  color: #ffffff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-task-button:hover {
+  background-color: #e63946;
+}
+
+.close-popup-button {
+  background-color: #707c88; /* Light gray button background */
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Add Task Section */
+.add-task-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.add-task-input {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #444c57;
+  color: #ffffff;
+}
+
+.add-task-input::placeholder {
+  color: #888f99; /* Placeholder text color */
+}
+
+.add-task-button {
+  width: 25%;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.add-task-button:hover {
+  background-color: #45a049;
 }

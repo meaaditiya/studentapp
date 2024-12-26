@@ -11,7 +11,7 @@ const ExcelTables = () => {
   useEffect(() => {
     const fetchExcelTables = async () => {
       try {
-        const response = await axios.get("http://192.168.1.35:5000/tables");
+        const response = await axios.get("http://192.168.1.41:5000/tables");
         setExcelTables(response.data);
       } catch (error) {
         alert("Could not fetch File data.");
@@ -49,7 +49,7 @@ const ExcelTables = () => {
 
   const saveExcelTable = async (headers, data, title) => {
     try {
-      await axios.post("http://192.168.1.35:5000/tables", { headers, data, title });
+      await axios.post("http://192.168.1.41:5000/tables", { headers, data, title });
       alert("File uploaded successfully!");
     } catch (error) {
       alert("Could not upload File.");
@@ -84,7 +84,7 @@ const ExcelTables = () => {
   const deleteExcelTable = async (title) => {
     try {
       const encodedTitle = encodeURIComponent(title);
-      const response = await axios.delete(`http://192.168.1.35:5000/tables/${encodedTitle}`);
+      const response = await axios.delete(`http://192.168.1.41:5000/tables/${encodedTitle}`);
 
       if (response.status === 200) {
         const updatedExcelTables = excelTables.filter((excelTable) => excelTable.title !== title);

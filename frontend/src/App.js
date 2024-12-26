@@ -20,6 +20,7 @@ import YouTubeEmbed from "./components/YouTubeEmbed";
 import ExcelTables from "./components/ExcelTables";
 import CalendarComponent from './components/CalendarComponent';
 import DSALists from "./components/DSALists";
+import NewSubject from "./components/NewSubject";
 
 
 
@@ -97,6 +98,8 @@ const App = () => {
               <Route path="/exceltables" element={<ExcelTables/>}/>
               <Route path="/calendarcomponent" element={<CalendarComponent/>}/>
               <Route path="/dsalists" element={<DSALists/>}/> 
+              <Route path ="/newsubject" element={<NewSubject/>}/>
+            
             </Routes>
           </main>
         </div>

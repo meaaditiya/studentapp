@@ -4,6 +4,7 @@ import backgroundImage from '../aadiimage.jpeg';
 import backgroundImage2 from '../aadiimage2.png';
 import backgroundImage3 from '../aadiimage3.jpg';
 import backgroundImage4 from '../aadiimage4.jpg';
+import backgroundImage5 from '../aadiimage6.jpg'; // New subject image
 
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
@@ -13,7 +14,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const API_BASE_URL = 'http://192.168.1.35:5000/api/quick-links'; // Updated to your IP address
+  const API_BASE_URL = 'http://192.168.1.41:5000/api/quick-links';
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -64,7 +65,7 @@ const Dashboard = () => {
       await fetch(`${API_BASE_URL}/${id}`, {
         method: 'DELETE',
       });
-      setLinks(links.filter(link => link._id !== id));
+      setLinks(links.filter((link) => link._id !== id));
     } catch (error) {
       setError('Failed to delete quick link');
     }
@@ -83,35 +84,19 @@ const Dashboard = () => {
     justifyContent: 'flex-start',
     padding: '20px',
     position: 'relative',
-    margin: '-35px'
-  };
-
-  const titleStyle = {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    zIndex: 10,
-    backgroundImage: 'linear-gradient(270deg, #FF512F, #F09819, #4CAF50, #2196F3)',
-    backgroundSize: '400% 400%',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    animation: 'vibrantColor 5s ease infinite',
-    marginTop: '20px',
+    margin: '-35px',
   };
 
   return (
     <div className="dashboard" style={dashboardStyle}>
       <h1 className="title-dashboard">Welcome to Student Manager</h1>
 
-      {/* Error Message */}
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
-      {/* Loading State */}
       {loading ? (
         <div>Loading quick links...</div>
       ) : (
         <>
-          {/* Quick Links Snippet Box */}
           <div className="snippet-box">
             <div className="quick-links-container">
               {links.map((link) => (
@@ -124,22 +109,19 @@ const Dashboard = () => {
                   >
                     {link.name}
                   </a>
-                  <button onClick={() => handleDeleteLink(link._id)} className="quick-delete-button">X</button>
+                  <button onClick={() => handleDeleteLink(link._id)} className="quick-delete-button">
+                    X
+                  </button>
                 </div>
               ))}
-
-              {/* Add Shortcut Button in the Same Row */}
               <div className="add-shortcut-container">
-                <div
-                  className="circle-link add-shortcut"
-                  onClick={() => setShowForm(!showForm)}
-                >
+                <div className="circle-link add-shortcut" onClick={() => setShowForm(!showForm)}>
                   <span>+</span>
                 </div>
-                <p className="add-quick-links-text" style={{ color: 'black' }}>Add Quick Links</p>
+                <p className="add-quick-links-text" style={{ color: 'black' }}>
+                  Add Quick Links
+                </p>
               </div>
-
-              {/* Add Link Form Right Next to Add Shortcut */}
               {showForm && (
                 <div className="add-link-form" style={{ marginLeft: '20px' }}>
                   <input
@@ -160,7 +142,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Grid Container */}
           <div className="grid-container">
             <Link to="/markattendance" className="box">
               <img src={backgroundImage3} alt="Attendance Manager" className="box-image" />
@@ -174,8 +155,10 @@ const Dashboard = () => {
               <img src={backgroundImage4} alt="Timer" className="box-image" />
               <p className="box-text">Timer</p>
             </Link>
-           
-
+            <Link to="/newsubject" className="box">
+              <img src={backgroundImage5} alt="New Subject" className="box-image" />
+              <p className="box-text">Exam Preparation</p>
+            </Link>
           </div>
         </>
       )}

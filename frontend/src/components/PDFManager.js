@@ -12,7 +12,7 @@ const PDFManager = () => {
   // Fetch all PDFs
   const fetchPDFs = async () => {
     try {
-      const res = await axios.get('http://192.168.1.35:5000/api/pdfs'); // Updated URL
+      const res = await axios.get('http://192.168.1.41:5000/api/pdfs'); // Updated URL
       setPdfs(res.data);
     } catch (error) {
       /* console.error("Failed to fetch PDFs"); */
@@ -30,7 +30,7 @@ const PDFManager = () => {
     formData.append('pdf', file);
 
     try {
-      await axios.post('http://192.168.1.35:5000/api/upload', formData); // Updated URL
+      await axios.post('http://192.168.1.41:5000/api/upload', formData); // Updated URL
       fetchPDFs();
       alert('PDF uploaded successfully');
     } catch (error) {
@@ -41,7 +41,7 @@ const PDFManager = () => {
   // Delete PDF
   const deletePDF = async (id) => {
     try {
-      await axios.delete(`http://192.168.1.35:5000/api/pdfs/${id}`); // Fixed URL interpolation
+      await axios.delete(`http://192.168.1.41:5000/api/pdfs/${id}`); // Fixed URL interpolation
       fetchPDFs();
       alert('PDF deleted successfully');
     } catch (error) {
@@ -51,7 +51,7 @@ const PDFManager = () => {
 
   // Open PDF in Edge
   const openPDF = (id) => {
-    window.open(`http://192.168.1.35:5000/api/pdfs/${id}`, '_blank'); // Fixed URL interpolation
+    window.open(`http://192.168.1.41:5000/api/pdfs/${id}`, '_blank'); // Fixed URL interpolation
   };
 
   return (

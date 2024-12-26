@@ -12,7 +12,7 @@ function WeeklyTimetable() {
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await axios.get("http://192.168.1.35:5000/api/timetable");
+        const response = await axios.get("http://192.168.1.41:5000/api/timetable");
         const { headers, data } = response.data;
 
         setColumnHeaders(headers);
@@ -54,7 +54,7 @@ function WeeklyTimetable() {
 
   const saveTimetable = async (headers, data) => {
     try {
-      await axios.post("http://192.168.1.35:5000/api/timetable", { headers, data });
+      await axios.post("http://192.168.1.41:5000/api/timetable", { headers, data });
       alert("Timetable uploaded successfully!");
     } catch (error) {
       alert("Could not upload timetable.");

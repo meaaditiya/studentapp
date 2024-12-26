@@ -685,8 +685,140 @@ app.delete('/api/lists/:listKey/delete/:questionId', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete question' });
   }
 });
+// Schema for subjects and topics
+const newSubjectSchema = new mongoose.Schema({
+  subjectName: { type: String, required: true },
+  topics: [
+    {
+      date: { type: String, required: true },
+      topicName: { type: String, required: true },
+      unitName: { type: String, required: true },
+      completed: { type: Boolean, default: false },  // Completion field
+    },
+  ],
+});
 
+const NewSubject = mongoose.model("NewSubject", newSubjectSchema);
 
+// API Endpoints
+
+// Retrieve all subjects
+app.get("/newsubject", async (req, res) => {
+  try {
+    const subjects = await NewSubject.find();
+    res.status(200).json(subjects);
+  } catch (error) {
+    console.error(error); // Log error details
+    res.status(500).json({ message: "Error fetching subjects.", error });
+  }
+});
+
+// Add a new subject
+app.post("/newsubject", async (req, res) => {
+  try {
+    const { subjectName } = req.body;
+    const newSubject = new NewSubject({ subjectName, topics: [] });
+    await newSubject.save();
+    res.status(201).json(newSubject);
+  } catch (error) {
+    console.error(error); // Log error details
+    res.status(500).json({ message: "Error adding subject.", error });
+  }
+});
+
+// Add a topic to a subject
+app.post("/newsubject/:subjectId/topics", async (req, res) => {
+  try {
+    const { subjectId } = req.params;
+    const { date, topicName, unitName } = req.body;
+
+    if (!date || !topicName || !unitName) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const subject = await NewSubject.findById(subjectId);
+
+    if (!subject) {
+      return res.status(404).json({ message: "Subject not found." });
+    }
+
+    subject.topics.push({ date, topicName, unitName, completed: false });
+    await subject.save();
+    res.status(201).json(subject);
+  } catch (error) {
+    console.error(error); // Log error details
+    res.status(500).json({ message: "Error adding topic.", error });
+  }
+});
+
+// Toggle the completion status of a topic
+app.patch("/newsubject/:subjectId/topics/:topicId", async (req, res) => {
+  try {
+    const { subjectId, topicId } = req.params;
+
+    const subject = await NewSubject.findById(subjectId);
+
+    if (!subject) {
+      return res.status(404).json({ message: "Subject not found." });
+    }
+
+    const topic = subject.topics.id(topicId);
+
+    if (!topic) {
+      return res.status(404).json({ message: "Topic not found." });
+    }
+
+    topic.completed = !topic.completed; // Toggle completion status
+    await subject.save();
+    res.status(200).json(subject);
+  } catch (error) {
+    console.error(error); // Log error details
+    res.status(500).json({ message: "Error toggling topic completion.", error });
+  }
+});
+
+// Delete a topic
+
+app.delete("/newsubject/:subjectId/topics/:topicId", async (req, res) => {
+  try {
+    const { subjectId, topicId } = req.params;
+    const subject = await NewSubject.findById(subjectId);
+    
+    if (!subject) {
+      return res.status(404).json({ message: "Subject not found." });
+    }
+    
+    const topicIndex = subject.topics.findIndex(topic => topic._id.toString() === topicId);
+    if (topicIndex === -1) {
+      return res.status(404).json({ message: "Topic not found." });
+    }
+    
+    subject.topics.splice(topicIndex, 1);
+    await subject.save();
+    res.status(200).json({ message: "Topic deleted successfully.", subject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting topic.", error });
+  }
+});
+// Delete a subject
+app.delete("/newsubject/:subjectId", async (req, res) => {
+  try {
+    const { subjectId } = req.params;
+
+    const subject = await NewSubject.findById(subjectId);
+
+    if (!subject) {
+      return res.status(404).json({ message: "Subject not found." });
+    }
+
+    await NewSubject.findByIdAndDelete(subjectId);// Remove the subject
+    res.status(200).json({ message: "Subject deleted successfully." });
+  } catch (error) {
+    console.error(error); // Log error details
+    res.status(500).json({ message: "Error deleting subject.", error });
+  }
+});
 
 // Start the server
 app.listen(5000, '0.0.0.0',() => {

@@ -14,7 +14,7 @@ const CalendarTest = () => {
 
   // Fetch tasks for the selected date
   useEffect(() => {
-    axios.get(`http://192.168.1.35:5000/api/calendar-tasks/${formattedDate}`)
+    axios.get(`http://192.168.1.41:5000/api/calendar-tasks/${formattedDate}`)
       .then(response => setTasks(response.data.tasks || []))
       .catch(error => console.error("Error fetching tasks:", error));
   }, [formattedDate]);
@@ -26,7 +26,7 @@ const CalendarTest = () => {
       return;
     }
 
-    axios.post('http://192.168.1.35:5000/api/calendar-tasks', { date: formattedDate, task: newTask })
+    axios.post('http://192.168.1.41:5000/api/calendar-tasks', { date: formattedDate, task: newTask })
       .then(response => {
         setTasks(response.data.tasks);
         setNewTask('');
@@ -37,7 +37,7 @@ const CalendarTest = () => {
  
   const handleDeleteTask = (taskToDelete) => {
     // Pass date and task as query parameters
-    axios.delete(`http://192.168.1.35:5000/api/calendar-tasks`, {
+    axios.delete(`http://192.168.1.41:5000/api/calendar-tasks`, {
       params: {
         date: formattedDate,
         task: taskToDelete

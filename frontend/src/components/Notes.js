@@ -17,7 +17,7 @@ function Notes() {
   // Fetch notes from the backend
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("http://192.168.1.35:5000/api/notes"); // Updated to your IP address
+      const response = await axios.get("http://192.168.1.41:5000/api/notes"); // Updated to your IP address
       setNotes(response.data);
     } catch (error) {
      /* console.error("Error fetching notes:", error);*/
@@ -28,7 +28,7 @@ function Notes() {
     if (noteText.trim()) {
       const { date, dayTime } = getCurrentDateTime(); // Get date and time when the note is added
       try {
-        const response = await axios.post("http://192.168.1.35:5000/api/notes", {
+        const response = await axios.post("http://192.168.1.41:5000/api/notes", {
           text: noteText,
           date,
           dayTime,
@@ -43,7 +43,7 @@ function Notes() {
 
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`http://192.168.1.35:5000/api/notes/${id}`); // Updated to your IP address
+      await axios.delete(`http://192.168.1.41:5000/api/notes/${id}`); // Updated to your IP address
       setNotes(notes.filter(note => note._id !== id)); // Update state to remove the deleted note
     } catch (error) {
      /* console.error("Error deleting note:", error);*/
@@ -55,7 +55,7 @@ function Notes() {
     if (newNoteText !== null && newNoteText.trim()) {
       const { date, dayTime } = getCurrentDateTime(); // Update date and time on edit
       try {
-        const response = await axios.put(`http://192.168.1.35:5000/api/notes/${notes[index]._id}`, {
+        const response = await axios.put(`http://192.168.1.41:5000/api/notes/${notes[index]._id}`, {
           text: newNoteText,
           date,
           dayTime,

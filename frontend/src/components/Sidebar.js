@@ -12,7 +12,9 @@ import {
   faUserCheck, 
   faBook, 
   faFilePdf, 
-  faVideo 
+  faVideo ,
+  faList,
+  faPencilAlt
 } from '@fortawesome/free-solid-svg-icons'; 
 import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
 
@@ -92,8 +94,16 @@ const Sidebar = ({ isVisible }) => {
         </li>
         <li>
           <a href="/dsalists">
-            <AiOutlineCalendar /> DSA List
+          <FontAwesomeIcon icon={faList}/> DSA List
           </a>
+        </li>
+        <li>
+          <a href="/newsubject">
+          <FontAwesomeIcon icon={faPencilAlt}/> Prepare Exam
+          </a>
+        </li>
+        <li>
+       
         </li>
         <li> <br></br>
         <br></br>

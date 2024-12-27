@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-
+import '../ComponentCSS/CGPACalculator.css'
 const CGPACalculator = () => {
   const [totalSubjects, setTotalSubjects] = useState(0);
   const [subjects, setSubjects] = useState([]);

@@ -1,0 +1,175 @@
+/* Style for the main container */
+.cgpa-calculator {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 90%; /* Responsive width */
+  }
+  
+  /* Title styling */
+  .cgpa-calculator h2 {
+    color: #28a745;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Subheadings */
+  .cgpa-calculator h3 {
+    color: #555;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  /* Label styling */
+  .cgpa-calculator label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+  }
+  
+  /* Input and Select field styling */
+  .cgpa-calculator input[type="number"],
+  .cgpa-calculator select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Button styling */
+  .reset-btn {
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position:relative;
+    top:4px;
+    left:150px;
+  }
+  .submit-btn {
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position:relative;
+    top:40px;
+    right:150px;
+  }
+  .addsub-btn {
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position:relative;
+    top:48px;
+    right:150px;
+  }
+  .cgpa-calculator button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+  
+  /* Progress Ring styling */
+  .progress-ring {
+    margin: 20px auto;
+    width: 120px;
+    height: 120px;
+  }
+  
+  .progress-ring text {
+    font-size: 18px;
+    fill: #000;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .cgpa-calculator {
+      padding: 15px;
+    }
+  
+    .cgpa-calculator h2 {
+      font-size: 20px;
+    }
+  
+    .cgpa-calculator h3 {
+      font-size: 18px;
+    }
+  
+    .cgpa-calculator input[type="number"],
+    .cgpa-calculator select {
+      font-size: 14px;
+    }
+  
+    .cgpa-calculator button {
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+    .addsub-btn{
+         position:relative;
+         top:40px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cgpa-calculator h2 {
+      font-size: 18px;
+    }
+  
+    .cgpa-calculator h3 {
+      font-size: 16px;
+    }
+  
+    .progress-ring {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .progress-ring text {
+      font-size: 14px;
+    }
+    .submit-btn{
+      position:relative;
+      left:-90px;
+    }
+    .reset-btn{
+      position : relative;
+      left:85px;
+      ;
+    }
+    .addsub-btn{
+      position:relative;
+      top:40px;
+      left: -85px;
+  }
+  }
+  
+  

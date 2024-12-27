@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import '../ComponentCSS/Timer.css';
 function Timer() {
   // Initializing state with values from localStorage, or default values if not present
   const [time, setTime] = useState(() => {

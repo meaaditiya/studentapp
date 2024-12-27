@@ -1,0 +1,30 @@
+/* Weekly Timetable */
+.weekly-timetable table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .weekly-timetable th,
+  .weekly-timetable td {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .weekly-timetable th {
+    background-color: #264653;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .weekly-timetable td {
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .weekly-timetable td:hover {
+    background-color: #e9f5f2; /* Light teal on hover */
+  }
+  

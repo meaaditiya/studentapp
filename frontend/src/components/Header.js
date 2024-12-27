@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaOdnoklassnikiSquare } from 'react-icons/fa';
 import { FiRefreshCw } from "react-icons/fi";
 // You can choose any other icon as needed
-
+import '../ComponentCSS/Header.css';
 function Header({ toggleSidebar }) {
   const [time, setTime] = useState(new Date());
   const navigate = useNavigate();

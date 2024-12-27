@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
-
+import '../ComponentCSS/ExcelTables.css';
 const ExcelTables = () => {
   const [excelTables, setExcelTables] = useState([]);
   const [dragging, setDragging] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import '../ComponentCSS/DailySchedule.css';
 function DailySchedule() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");

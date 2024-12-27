@@ -21,6 +21,7 @@ import ExcelTables from "./components/ExcelTables";
 import CalendarComponent from './components/CalendarComponent';
 import DSALists from "./components/DSALists";
 import NewSubject from "./components/NewSubject";
+/*import JavaIDE from "./components/JavaIDE";*/
 
 
 
@@ -99,6 +100,7 @@ const App = () => {
               <Route path="/calendarcomponent" element={<CalendarComponent/>}/>
               <Route path="/dsalists" element={<DSALists/>}/> 
               <Route path ="/newsubject" element={<NewSubject/>}/>
+              {/*<Route path="/javaide" element={<JavaIDE/>}/>*/}
             
             </Routes>
           </main>

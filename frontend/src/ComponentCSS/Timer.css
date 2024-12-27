@@ -1,0 +1,175 @@
+/* Timer */
+/* Timer */
+/* Full-Screen Timer Container */
+.full-screen-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height of the viewport */
+    background-color: #f4f4f4;
+    padding: 20px; /* Add some padding for smaller screens */
+    box-sizing: border-box; /* Include padding in height calculation */
+  }
+  
+  /* Timer Type Toggle */
+  .timer-type-toggle {
+    margin-bottom: 20px;
+  }
+  
+  .timer-type-toggle button {
+    margin: 0 10px;
+    padding: 10px;
+    font-size: 1.2rem;
+    background-color: #024CAA;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .timer-type-toggle button:hover {
+    background-color: #091057;
+  }
+  
+  /* Time Inputs Container */
+  .time-inputs {
+    display: flex;
+    gap: 20px; /* Space between each input */
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .time-inputs input {
+    width: 50px; /* Width for inputs */
+    height: 40px; /* Height to match label text size */
+    padding: 5px;
+    font-size: 1.2rem;
+    text-align: center;
+    border: 2px solid #024CAA;
+    border-radius: 8px;
+    color: #333;
+    transition: border-color 0.3s ease;
+  }
+  
+  .time-inputs input:focus {
+    border-color: #024CAA;
+  }
+  
+  .time-inputs input::placeholder {
+    color: #aaa; /* Placeholder color */
+  }
+  
+  /* Timer Display */
+  .timer-display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .timer-ring {
+    width: 200px; /* Increased size of the ring */
+    height: 200px; /* Increased size of the ring */
+  }
+  
+  .time-text {
+    position: absolute;
+    font-size: 2.5rem; /* Size for the time text */
+    color: #333;
+  }
+  
+  /* Timer Controls */
+  .timer-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .timer-controls button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #024CAA;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .timer-controls button:hover {
+    background-color: #091057;
+  }
+  
+  /* Preset Buttons */
+  .preset-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    justify-content: center; /* Center align buttons */
+    gap: 10px; /* Space between buttons */
+    margin-top: 15px;
+  }
+  
+  .preset-buttons button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    background-color: #024CAA;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex: 1 0 45%; /* Allow buttons to grow/shrink and take up to 45% of the row */
+    min-width: 120px; /* Minimum width for buttons */
+  }
+  
+  .preset-buttons button:hover {
+    background-color: #091057;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .timer-ring {
+      width: 150px; /* Smaller ring for tablets */
+      height: 150px; /* Smaller ring for tablets */
+    }
+  
+    .time-text {
+      font-size: 2rem; /* Smaller font size for time display */
+    }
+  
+    .timer-controls button,
+    .preset-buttons button {
+      padding: 8px;
+      font-size: 1rem; /* Adjust font size */
+    }
+  
+    .time-inputs {
+      gap: 10px; /* Adjust gap between inputs */
+    }
+  
+    .time-inputs input {
+      width: 40px; /* Width for inputs on smaller screens */
+      font-size: 1rem; /* Decrease font size */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .timer-ring {
+      width: 120px; /* Smaller ring for mobile */
+      height: 120px; /* Smaller ring for mobile */
+    }
+  
+    .time-text {
+      font-size: 1.5rem; /* Smaller font size for mobile time display */
+    }
+  
+    .timer-display {
+      width: 90%; /* Limit width for timer display on mobile */
+    }
+  
+    .preset-buttons button {
+      flex: 1 0 100%; /* Full width buttons on small screens */
+    }
+  }

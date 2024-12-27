@@ -1,0 +1,52 @@
+/* Notes */
+.notes textarea {
+    width: 100%;
+    height: 120px;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem; /* Add some space below the textarea */
+  }
+  
+  .notes button {
+    margin-top: 0.5rem;
+    background-color: #2a9d8f;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .notes button:hover {
+    background-color: #21867a; /* Darker teal */
+  }
+  
+  /* Additional styling for the Edit and Delete buttons */
+  .notes ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .notes li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .notes li p {
+    margin: 0;
+    flex: 1;
+  }
+  
+  .notes li button {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  

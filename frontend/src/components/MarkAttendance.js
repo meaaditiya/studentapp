@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import '../ComponentCSS/MarkAttendance.css';
 const AttendanceComponent = () => {
   const [subjects, setSubjects] = useState([]);
   const [newSubject, setNewSubject] = useState("");

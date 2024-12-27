@@ -1,0 +1,185 @@
+.youtube-embed-container {
+    position: relative;
+    padding: 20px;
+  }
+  
+  .add-video-button {
+    position: absolute;
+    top: -14px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .add-video-button:hover {
+    background-color: #45a049;
+  }
+  
+  .add-video-form {
+    position: absolute;
+    top: 80px;  /* Position below the button */
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+  
+  .add-video-form input {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 250px;
+  }
+  
+  .add-video-form button {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    position:relative;
+    
+  }
+  
+  .add-video-form button:hover {
+    background-color: #45a049;
+  }
+  
+  
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .video-item {
+      width: 100%;  /* Make videos full width on small screens */
+    }
+  
+    .add-video-form {
+      width: 90%;  /* Make the form responsive */
+    }
+  }
+  /* YouTubeEmbed.css */
+.youtube-embed-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .add-video {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .add-video input {
+    padding: 10px;
+    font-size: 16px;
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-video button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-video button:hover {
+    background-color: #218838;
+  }
+  
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .video-item {
+    position: relative;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .video-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .delete-video-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .delete-video-button:hover {
+    background-color: #ff3333;
+  }
+  
+  .video-title {
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .add-video {
+      flex-direction: column; /* Stack the inputs and button vertically */
+    }
+  
+    .add-video input,
+    .add-video button {
+      width: 100%; /* Full width for inputs and button */
+    }
+  
+    .video-grid {
+      grid-template-columns: 1fr; /* Single column layout */
+    }
+  
+    .video-item {
+      width: 100%; /* Full width for video items */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .video-title {
+      font-size: 14px; /* Slightly smaller font size for titles */
+    }
+  
+    .delete-video-button {
+      font-size: 18px; /* Smaller font size for delete button */
+      width: 25px;
+      height: 25px;
+    }
+  }
+  

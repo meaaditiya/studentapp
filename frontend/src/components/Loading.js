@@ -1,6 +1,6 @@
 import React from 'react';
 import aadiImage from '../aadiimage5.jpg'; // Adjust this path if needed
-
+import '../ComponentCSS/Loading.css'
 const Loading = () => {
   return (
     <div className="loading-container">

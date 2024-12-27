@@ -1,0 +1,116 @@
+/* Attendance Manager Styles */
+.attendance-manager {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  /* Title Styling */
+  .attendance-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #28a745;
+  }
+  
+  /* Button Group Layout */
+  .attendance-button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Spacing between buttons */
+    margin-bottom: 20px;
+  }
+  
+  /* Button Styles */
+  .attendance-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    background-color: #28a745; /* Green background */
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+  }
+  
+  .attendance-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: translateY(-2px);
+  }
+  
+  /* Advanced Container Styles for Forms */
+  .attendance-form-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+   
+    width: 100%;
+  }
+  
+  /* Form Input Styling */
+  .attendance-form-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Subject Input Group Styling */
+  .attendance-subject-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Result Message Styling */
+  p {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 768px) {
+    .attendance-manager {
+      padding: 20px; /* Reduce padding on smaller screens */
+    }
+  
+    .attendance-btn {
+      font-size: 0.9em; /* Smaller buttons on mobile */
+      padding: 8px;
+    }
+  
+    .attendance-form-container input {
+      padding: 8px; /* Smaller padding for input fields */
+    }
+  }
+  @media (max-width: 480px) {
+    .attendance-manager {
+      padding: 20px; /* Reduce padding on smaller screens */
+    }
+  
+    .attendance-btn {
+      font-size: 0.8em; /* Smaller buttons on mobile */
+      padding:0px;
+      
+    }
+  
+    .attendance-form-container input {
+      padding: 8px; /* Smaller padding for input fields */
+    }
+    .attendance-title {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+     
+    }
+  }

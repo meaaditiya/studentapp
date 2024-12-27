@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import '../ComponentCSS/AttendanceManager.css'
 const AttendanceManager = () => {
   const [mode, setMode] = useState(null);
   const [totalLectures, setTotalLectures] = useState('');

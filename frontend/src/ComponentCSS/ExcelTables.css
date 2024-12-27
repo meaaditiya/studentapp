@@ -1,0 +1,321 @@
+.custom-file-input {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto; /* Default width */
+  }
+  
+  .custom-file-input:hover {
+    background-color: #45a049;
+  }
+  
+  .custom-file-input:focus {
+    outline: none;
+  }
+  
+  .drag-drop-area {
+    padding: 20px;
+    border: 2px dashed #4CAF50;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-size: 16px;
+    color: #6c757d;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    max-width: 100%; /* Make sure it doesn't overflow the parent */
+  }
+  
+  .drag-drop-area.dragging {
+    background-color: #e2e6ea;
+    border-color: #0056b3;
+    color: #0056b3;
+  }
+  
+  .drag-drop-area:hover {
+    background-color: #e9ecef;
+  }
+  
+  .drag-drop-area p {
+    margin: 0;
+  }
+  
+  /* Media queries for responsiveness */
+  
+  /* Small devices (up to 576px) */
+  @media (max-width: 576px) {
+    .custom-file-input {
+      padding: 8px 12px;
+      font-size: 14px;
+      width: 100%; /* Full width on smaller screens */
+      text-align: center;
+    }
+  
+    /* Hide drag-and-drop on small screens */
+    .drag-drop-area {
+      display: none;
+    }
+  }
+  
+  /* Medium devices (up to 768px) */
+  @media (max-width: 768px) {
+    .custom-file-input {
+      padding: 9px 13px;
+      font-size: 15px;
+      width: 100%; /* Full width on smaller screens */
+      text-align: center;
+    }
+  
+    .drag-drop-area {
+      padding: 18px;
+      font-size: 15px;
+      width: 100%; /* Full width */
+    }
+  }
+  
+  /* Larger devices (up to 992px) */
+  @media (max-width: 992px) {
+    .custom-file-input {
+      font-size: 15px;
+      padding: 9px 13px;
+    }
+  
+    .drag-drop-area {
+      font-size: 15px;
+    }
+  }
+  .plus-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .plus-button:hover {
+    background-color: #45a049;
+  }
+  
+  .upload-area {
+    margin-top: 20px;
+  }
+  
+  .drag-drop-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .dragging {
+    border-color: #4CAF50;
+  }
+  /* General Container Styling */
+  .excel-tables-component {
+    padding: 20px;
+    background-color: #f5f5f5; /* Light gray background */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for modern look */
+  }
+  
+  /* Title Styling */
+  .excel-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #264653; /* Matching the table header color */
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    text-align: center;
+  }
+  
+  /* Circular Upload Button */
+  .circular-upload-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #2a9d8f; /* Muted teal for modern aesthetic */
+    color: white;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .circular-upload-button:hover {
+    background-color: #264653; /* Darker shade for hover effect */
+  }
+  
+  /* Upload Area */
+  .upload-area {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+  
+  /* Title Input Field */
+  .title-input {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* File Input */
+  .file-input {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Drag & Drop Area */
+  .drag-drop-area-custom {
+    border: 2px dashed #264653; /* Border color updated to match modern theme */
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #264653;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dragging {
+    background-color: #e9f5f2; /* Lighter green for dragging state */
+  }
+  
+  .timetable-container {
+    margin-top: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Table Title Styling */
+  .table-title {
+    font-size: 20px;
+    color: #2a9d8f;
+    margin-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+  }
+  
+  /* Table Styling */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .styled-table th {
+    background-color: #264653;
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-align: left;
+  }
+  
+  .styled-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  /* Delete Button */
+  .delete-button {
+    margin-bottom: 10px;
+    padding: 8px 15px;
+    background-color: #e76f51;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.3s ease;
+  }
+  
+  .delete-button:hover {
+    background-color: #d62828;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 1200px) {
+    .styled-table th, .styled-table td {
+      padding: 12px;
+      font-size: 14px;
+    }
+  
+    .circular-upload-button {
+      width: 50px;
+      height: 50px;
+      font-size: 28px;
+    }
+  
+    .table-title {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .styled-table th, .styled-table td {
+      padding: 10px;
+      font-size: 12px;
+    }
+  
+    .circular-upload-button {
+      width: 45px;
+      height: 45px;
+      font-size: 24px;
+    }
+  
+    .excel-title {
+      font-size: 22px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .styled-table th, .styled-table td {
+      padding: 3px;
+      font-size: 10px;
+    }
+  
+    .circular-upload-button {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+  
+    .excel-title {
+      font-size: 20px;
+    }
+  
+    .table-title {
+      font-size: 16px;
+    }
+  }
+  

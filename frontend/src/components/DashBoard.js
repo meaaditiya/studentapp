@@ -1,27 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import backgroundImage from '../aadiimage.jpeg';
-import backgroundImage2 from '../aadiimage2.png';
-import backgroundImage3 from '../aadiimage3.jpg';
-import backgroundImage4 from '../aadiimage4.jpg';
-import backgroundImage5 from '../aadiimage6.jpg'; // New subject image
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { AiOutlinePlus, AiOutlineDelete, AiOutlineLink } from "react-icons/ai";
+import "../ComponentCSS/Dashboard.css";
 
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
-  const [linkName, setLinkName] = useState('');
-  const [linkURL, setLinkURL] = useState('');
+  const [linkName, setLinkName] = useState("");
+  const [linkURL, setLinkURL] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const API_BASE_URL = 'http://192.168.1.41:5000/api/quick-links';
+  const API_BASE_URL = "http://192.168.1.41:5000/api/quick-links";
 
   useEffect(() => {
     const fetchLinks = async () => {
       try {
         const response = await fetch(API_BASE_URL);
         if (!response.ok) {
-          throw new Error('Failed to fetch quick links');
+          throw new Error("Failed to fetch quick links");
         }
         const data = await response.json();
         setLinks(data);
@@ -40,19 +37,19 @@ const Dashboard = () => {
     if (linkName && linkURL) {
       try {
         const response = await fetch(API_BASE_URL, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ name: linkName, url: linkURL }),
         });
         if (!response.ok) {
-          throw new Error('Failed to add quick link');
+          throw new Error("Failed to add quick link");
         }
         const newLink = await response.json();
         setLinks([...links, newLink]);
-        setLinkName('');
-        setLinkURL('');
+        setLinkName("");
+        setLinkURL("");
         setShowForm(false);
       } catch (error) {
         setError(error.message);
@@ -63,105 +60,101 @@ const Dashboard = () => {
   const handleDeleteLink = async (id) => {
     try {
       await fetch(`${API_BASE_URL}/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       setLinks(links.filter((link) => link._id !== id));
     } catch (error) {
-      setError('Failed to delete quick link');
+      setError("Failed to delete quick link");
     }
   };
 
-  const dashboardStyle = {
-    height: '100vh',
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundAttachment: 'fixed',
-    backgroundPosition: 'center',
-    color: 'white',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: '20px',
-    position: 'relative',
-    margin: '-35px',
-  };
-
   return (
-    <div className="dashboard" style={dashboardStyle}>
-      <h1 className="title-dashboard">Welcome to Student Manager</h1>
+    <div className="dashboard-layout">
+      {/* Simple Text at the Top */}
+      <div className="top-text">Welcome to Your Dashboard</div>
 
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-
-      {loading ? (
-        <div>Loading quick links...</div>
-      ) : (
-        <>
-          <div className="snippet-box">
+      {/* Main Content */}
+      <div className="dashboard-content">
+        {/* Quick Links */}
+        <div className="quick-links-snippet">
+          <h2 className="snippet-title">Quick Links</h2>
+          {loading ? (
+            <div>Loading quick links...</div>
+          ) : (
             <div className="quick-links-container">
               {links.map((link) => (
-                <div key={link._id} className="link-wrapper">
+                <div key={link._id} className="quick-link-item">
                   <a
                     href={link.url}
-                    className="circle-link"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="quick-link-icon"
                   >
-                    {link.name}
+                    <AiOutlineLink />
                   </a>
-                  <button onClick={() => handleDeleteLink(link._id)} className="quick-delete-button">
-                    X
-                  </button>
+                  <span className="quick-link-text">{link.name}</span>
+                  <AiOutlineDelete
+                    className="delete-icon"
+                    onClick={() => handleDeleteLink(link._id)}
+                  />
                 </div>
               ))}
-              <div className="add-shortcut-container">
-                <div className="circle-link add-shortcut" onClick={() => setShowForm(!showForm)}>
-                  <span>+</span>
-                </div>
-                <p className="add-quick-links-text" style={{ color: 'black' }}>
-                  Add Quick Links
-                </p>
+              <div className="add-quick-link">
+                <button
+                  className="add-link-button"
+                  onClick={() => setShowForm(!showForm)}
+                >
+                  <AiOutlinePlus />
+                </button>
+                {showForm && (
+                  <div className="add-link-form">
+                    <input
+                      type="text"
+                      placeholder="Link Name"
+                      value={linkName}
+                      onChange={(e) => setLinkName(e.target.value)}
+                    />
+                    <input
+                      type="url"
+                      placeholder="Link URL"
+                      value={linkURL}
+                      onChange={(e) => setLinkURL(e.target.value)}
+                    />
+                    <button className="submit-link-button" onClick={handleAddLink}>
+                      Add
+                    </button>
+                  </div>
+                )}
               </div>
-              {showForm && (
-                <div className="add-link-form" style={{ marginLeft: '20px' }}>
-                  <input
-                    type="text"
-                    placeholder="Link Name"
-                    value={linkName}
-                    onChange={(e) => setLinkName(e.target.value)}
-                  />
-                  <input
-                    type="url"
-                    placeholder="Link URL"
-                    value={linkURL}
-                    onChange={(e) => setLinkURL(e.target.value)}
-                  />
-                  <button onClick={handleAddLink}>Add Link</button>
-                </div>
-              )}
             </div>
-          </div>
+          )}
+          {error && <div className="error-message">{error}</div>}
+        </div>
 
-          <div className="grid-container">
-            <Link to="/markattendance" className="box">
-              <img src={backgroundImage3} alt="Attendance Manager" className="box-image" />
-              <p className="box-text">Attendance </p>
-            </Link>
-            <Link to="/mymarks" className="box">
-              <img src={backgroundImage2} alt="CGPA Calculator" className="box-image" />
+        {/* Feature Grid */}
+        <div className="grid-container">
+          <Link to="/markattendance" className="box">
+            <div className="box-content">
+              <p className="box-text">Attendance</p>
+            </div>
+          </Link>
+          <Link to="/mymarks" className="box">
+            <div className="box-content">
               <p className="box-text">My Marks</p>
-            </Link>
-            <Link to="/timer" className="box">
-              <img src={backgroundImage4} alt="Timer" className="box-image" />
+            </div>
+          </Link>
+          <Link to="/timer" className="box">
+            <div className="box-content">
               <p className="box-text">Timer</p>
-            </Link>
-            <Link to="/newsubject" className="box">
-              <img src={backgroundImage5} alt="New Subject" className="box-image" />
+            </div>
+          </Link>
+          <Link to="/newsubject" className="box">
+            <div className="box-content">
               <p className="box-text">Exam Preparation</p>
-            </Link>
-          </div>
-        </>
-      )}
+            </div>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

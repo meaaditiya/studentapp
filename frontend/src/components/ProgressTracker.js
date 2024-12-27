@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import '../ComponentCSS/ProgressTracker.css';
 
 const ProgressTracker = () => {
   const [progressList, setProgressList] = useState([]);

@@ -17,7 +17,7 @@ import {
   faPencilAlt
 } from '@fortawesome/free-solid-svg-icons'; 
 import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
-
+import '../ComponentCSS/Slidebar.css'
 const Sidebar = ({ isVisible }) => {
   return (
     <div className={`sidebar ${isVisible ? 'open' : 'hidden'}`}>
@@ -102,6 +102,11 @@ const Sidebar = ({ isVisible }) => {
           <FontAwesomeIcon icon={faPencilAlt}/> Prepare Exam
           </a>
         </li>
+        {/*<li>
+          <a href="/javaide">
+          <FontAwesomeIcon icon={faPencilAlt}/> Prepare Exam
+          </a>
+        </li>*/}
         <li>
        
         </li>

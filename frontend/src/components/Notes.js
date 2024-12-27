@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import '../ComponentCSS/Notes.css';
 function Notes() {
   const [notes, setNotes] = useState([]);
   const [noteText, setNoteText] = useState("");

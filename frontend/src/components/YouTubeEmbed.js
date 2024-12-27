@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
   // Import a CSS file for styles
-
+import '../ComponentCSS/YouTubeEmbed.css';
 const YouTubeEmbed = () => {
   const [videoLinks, setVideoLinks] = useState([]);
   const [newLink, setNewLink] = useState('');

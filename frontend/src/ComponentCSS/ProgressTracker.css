@@ -1,0 +1,240 @@
+/* General Container */
+.progress-tracker {
+    width: 80%;
+    margin: 2rem auto;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header */
+  .progress-tracker h2 {
+    font-size: 24px;
+    margin-bottom: 1rem;
+    color: #264653;
+    text-align: center;
+  }
+  
+  /* Form */
+  .progress-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .progress-form input,
+  .progress-form textarea {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .progress-form button {
+    background-color: #2a9d8f;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .progress-form button:hover {
+    background-color: #21867a;
+  }
+  
+  /* Progress List */
+  .progress-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .progress-list li {
+    background-color: #f0f4f8;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-left: 5px solid #2a9d8f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-list .details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .progress-list .details span {
+    font-weight: bold;
+    color: #264653;
+  }
+  
+  .progress-list .note {
+    margin-top: 0.5rem;
+    color: #555;
+  }
+  
+  .progress-list .percentage {
+    font-weight: bold;
+    color: #2a9d8f;
+    font-size: 18px;
+  }
+  
+  /* Button container for stacking edit and delete buttons vertically */
+  .progress-list .button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Space between the buttons */
+  }
+  
+  .progress-list button {
+    background-color: #e76f51;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .progress-list button:hover {
+    background-color: #c6553d;
+  }
+  
+  /* Edit Button */
+  .progress-list .edit-btn {
+    background-color: #f4a261;
+  }
+  
+  .progress-list .edit-btn:hover {
+    background-color: #d87d42;
+  }
+  
+  /* ProgressTracker.css */
+  .progress-tracker {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .progress-form input,
+  .progress-form textarea,
+  .progress-form button {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .progress-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .progress-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-item .details {
+    flex: 1;
+    padding-left: 15px;
+  }
+  
+  .progress-item button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2a9d8f;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .progress-item button:hover {
+    background-color: #21867a;
+  }
+  .toggle-form-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #45a049;
+    color: white;
+    border: none;
+  
+    cursor: pointer;
+    font-size: 24px; /* Adjust size as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .progress-form {
+      flex-direction: column;
+    }
+  
+    .progress-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .progress-item .details {
+      padding-left: 0;
+    }
+  
+    .progress-item button {
+      margin-left: 0;
+      margin-top: 5px;
+    }
+  }
+  
+  @media (max-width: 780px) {
+    .progress-form input,
+    .progress-form textarea,
+    .progress-form button {
+      font-size: 14px;
+    }
+  
+    .progress-item {
+      padding: 15px;
+    }
+  
+    .progress-item .details {
+      font-size: 14px;
+    }
+    #progress-edit{
+      position:relative;
+      bottom: -31px;
+      left: -80px;
+      padding-left:17.5px;
+      padding-right: 17.5px;
+    }
+    #progress-delete{
+      position:relative;
+      bottom: 0px;
+      left: 80px;
+    }
+  
+  }
+  

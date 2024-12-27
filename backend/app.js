@@ -11,7 +11,7 @@ const XLSX = require("xlsx");
 const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const os = require('os');
 // Middleware
 app.use(cors());
 app.use(bodyParser.json()); // Parse JSON bodies
@@ -819,6 +819,181 @@ app.delete("/newsubject/:subjectId", async (req, res) => {
     res.status(500).json({ message: "Error deleting subject.", error });
   }
 });
+// Create uploads directory if it doesn't exist
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+// Serve static files from the uploads directory - UPDATED THIS LINE
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// MongoDB Resource Schema
+const resourceSchema = new mongoose.Schema({
+    subjectId: { 
+        type: String, 
+        required: true 
+    },
+    type: { 
+        type: String, 
+        enum: ["PDF", "YouTube"], 
+        required: true 
+    },
+    name: { 
+        type: String, 
+        required: true 
+    },
+    url: { 
+        type: String, 
+        required: true 
+    },
+    createdAt: { 
+        type: Date, 
+        default: Date.now 
+    }
+});
+
+const Resource = mongoose.model("Resource", resourceSchema);
+
+// Multer configuration for PDF uploads - UPDATED THIS PART
+const pdfStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir); // Use the absolute path
+    },
+    filename: (req, file, cb) => {
+        // Create unique filename with original extension
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+// File filter for PDF uploads
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+        cb(null, true);
+    } else {
+        cb(new Error('Only PDF files are allowed!'), false);
+    }
+};
+
+const pdfUpload = multer({ 
+    storage: pdfStorage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 10 * 1024 * 1024 // 10MB limit
+    }
+});
+// In your server.js, update these parts:
+
+
+// 2. Update the resource POST route - modify the URL creation
+app.post("/resources", pdfUpload.single("file"), async (req, res) => {
+    try {
+        const { subjectId, type, name } = req.body;
+
+        if (!subjectId || !type || !name) {
+            return res.status(400).json({ 
+                error: "Subject ID, type, and name are required" 
+            });
+        }
+
+        let url;
+        if (type === "PDF") {
+            if (!req.file) {
+                return res.status(400).json({ error: "PDF file is required" });
+            }
+            // Store the complete URL
+            url = `http://192.168.1.41:5000/uploads/${req.file.filename}`;
+        } else if (type === "YouTube") {
+            const { url: youtubeUrl } = req.body;
+            if (!youtubeUrl || !youtubeUrl.trim()) {
+                return res.status(400).json({ error: "YouTube URL is required" });
+            }
+            url = youtubeUrl;
+        } else {
+            return res.status(400).json({ error: "Invalid resource type" });
+        }
+
+        const resource = new Resource({
+            subjectId,
+            type,
+            name,
+            url
+        });
+
+        await resource.save();
+        res.status(201).json(resource);
+    } catch (error) {
+        console.error("Error adding resource:", error);
+        res.status(500).json({ error: "Error adding resource" });
+    }
+});
+
+// 3. Update the delete route to handle the new URL format
+app.delete("/resources/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const resource = await Resource.findById(id);
+
+        if (!resource) {
+            return res.status(404).json({ error: "Resource not found" });
+        }
+
+        if (resource.type === "PDF") {
+            // Extract filename from the full URL
+            const filename = resource.url.split('/').pop();
+            const filePath = path.join(uploadDir, filename);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+
+        await resource.deleteOne();
+        res.json({ message: "Resource deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting resource:", error);
+        res.status(500).json({ error: "Error deleting resource" });
+    }
+});
+
+
+// Keep existing routes
+app.get("/resources", async (req, res) => {
+    try {
+        const resources = await Resource.find().sort({ createdAt: -1 });
+        res.json(resources);
+    } catch (error) {
+        console.error("Error fetching resources:", error);
+        res.status(500).json({ error: "Error fetching resources" });
+    }
+});
+
+app.get("/resources/subject/:subjectId", async (req, res) => {
+    try {
+        const resources = await Resource.find({ 
+            subjectId: req.params.subjectId 
+        }).sort({ createdAt: -1 });
+        res.json(resources);
+    } catch (error) {
+        console.error("Error fetching subject resources:", error);
+        res.status(500).json({ error: "Error fetching subject resources" });
+    }
+});
+
+// Error handling middleware
+app.use((error, req, res, next) => {
+    if (error instanceof multer.MulterError) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ 
+                error: 'File size is too large. Maximum size is 10MB' 
+            });
+        }
+        return res.status(400).json({ error: error.message });
+    }
+    next(error);
+});
+
+
 
 // Start the server
 app.listen(5000, '0.0.0.0',() => {

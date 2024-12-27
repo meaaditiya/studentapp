@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx"; // Import XLSX for Excel file handling
-
+import '../ComponentCSS/WeeklyTimetable.css';
 function WeeklyTimetable() {
   const [excelData, setExcelData] = useState([]);
   const [columnHeaders, setColumnHeaders] = useState([]);

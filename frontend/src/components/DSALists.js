@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaBook } from 'react-icons/fa';
-import './DSALists.css';
+import '../ComponentCSS/DSALists.css';
 
 const DSALists = () => {
   const [lists, setLists] = useState({

@@ -1,0 +1,120 @@
+/* Full screen container */
+.loading-container {
+    position: fixed; /* Fixed to prevent scrolling */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: dark overlay for contrast */
+    backdrop-filter: blur(10px); /* Blurs the entire background */
+    z-index: 1000; /* Ensures it overlays all other content */
+  }
+  
+  /* Blurred background overlay */
+  .blurred-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  /* Replace with your actual image */
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px); /* Additional blur for image background */
+    z-index: -1; /* Keeps it behind the loading content */
+  }
+  
+  /* Popup container for loading content */
+  .loading-popup {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Loading text styling */
+  .loading-text {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #fff;
+  }
+  
+  /* Centered image styling */
+  .centered-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .centered-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 5px solid #fff;
+  }
+  
+  /* Full-width loading bar */
+  .loading-bar {
+    width: 80%; /* Adjust width as needed */
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 20px;
+  }
+  
+  /* Loading progress animation */
+  .loading-progress {
+    width: 0;
+    height: 100%;
+    background-color: #218838;
+    animation: loading 1s infinite ease-in-out;
+  }
+  
+  /* Keyframes for loading progress animation */
+  @keyframes loading {
+    0% {
+      width: 0;
+    }
+    50% {
+      width: 50%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .loading-text {
+      font-size: 1.2em;
+    }
+  
+    .centered-image {
+      width: 120px;
+      height: 120px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .loading-text {
+      font-size: 1em;
+    }
+  
+    .centered-image {
+      width: 100px;
+      height: 100px;
+    }
+  }
+  

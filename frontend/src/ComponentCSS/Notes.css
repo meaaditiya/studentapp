@@ -1,52 +1,199 @@
-/* Notes */
+/* Notes Container */
+.notes {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header */
+.notes h2 {
+  color: #2c5282;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Textarea */
 .notes textarea {
-    width: 100%;
-    height: 120px;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem; /* Add some space below the textarea */
+  width: 100%;
+  max-width: 800px;
+  height: 150px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  resize: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.notes textarea:focus {
+  outline: none;
+  border-color: #2c5282;
+}
+
+/* Add Note Button */
+.notes > button {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #2c5282;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notes > button:hover {
+  background-color: #1a365d;
+  transform: translateY(-2px);
+}
+
+/* Notes List */
+.notes ul {
+  width: 100%;
+  max-width: 800px;
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+/* Note Item */
+.notes li {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Note Text */
+.notes li p:first-of-type {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #2d3748;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  margin-bottom: 0.5rem;
+}
+
+/* Note Timestamp */
+.notes li small {
+  color: #718096;
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+/* Note Actions - Positioned top right */
+.notes li .actions {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Edit and Delete Buttons */
+.notes li button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #2c5282;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  min-width: 70px; /* Ensure consistent button width */
+}
+
+.notes li button:hover {
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  .notes {
+    padding: 1.5rem;
   }
   
-  .notes button {
-    margin-top: 0.5rem;
-    background-color: #2a9d8f;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.25rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .notes button:hover {
-    background-color: #21867a; /* Darker teal */
-  }
-  
-  /* Additional styling for the Edit and Delete buttons */
+  .notes textarea, 
   .notes ul {
-    list-style-type: none;
-    padding: 0;
+    max-width: 700px;
   }
-  
+}
+
+@media screen and (max-width: 768px) {
+  .notes {
+    padding: 1rem;
+  }
+
+  .notes h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .notes textarea {
+    height: 120px;
+    font-size: 1rem;
+  }
+
+  .notes > button {
+    padding: 0.7rem 1.75rem;
+    font-size: 1rem;
+  }
+
   .notes li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #ddd;
+    padding: 1.25rem;
   }
   
-  .notes li p {
-    margin: 0;
-    flex: 1;
+  .notes li .actions {
+    top: 1.25rem;
+    right: 1.25rem;
   }
-  
+}
+
+@media screen and (max-width: 480px) {
+  .notes {
+    padding: 1rem 0.75rem;
+  }
+
+  .notes h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .notes textarea {
+    height: 100px;
+    padding: 0.75rem;
+  }
+
+  .notes li {
+    padding: 1rem;
+  }
+
+  .notes li .actions {
+    top: 1rem;
+    right: 1rem;
+  }
+
   .notes li button {
-    margin-left: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    min-width: 60px;
   }
-  
-  
+}

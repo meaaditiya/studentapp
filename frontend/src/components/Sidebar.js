@@ -12,12 +12,14 @@ import {
   faUserCheck, 
   faBook, 
   faFilePdf, 
-  faVideo ,
+  faVideo,
   faList,
   faPencilAlt
 } from '@fortawesome/free-solid-svg-icons'; 
+import { FaStar } from 'react-icons/fa';
 import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
-import '../ComponentCSS/Slidebar.css'
+import '../ComponentCSS/Slidebar.css';
+
 const Sidebar = ({ isVisible }) => {
   return (
     <div className={`sidebar ${isVisible ? 'open' : 'hidden'}`}>
@@ -79,7 +81,7 @@ const Sidebar = ({ isVisible }) => {
         </li>
         <li>
           <a href="/youtubeembed">
-            <FontAwesomeIcon icon={faVideo} /> YouTube Videos
+            <FontAwesomeIcon icon={faVideo} /> Videos
           </a>
         </li>
         <li>
@@ -94,25 +96,31 @@ const Sidebar = ({ isVisible }) => {
         </li>
         <li>
           <a href="/dsalists">
-          <FontAwesomeIcon icon={faList}/> DSA List
+            <FontAwesomeIcon icon={faList} /> DSA List
           </a>
         </li>
         <li>
           <a href="/newsubject">
-          <FontAwesomeIcon icon={faPencilAlt}/> Prepare Exam
+            <FontAwesomeIcon icon={faPencilAlt} /> Prepare Exam
           </a>
         </li>
-        {/*<li>
-          <a href="/javaide">
-          <FontAwesomeIcon icon={faPencilAlt}/> Prepare Exam
-          </a>
-        </li>*/}
-        <li>
-       
+        {/* Star Icon at the Bottom */}
+        <li className="center-icon">
+          <FaStar className="star-icon" />
         </li>
-        <li> <br></br>
-        <br></br>
-<br></br>        </li>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+
       </ul>
     </div>
   );

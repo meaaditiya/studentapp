@@ -112,5 +112,25 @@
   .sidebar::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
   }
-  
+  /* For the star icon at the bottom */
+.center-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto; /* Push the icon to the bottom */
+  padding: 20px 0;
+}
+
+.star-icon {
+  font-size: 32px; /* Adjust size */
+  color: #f4c10f; /* Golden-yellow color */
+  transition: transform 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.star-icon:hover {
+  transform: scale(1.2); /* Slightly enlarge on hover */
+  color: #ffd700; /* Bright yellow on hover */
+}
+
   

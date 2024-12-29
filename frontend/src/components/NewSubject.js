@@ -45,7 +45,7 @@ function NewSubjectManager() {
         alert("Subject name cannot be empty.");
         return;
       }
-      const response = await axios.post("http://192.168.1.41:5000/newsubject", {
+      const response = await axios.post("http:192.168.1.41:5000/newsubject", {
         subjectName: newSubjectName,
       });
       setSubjects([...subjects, response.data]);

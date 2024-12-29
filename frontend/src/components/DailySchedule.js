@@ -114,9 +114,10 @@ function DailySchedule() {
 
   return (
     <div className="daily-schedule">
-      <h2>Daily Schedule</h2>
-      <h3>{dateString}</h3>
-
+    
+      <h2 className="header6">Daily Schedule</h2>
+      <h3 className="header6">{dateString}</h3>
+      
       {/* Completion Ring */}
       <div className="completion-tracker">
         <div className="completion-ring">

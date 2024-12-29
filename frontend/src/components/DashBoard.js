@@ -2,7 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlinePlus, AiOutlineDelete, AiOutlineLink } from "react-icons/ai";
 import "../ComponentCSS/Dashboard.css";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faHome, 
+  faCalendar, 
+  faStickyNote, 
+  faTable, 
+  faChartBar, 
+  faClock, 
+  faGraduationCap, 
+  faCalculator, 
+  faUserCheck, 
+  faBook, 
+  faFilePdf, 
+  faVideo ,
+  faList,
+  faPencilAlt
+} from '@fortawesome/free-solid-svg-icons'; 
+import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
   const [linkName, setLinkName] = useState("");
@@ -10,8 +27,13 @@ const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [weather, setWeather] = useState("Loading weather...");
+  const [locationError, setLocationError] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [tasksError, setTasksError] = useState("");
 
   const API_BASE_URL = "http://192.168.1.41:5000/api/quick-links";
+  const TASKS_API_URL = "http://192.168.1.41:5000/tasks";
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -30,6 +52,23 @@ const Dashboard = () => {
     };
 
     fetchLinks();
+  }, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(TASKS_API_URL);
+        if (!response.ok) {
+          throw new Error("Failed to fetch tasks");
+        }
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        setTasksError("Failed to load today's tasks");
+      }
+    };
+
+    fetchTasks();
   }, []);
 
   const handleAddLink = async (e) => {
@@ -67,6 +106,55 @@ const Dashboard = () => {
       setError("Failed to delete quick link");
     }
   };
+
+  useEffect(() => {
+    const updateTimeAndDate = () => {
+      const now = new Date();
+      const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+      document.getElementById("time").textContent = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      document.getElementById("date").textContent = now.toLocaleDateString(undefined, options);
+    };
+
+    const fetchWeather = async (latitude, longitude) => {
+      try {
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+        );
+        if (!response.ok) throw new Error("Failed to fetch weather data");
+        const data = await response.json();
+        setWeather(
+          `Temp: ${data.current_weather.temperature}°C, Condition: ${data.current_weather.weathercode}`
+        );
+      } catch {
+        setWeather("Weather unavailable");
+      }
+    };
+
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            fetchWeather(latitude, longitude);
+          },
+          () => {
+            setLocationError("Unable to retrieve your location");
+          }
+        );
+      } else {
+        setLocationError("Geolocation is not supported by this browser");
+      }
+    };
+
+    updateTimeAndDate();
+    getLocation();
+    const interval = setInterval(updateTimeAndDate, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="dashboard-layout">
@@ -135,24 +223,54 @@ const Dashboard = () => {
         <div className="grid-container">
           <Link to="/markattendance" className="box">
             <div className="box-content">
-              <p className="box-text">Attendance</p>
+              <p className="box-text"><FontAwesomeIcon icon={faUserCheck} />  Attendance  </p>
             </div>
           </Link>
           <Link to="/mymarks" className="box">
             <div className="box-content">
-              <p className="box-text">My Marks</p>
+              <p className="box-text"><FontAwesomeIcon icon={faGraduationCap} />Marks</p>
             </div>
           </Link>
           <Link to="/timer" className="box">
             <div className="box-content">
-              <p className="box-text">Timer</p>
+              <p className="box-text"><FontAwesomeIcon icon={faClock} /> Timer</p>
             </div>
           </Link>
           <Link to="/newsubject" className="box">
             <div className="box-content">
-              <p className="box-text">Exam Preparation</p>
+              <p className="box-text"><FontAwesomeIcon icon={faPencilAlt}/> Exam Planner</p>
             </div>
           </Link>
+        </div>
+      </div>
+
+      {/* Clock and Weather Box */}
+      <div className="clock-weather-box">
+        <div className="clock-content">
+          <div className="time" id="time">Loading time...</div>
+          <div className="date" id="date">Loading date...</div>
+          <div className="weather">{weather}</div>
+          {locationError && <div className="location-error">{locationError}</div>}
+        </div>
+
+        {/* Today's Tasks */}
+        <div className="todays-tasks">
+          <h3 className="tasks-heading">Today's Tasks</h3>
+          {tasksError ? (
+            <div className="error-message">{tasksError}</div>
+          ) : tasks.length > 0 ? (
+            <div className="tasks-slider">
+              <div className="tasks-track">
+                {tasks.map((task, index) => (
+                  <span key={index} className="task-item">
+                    {task.text}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div>No tasks for today</div>
+          )}
         </div>
       </div>
     </div>

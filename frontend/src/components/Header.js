@@ -37,7 +37,7 @@ function Header({ toggleSidebar }) {
         < FaOdnoklassnikiSquare size={40} style={{ marginRight: '10px' }} /> {/* Using a book icon */}
         Personal Diary
       </h1>
-      <div className="clock">{time.toLocaleTimeString()}</div>
+     
     </header>
   );
 }

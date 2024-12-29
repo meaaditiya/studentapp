@@ -1,92 +1,170 @@
 .pdf-manager {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.pdf-manager-title {
+  color: #2c5282;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* File Input Styling */
+.pdf-file-input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: white;
+  border: 2px dashed #2c5282;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.pdf-file-input:hover {
+  border-color: #1a365d;
+}
+
+/* Upload Button */
+.pdf-upload-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #2c5282;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.pdf-upload-button:hover {
+  background-color: #1a365d;
+  transform: translateY(-2px);
+}
+
+/* List Section */
+.pdf-list-title {
+  color: #2d3748;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.pdf-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pdf-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.pdf-list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-title {
+  font-size: 1.1rem;
+  color: #2d3748;
+  flex: 1;
+  margin-right: 1rem;
+  word-break: break-word;
+}
+
+.pdf-list-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* View and Delete Buttons */
+.pdf-view-button,
+.pdf-delete-button {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+  background-color: #2c5282;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  min-width: 80px;
+}
+
+.pdf-view-button:hover,
+.pdf-delete-button:hover {
+  background-color: #1a365d;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .pdf-manager {
+    margin: 1rem;
+    padding: 1.5rem;
   }
-  
+
   .pdf-manager-title {
-    text-align: center;
-    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
   }
-  
-  .pdf-list-title {
-    color: #666;
+
+  .pdf-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
-  
-  /* File input styling */
-  .pdf-file-input {
-    margin-bottom: 15px;
-    display: block;
+
+  .pdf-list-buttons {
+    width: 100%;
+    justify-content: flex-start;
   }
-  
-  /* Button styling */
-  .pdf-upload-button,
+
   .pdf-view-button,
   .pdf-delete-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
+    flex: 1;
+    text-align: center;
   }
-  
-  .pdf-upload-button:hover,
-  .pdf-view-button:hover,
-  .pdf-delete-button:hover {
-    background-color: #218838;
+}
+
+@media screen and (max-width: 480px) {
+  .pdf-manager {
+    margin: 0.5rem;
+    padding: 1rem;
   }
-  
-  /* List styling */
-  .pdf-list {
-    list-style-type: none;
-    padding: 0;
+
+  .pdf-manager-title {
+    font-size: 1.5rem;
   }
-  
-  .pdf-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+
+  .pdf-file-input,
+  .pdf-upload-button {
+    padding: 0.75rem;
   }
-  
-  /* Title styling with ellipsis */
-  .pdf-title {
-    flex: 1; /* Allow title to grow */
-    white-space: nowrap; /* Prevent line breaks */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Show ellipsis for overflow text */
-    margin-right: 10px; /* Space between title and buttons */
+
+  .pdf-view-button,
+  .pdf-delete-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
-  
-  /* Responsive styling */
-  @media (max-width: 600px) {
-    .pdf-manager {
-      padding: 15px;
-    }
-  
-    .pdf-upload-button,
-    .pdf-view-button,
-    .pdf-delete-button {
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-  
-    /* Adjust the list item to handle smaller screens */
-    .pdf-list-item {
-      flex-wrap: nowrap; /* Prevent wrapping to a new line */
-      overflow: hidden; /* Prevent overflow from the list item */
-    }
-  
-    /* Ensuring title fits smaller screens */
-    .pdf-title {
-      max-width: calc(100% - 100px); /* Reserve space for buttons */
-    }
-  }
-  
+}

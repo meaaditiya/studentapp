@@ -10,7 +10,7 @@ const YouTubeEmbed = () => {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const response = await axios.get('http://192.168.1.41:5000/api/videos');
+      const response = await axios.get('https://studentapp-backend-ccks.onrender.com/api/videos');
       setVideoLinks(response.data);
     };
     fetchVideos();
@@ -25,7 +25,7 @@ const YouTubeEmbed = () => {
   const addVideoLink = async () => {
     const videoId = extractVideoId(newLink);
     if (videoId && newTitle) {
-      await axios.post('http://192.168.1.41:5000/api/videos', { videoId, title: newTitle });
+      await axios.post('https://studentapp-backend-ccks.onrender.com/api/videos', { videoId, title: newTitle });
       setVideoLinks([...videoLinks, { videoId, title: newTitle }]);
       setNewLink('');
       setNewTitle('');
@@ -36,7 +36,7 @@ const YouTubeEmbed = () => {
   };
 
   const deleteVideo = async (videoId) => {
-    await axios.delete(`http://192.168.1.41:5000/api/videos/${videoId}`);
+    await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/videos/${videoId}`);
     setVideoLinks(videoLinks.filter((video) => video.videoId !== videoId));
   };
 

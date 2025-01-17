@@ -22,8 +22,8 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [tasksError, setTasksError] = useState("");
 
-  const API_BASE_URL = "http://192.168.1.41:5000/api/quick-links";
-  const TASKS_API_URL = "http://192.168.1.41:5000/tasks";
+  const API_BASE_URL = "https://studentapp-backend-ccks.onrender.com/api/quick-links";
+  const TASKS_API_URL = "https://studentapp-backend-ccks.onrender.com/tasks";
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -236,11 +236,7 @@ const Dashboard = () => {
               <p className="box-text"><FontAwesomeIcon icon={faDatabase}/> Internal Marks</p>
             </div>
           </Link>
-          <Link to="/notes" className="box">
-            <div className="box-content">
-              <p className="box-text"><FontAwesomeIcon icon={faPencilAlt}/> Exam Planner</p>
-            </div>
-          </Link>
+         
         </div>
       </div>
 

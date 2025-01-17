@@ -68,7 +68,7 @@ const WeightLossTracker = () => {
 
     try {
       await Promise.all(updatedEntries.map(entry =>
-        fetch(`http://192.168.1.41:5000/api/weight-entries/${entry._id}`, {
+        fetch(`https://studentapp-backend-ccks.onrender.com/api/weight-entries/${entry._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(entry),
@@ -91,7 +91,7 @@ const WeightLossTracker = () => {
     };
 
     try {
-      const response = await fetch('http://192.168.1.41:5000/api/weight-entries', {
+      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/weight-entries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entryData),
@@ -111,7 +111,7 @@ const WeightLossTracker = () => {
 
   const fetchEntries = async () => {
     try {
-      const response = await fetch('http://192.168.1.41:5000/api/weight-entries');
+      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/weight-entries');
       const data = await response.json();
       setEntries(data);
       if (data.length > 0 && data[0].height) {
@@ -124,7 +124,7 @@ const WeightLossTracker = () => {
 
   const deleteEntry = async (id) => {
     try {
-      const response = await fetch(`http://192.168.1.41:5000/api/weight-entries/${id}`, {
+      const response = await fetch(`https://studentapp-backend-ccks.onrender.com/api/weight-entries/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -136,7 +136,7 @@ const WeightLossTracker = () => {
   };
   const fetchTargetWeight = async () => {
     try {
-      const response = await fetch('http://192.168.1.41:5000/api/target-weight');
+      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/target-weight');
       const data = await response.json();
       if (data && data.weight) {
         setTargetWeight(data.weight.toString());
@@ -148,7 +148,7 @@ const WeightLossTracker = () => {
   
   const updateTargetWeight = async (newWeight) => {
     try {
-      const response = await fetch('http://192.168.1.41:5000/api/target-weight', {
+      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/target-weight', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

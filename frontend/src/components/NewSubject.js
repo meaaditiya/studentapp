@@ -32,7 +32,7 @@ function NewSubjectManager() {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("http://192.168.1.41:5000/newsubject");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/newsubject");
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -45,7 +45,7 @@ function NewSubjectManager() {
         alert("Subject name cannot be empty.");
         return;
       }
-      const response = await axios.post("http://192.168.1.41:5000/newsubject", {
+      const response = await axios.post("https://studentapp-backend-ccks.onrender.com/newsubject", {
         subjectName: newSubjectName,
       });
       setSubjects([...subjects, response.data]);
@@ -61,7 +61,7 @@ function NewSubjectManager() {
       return;
     }
     try {
-      await axios.delete(`http://192.168.1.41:5000/newsubject/${subjectId}`);
+      await axios.delete(`https://studentapp-backend-ccks.onrender.com/newsubject/${subjectId}`);
       setSubjects(subjects.filter((subject) => subject._id !== subjectId));
       if (selectedSubject === subjectId) {
         setSelectedSubject(null);
@@ -95,7 +95,7 @@ function NewSubjectManager() {
     for (const topic of topicsArray) {
       try {
         await axios.post(
-          `http://192.168.1.41:5000/newsubject/${selectedSubject}/topics`,
+          `https://studentapp-backend-ccks.onrender.com/newsubject/${selectedSubject}/topics`,
           {
             date: new Date().toISOString().split("T")[0],
             topicName: topic,
@@ -120,7 +120,7 @@ function NewSubjectManager() {
     }
     try {
       await axios.delete(
-        `http://192.168.1.41:5000/newsubject/${subjectId}/topics/${topicId}`
+        `https://studentapp-backend-ccks.onrender.com/newsubject/${subjectId}/topics/${topicId}`
       );
       setSubjects(
         subjects.map((subject) => {
@@ -141,7 +141,7 @@ function NewSubjectManager() {
   const toggleCompletion = async (subjectId, topicId, isCompleted) => {
     try {
       await axios.patch(
-        `http://192.168.1.41:5000/newsubject/${subjectId}/topics/${topicId}`,
+        `https://studentapp-backend-ccks.onrender.com/newsubject/${subjectId}/topics/${topicId}`,
         { completed: !isCompleted }
       );
       fetchSubjects();
@@ -158,7 +158,7 @@ function NewSubjectManager() {
 
   const fetchResources = async () => {
     try {
-      const response = await axios.get("http://192.168.1.41:5000/resources");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/resources");
       setResources(response.data);
     } catch (error) {
       console.error("Error fetching resources:", error);
@@ -199,7 +199,7 @@ function NewSubjectManager() {
       }
 
       const response = await axios.post(
-        "http://192.168.1.41:5000/resources",
+        "https://studentapp-backend-ccks.onrender.com/resources",
         formData,
         {
           headers: {
@@ -224,7 +224,7 @@ function NewSubjectManager() {
       return;
     }
     try {
-      await axios.delete(`http://192.168.1.41:5000/resources/${resourceId}`);
+      await axios.delete(`https://studentapp-backend-ccks.onrender.com/resources/${resourceId}`);
       setResources(resources.filter((resource) => resource._id !== resourceId));
     } catch (error) {
       console.error("Error deleting resource:", error);
@@ -242,7 +242,7 @@ function NewSubjectManager() {
     try {
       // Create an array of all deletion promises
       const deletePromises = Array.from(selectedTopics).map(topicId => 
-        axios.delete(`http://192.168.1.41:5000/newsubject/${selectedSubject}/topics/${topicId}`)
+        axios.delete(`https://studentapp-backend-ccks.onrender.com/newsubject/${selectedSubject}/topics/${topicId}`)
       );
 
       // Wait for all deletions to complete
@@ -284,7 +284,7 @@ function NewSubjectManager() {
       // Create an array of promises for all selected topics
       const updatePromises = Array.from(selectedTopics).map(topicId => {
         return axios.patch(
-          `http://192.168.1.41:5000/newsubject/${selectedSubject}/topics/${topicId}`,
+          `https://studentapp-backend-ccks.onrender.com/newsubject/${selectedSubject}/topics/${topicId}`,
           { completed: setCompleted }
         );
       });

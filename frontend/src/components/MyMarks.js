@@ -36,7 +36,7 @@ function MyMarks() {
 
   const fetchExistingSubjects = async () => {
     try {
-      const response = await axios.get("http://192.168.1.41:5000/api/subjects/");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/subjects/");
       setExistingSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -45,7 +45,7 @@ function MyMarks() {
 
   const fetchExamTypes = async () => {
     try {
-      const response = await axios.get("http://192.168.1.41:5000/api/examTypes/");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/examTypes/");
       setExamTypes(response.data);
     } catch (error) {
       console.error("Error fetching exam types:", error);
@@ -54,7 +54,7 @@ function MyMarks() {
 
   const fetchExamRecords = async () => {
     try {
-      const response = await axios.get("http://192.168.1.41:5000/api/exams/");
+      const response = await axios.get("https://studentapp-backend-ccks.onrender.com/api/exams/");
       setExamRecords(response.data);
     } catch (error) {
       console.error("Error fetching exams:", error);
@@ -64,7 +64,7 @@ function MyMarks() {
   const handleExamTypeSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://192.168.1.41:5000/api/examTypes/", newExamType);
+      await axios.post("https://studentapp-backend-ccks.onrender.com/api/examTypes/", newExamType);
       setNewExamType({ name: "", maxMarks: "", internalMarks: "" });
       setShowExamTypeForm(false);
       fetchExamTypes();
@@ -100,7 +100,7 @@ function MyMarks() {
     const updatedMarksBasedInternal = existingSubject.marksBasedInternal + newInternalInfo.marksBasedInternal;
     const updatedAttendanceBasedInternal = Math.max(existingSubject.attendanceBasedInternal, newInternalInfo.attendanceBasedInternal);
 
-    return await axios.put(`http://192.168.1.41:5000/api/subjects/${existingSubject._id}`, {
+    return await axios.put(`https://studentapp-backend-ccks.onrender.com/api/subjects/${existingSubject._id}`, {
       marksBasedInternal: updatedMarksBasedInternal,
       attendanceBasedInternal: updatedAttendanceBasedInternal,
       taMarks: existingSubject.taMarks || 0
@@ -126,7 +126,7 @@ function MyMarks() {
         );
 
         if (!existingSubject) {
-          const newSubjectResponse = await axios.post("http://192.168.1.41:5000/api/subjects/", {
+          const newSubjectResponse = await axios.post("https://studentapp-backend-ccks.onrender.com/api/subjects/", {
             name: currentSubject,
             marksBasedInternal: internalMarksInfo.marksBasedInternal,
             attendanceBasedInternal: internalMarksInfo.attendanceBasedInternal,
@@ -176,7 +176,7 @@ function MyMarks() {
     };
 
     try {
-      const response = await axios.post("http://192.168.1.41:5000/api/exams/", newExam);
+      const response = await axios.post("https://studentapp-backend-ccks.onrender.com/api/exams/", newExam);
       setExamRecords([...examRecords, response.data]);
       resetForm();
     } catch (error) {
@@ -209,7 +209,7 @@ function MyMarks() {
         setSelectedRecord(null);
 
         // Then make the API call to delete the record
-        await axios.delete(`http://192.168.1.41:5000/api/exams/${recordToDelete._id}`);
+        await axios.delete(`https://studentapp-backend-ccks.onrender.com/api/exams/${recordToDelete._id}`);
 
         // Update the subjects' internal marks
         const examType = examTypes.find(type => type._id === recordToDelete.examType);
@@ -232,7 +232,7 @@ function MyMarks() {
             );
 
             try {
-              await axios.put(`http://192.168.1.41:5000/api/subjects/${subject._id}`, {
+              await axios.put(`https://studentapp-backend-ccks.onrender.com/api/subjects/${subject._id}`, {
                 marksBasedInternal: Math.max(0, subject.marksBasedInternal - internalMarksInfo.marksBasedInternal),
                 attendanceBasedInternal: subject.attendanceBasedInternal,
                 taMarks: subject.taMarks || 0

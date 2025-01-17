@@ -1,0 +1,237 @@
+/* General Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .internal-marks-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    overflow: hidden;
+  }
+  
+  .internal-marks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+  }
+  
+  .internal-marks-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+  
+  .internal-marks-add-btn {
+    background-color: #1a1a2e;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .internal-marks-add-btn:hover {
+    background-color: #162447;
+  }
+  
+  /* Form Styling */
+  .internal-marks-form {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .internal-marks-form-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .internal-marks-input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .internal-marks-input:focus {
+    border-color: #1a1a2e;
+  }
+  
+  .internal-marks-submit-btn,
+  .internal-marks-cancel-btn {
+    background-color: #1a1a2e;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .internal-marks-cancel-btn {
+    background-color: #ff4d4d;
+  }
+  
+  .internal-marks-submit-btn:hover,
+  .internal-marks-cancel-btn:hover {
+    opacity: 0.9;
+  }
+  
+  /* Table Styling */
+  .internal-marks-table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  
+  .internal-marks-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .internal-marks-header-row {
+    background-color: #162447;
+    color: #ffffff;
+  }
+  
+  .internal-marks-header-cell {
+    padding: 14px 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 16px;
+  }
+  
+  .internal-marks-row {
+    transition: background-color 0.3s ease;
+  }
+  
+  .internal-marks-row:nth-child(even) {
+    background-color: #f8f9fc;
+  }
+  
+  .internal-marks-row:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .internal-marks-cell {
+    padding: 14px 10px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 15px;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .font-bold {
+    font-weight: 600;
+  }
+  
+  .internal-marks-number-input {
+    width: 60px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+  }
+  
+  /* Button Styling */
+  .internal-marks-edit-btn,
+  .internal-marks-delete-btn,
+  .internal-marks-save-btn,
+  .internal-marks-cancel-edit-btn,
+  .internal-marks-ta-edit-btn {
+    background: none;
+    border: none;
+    color: #1a1a2e;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .internal-marks-edit-btn:hover,
+  .internal-marks-delete-btn:hover,
+  .internal-marks-save-btn:hover,
+  .internal-marks-cancel-edit-btn:hover,
+  .internal-marks-ta-edit-btn:hover {
+    color: #162447;
+  }
+  
+  .internal-marks-delete-btn {
+    color: #ff4d4d;
+  }
+  
+  /* Error Styling */
+  .internal-marks-error {
+    background-color: #ffcccc;
+    color: #cc0000;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .internal-marks-error-close {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #cc0000;
+    cursor: pointer;
+  }
+  
+  /* Guide Styling */
+  .internal-marks-guide {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f0f7ff;
+    border-left: 4px solid #1a1a2e;
+    border-radius: 5px;
+  }
+  
+  .internal-marks-guide-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+  
+  .internal-marks-guide-list {
+    margin: 10px 0;
+    padding-left: 20px;
+    list-style: square;
+    color: #333;
+  }
+  
+  .internal-marks-guide-item {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  .internal-marks-guide-sublist {
+    margin-top: 5px;
+    padding-left: 20px;
+    list-style: disc;
+  }
+  

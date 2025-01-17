@@ -10,11 +10,12 @@ import {
   faGraduationCap, 
   faCalculator, 
   faUserCheck, 
-  faBook, 
   faFilePdf, 
   faVideo,
   faList,
-  faPencilAlt
+  faPencilAlt,
+  faDatabase,
+  faWeight
 } from '@fortawesome/free-solid-svg-icons'; 
 import { FaStar } from 'react-icons/fa';
 import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
@@ -70,8 +71,8 @@ const Sidebar = ({ isVisible }) => {
           </a>
         </li>
         <li>
-          <a href="/markattendance">
-            <FontAwesomeIcon icon={faBook} /> Mark Attendance
+          <a href="/weightlosstracker">
+            <FontAwesomeIcon icon={faWeight} /> My Weight Tracker
           </a>
         </li>
         <li>
@@ -102,6 +103,11 @@ const Sidebar = ({ isVisible }) => {
         <li>
           <a href="/newsubject">
             <FontAwesomeIcon icon={faPencilAlt} /> Prepare Exam
+          </a>
+        </li>
+        <li>
+          <a href="/internalmarks">
+          <FontAwesomeIcon icon={faDatabase} /> Internal marks
           </a>
         </li>
         {/* Star Icon at the Bottom */}

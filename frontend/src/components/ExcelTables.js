@@ -82,6 +82,9 @@ const ExcelTables = () => {
   };
 
   const deleteExcelTable = async (title) => {
+    if (!window.confirm("Are you sure you want to delete this Table?")) {
+      return;
+    }
     try {
       const encodedTitle = encodeURIComponent(title);
       const response = await axios.delete(`http://192.168.1.41:5000/tables/${encodedTitle}`);
@@ -101,64 +104,79 @@ const ExcelTables = () => {
   };
 
   return (
-    <div className="excel-tables-component">
-      <h1 className="excel-title">Excel Tables</h1>
-      <button className="circular-upload-button" onClick={toggleUploader}>
+    <div className="et-main-container">
+      <h1 className="et-main-title">Excel Tables</h1>
+      <button className="et-upload-toggle-btn" onClick={toggleUploader}>
         {showUploader ? "-" : "+"}
       </button>
 
       {showUploader && (
-        <div className="upload-area">
+        <div className="et-upload-section">
           <input
             type="text"
             value={tableTitle}
             onChange={(e) => setTableTitle(e.target.value)}
             placeholder="Enter table title"
-            className="title-input"
+            className="et-title-input"
           />
           <input
             type="file"
             accept=".xlsx, .xls"
             onChange={handleFileChange}
-            className="file-input"
+            className="et-file-input"
           />
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`drag-drop-area-custom ${dragging ? "dragging" : ""}`}
+            className={`et-drag-drop-zone ${dragging ? "et-dragging" : ""}`}
           >
             {dragging ? "Drop the file here..." : "Or drag and drop an Excel file here"}
           </div>
         </div>
       )}
 
-      {excelTables.map((excelTable, index) => (
-        <div key={index} className="timetable-container">
-          <h3 className="table-title">{excelTable.title || `Table ${index + 1}`}</h3>
-          <button className="delete-button" onClick={() => deleteExcelTable(excelTable.title)}>
-            Delete Table
-          </button>
-          <table className="styled-table" border="1">
-            <thead>
-              <tr>
-                {excelTable.headers.map((header, headerIndex) => (
-                  <th key={headerIndex}>{header}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {excelTable.data.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex}>{cell}</td>
+      <div className="et-tables-wrapper">
+        {excelTables.map((excelTable, index) => (
+          <div key={index} className="et-table-container">
+            <div className="et-table-header">
+              <h3 className="et-table-title">
+                {excelTable.title || `Table ${index + 1}`}
+              </h3>
+              <button 
+                className="et-delete-btn"
+                onClick={() => deleteExcelTable(excelTable.title)}
+              >
+                Delete Table
+              </button>
+            </div>
+            <div className="et-table-scroll-container">
+              <table className="et-data-table">
+                <thead className="et-table-head">
+                  <tr>
+                    {excelTable.headers.map((header, headerIndex) => (
+                      <th key={headerIndex} className="et-table-header-cell">
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="et-table-body">
+                  {excelTable.data.map((row, rowIndex) => (
+                    <tr key={rowIndex} className="et-table-row">
+                      {row.map((cell, cellIndex) => (
+                        <td key={cellIndex} className="et-table-cell">
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

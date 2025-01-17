@@ -10,8 +10,9 @@ const { v4: uuidv4 } = require('uuid');
 const XLSX = require("xlsx");
 const path = require("path");
 const app = express();
-const PORT = process.env.PORT || 5000;
-const os = require('os');
+const PORT = process.env.PORT || 5001;
+
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json()); // Parse JSON bodies
@@ -168,7 +169,47 @@ app.post("/api/timetable", async (req, res) => {
     res.status(500).send("Could not upload timetable.");
   }
 });
+// Update single cell
+app.patch('/api/timetable/cell', async (req, res) => {
+  try {
+    const { row, column, value } = req.body;
+    const currentTable = await Timetable.findOne().sort({ lastUpdated: -1 });
+    
+    if (!currentTable) {
+      return res.status(404).json({ error: 'No timetable found' });
+    }
 
+    // Update the specific cell
+    currentTable.data[row][column] = value;
+    currentTable.lastUpdated = new Date();
+    await currentTable.save();
+
+    res.json({ message: 'Cell updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update cell' });
+  }
+});
+
+// Update header
+app.patch('/api/timetable/header', async (req, res) => {
+  try {
+    const { headerIndex, value } = req.body;
+    const currentTable = await Timetable.findOne().sort({ lastUpdated: -1 });
+    
+    if (!currentTable) {
+      return res.status(404).json({ error: 'No timetable found' });
+    }
+
+    // Update the specific header
+    currentTable.headers[headerIndex] = value;
+    currentTable.lastUpdated = new Date();
+    await currentTable.save();
+
+    res.json({ message: 'Header updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update header' });
+  }
+});
 // API Routes for Progress Tracker
 app.get('/api/progress', async (req, res) => {
   try {
@@ -207,48 +248,190 @@ app.delete('/api/progress/:id', async (req, res) => {
   }
 });
 
-// Define the schema and model for exam records
+// Schema Definitions
+const examTypeSchema = new mongoose.Schema({
+  name: String,
+  maxMarks: Number,
+  internalMarks: Number
+});
+
+const subjectSchema = new mongoose.Schema({
+  name: { 
+    type: String, 
+    unique: true 
+  },
+  marksBasedInternal: { 
+    type: Number, 
+    default: 0 
+  },
+  attendanceBasedInternal: { 
+    type: Number, 
+    default: 1 
+  },
+  taMarks: {
+    type: Number,
+    default: 0
+  }
+});
+
 const examSchema = new mongoose.Schema({
+  examType: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ExamType'
+  },
   examName: String,
   examDate: String,
   subjects: [String],
   marks: [Number],
   maxMarks: [Number],
+  attendance: [Number]
 });
 
-const Exam = mongoose.model("Exam", examSchema);
+// Models
+const ExamType = mongoose.model('ExamType', examTypeSchema);
+const Subject = mongoose.model('Subject', subjectSchema);
+const Exam = mongoose.model('Exam', examSchema);
 
-// API routes for Exam records
-app.get("/api/exams", async (req, res) => {
+// API Routes
+
+// Exam Types
+app.get('/api/examTypes', async (req, res) => {
   try {
-    const exams = await Exam.find();
+    const examTypes = await ExamType.find();
+    res.json(examTypes);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching exam types' });
+  }
+});
+
+app.post('/api/examTypes', async (req, res) => {
+  try {
+    const examType = new ExamType(req.body);
+    await examType.save();
+    res.status(201).json(examType);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating exam type' });
+  }
+});
+
+// Subjects
+app.get('/api/subjects', async (req, res) => {
+  try {
+    const subjects = await Subject.find();
+    res.json(subjects);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching subjects' });
+  }
+});
+
+app.post('/api/subjects', async (req, res) => {
+  try {
+    const { name, marksBasedInternal,attendanceBasedInternal } = req.body;
+    const subject = new Subject({
+      name,
+      marksBasedInternal: marksBasedInternal || 0,
+      attendanceBasedInternal: attendanceBasedInternal || 1
+    });
+    await subject.save();
+    res.status(201).json(subject);
+  } catch (error) {
+    if (error.code === 11000) {
+      const existingSubject = await Subject.findOne({ name: req.body.name });
+      res.json(existingSubject);
+    } else {
+      res.status(500).json({ error: 'Error creating subject' });
+    }
+  }
+});
+
+app.put('/api/subjects/:id', async (req, res) => {
+  try {
+    const { marksBasedInternal, attendanceBasedInternal } = req.body;
+    const subject = await Subject.findByIdAndUpdate(
+      req.params.id,
+      { marksBasedInternal, attendanceBasedInternal },
+      { new: true }
+    );
+    res.json(subject);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating subject' });
+  }
+});
+
+// Exams
+app.get('/api/exams', async (req, res) => {
+  try {
+    const exams = await Exam.find().populate('examType');
     res.json(exams);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching exams", error: err });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching exams' });
   }
 });
 
-// Add a new exam record
-app.post("/api/exams", async (req, res) => {
-  const { examName, examDate, subjects, marks, maxMarks } = req.body;
+app.post('/api/exams', async (req, res) => {
   try {
-    const newExam = new Exam({ examName, examDate, subjects, marks, maxMarks });
-    const savedExam = await newExam.save();
-    res.status(201).json(savedExam);
-  } catch (err) {
-    res.status(500).json({ message: "Error adding exam", error: err });
+    const exam = new Exam(req.body);
+    await exam.save();
+    const populatedExam = await Exam.findById(exam._id).populate('examType');
+    res.status(201).json(populatedExam);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating exam' });
   }
 });
 
-// Delete an exam record by ID
-app.delete("/api/exams/:id", async (req, res) => {
+// Update the delete exam endpoint to handle internal marks
+app.delete('/api/exams/:id', async (req, res) => {
   try {
+    const exam = await Exam.findById(req.params.id);
+    if (!exam) return res.status(404).json({ error: 'Exam not found' });
+
+    const examType = await ExamType.findById(exam.examType);
+    if (!examType) return res.status(404).json({ error: 'Exam type not found' });
+
+    for (let i = 0; i < exam.subjects.length; i++) {
+      const subjectName = exam.subjects[i];
+      const mark = exam.marks[i];
+      const maxMark = exam.maxMarks[i];
+      
+      const internalRatio = maxMark / examType.internalMarks; // internalRatio = 7
+      let internalToSubtract = Math.ceil(mark / internalRatio); // Round up to the nearest integer
+
+      await Subject.findOneAndUpdate(
+        { name: subjectName },
+        { $inc: { marksBasedInternal: -internalToSubtract } }
+      );
+    }
+
     await Exam.findByIdAndDelete(req.params.id);
-    res.json({ message: "Exam deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Error deleting exam", error: err });
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error in exam deletion:', error);
+    res.status(500).json({ error: 'Error deleting exam' });
   }
 });
+
+// TA Marks Update Endpoint
+app.put('/api/subjects/:id/ta-marks', async (req, res) => {
+  try {
+    const { taMarks } = req.body;
+    const subject = await Subject.findByIdAndUpdate(
+      req.params.id,
+      { taMarks },
+      { new: true }
+    );
+    res.json(subject);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating TA marks' });
+  }
+});
+
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something broke!' });
+});
+
+
 const quickLinkSchema = new mongoose.Schema({
   name: String,
   url: String,
@@ -295,12 +478,12 @@ const attendanceSchema = new mongoose.Schema({
 });
 
 // Subject schema, which includes an array of attendance records
-const subjectSchema = new mongoose.Schema({
+const newsubjectSchema = new mongoose.Schema({
   name: String,
   attendance: [attendanceSchema],
 });
 
-const Subject = mongoose.model("Subject", subjectSchema);
+const newSubject = mongoose.model("Subject", subjectSchema);
 
 // Get all subjects
 app.get("/api/subjects", async (req, res) => {
@@ -993,9 +1176,116 @@ app.use((error, req, res, next) => {
     next(error);
 });
 
+const weightEntrySchema = new mongoose.Schema({
+  date: { type: String, required: true },
+  time: { type: String, required: true },
+  weight: { type: Number, required: true },
+  height: {
+    feet: { type: Number },
+    inches: { type: Number },
+    cm: { type: Number }
+  },
+  bmi: { type: Number },
+  notes: { type: String }
+}, { timestamps: true });
+const targetWeightSchema = new mongoose.Schema({
+  weight: Number,
+  unit: {
+    type: String,
+    enum: ['kg', 'lbs'],
+    default: 'kg'
+  },
+  userId: {
+    type: String,
+    default: 'default' // In a real app, this would be tied to user authentication
+  }
+}, { timestamps: true });
+const TargetWeight = mongoose.model('TargetWeight', targetWeightSchema);
+const WeightEntry = mongoose.model('WeightEntry', weightEntrySchema);
 
+// Routes
+app.get('/api/weight-entries', async (req, res) => {
+  try {
+    const entries = await WeightEntry.find()
+      .sort({ date: -1, time: -1 });
+    res.json(entries);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching entries' });
+  }
+});
 
+app.post('/api/weight-entries', async (req, res) => {
+  try {
+    const newEntry = new WeightEntry(req.body);
+    await newEntry.save();
+    res.json(newEntry);
+  } catch (err) {
+    res.status(500).json({ error: 'Error saving entry' });
+  }
+});
+
+app.put('/api/weight-entries/:id', async (req, res) => {
+  try {
+    const updatedEntry = await WeightEntry.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedEntry);
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating entry' });
+  }
+});
+
+app.delete('/api/weight-entries/:id', async (req, res) => {
+  try {
+    await WeightEntry.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Entry deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error deleting entry' });
+  }
+});
+app.post('/api/target-weight', async (req, res) => {
+  try {
+    // First try to find existing target weight
+    let targetWeight = await TargetWeight.findOne({ userId: 'default' });
+    
+    if (targetWeight) {
+      // Update existing target weight
+      targetWeight.weight = req.body.weight;
+      targetWeight.unit = req.body.unit || 'kg';
+      await targetWeight.save();
+    } else {
+      // Create new target weight
+      targetWeight = new TargetWeight({
+        weight: req.body.weight,
+        unit: req.body.unit || 'kg',
+        userId: 'default'
+      });
+      await targetWeight.save();
+    }
+    
+    res.status(201).json(targetWeight);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/target-weight', async (req, res) => {
+  try {
+    const targetWeight = await TargetWeight.findOne({ userId: 'default' });
+    res.json(targetWeight || { weight: null, unit: 'kg' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something broke!' });
+});
 // Start the server
 app.listen(5000, '0.0.0.0',() => {
-  console.log(`Server is running on http://localhost:${PORT} and http://192.168.1.42:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT} and http://192.168.1.41:${PORT}`);
 });  

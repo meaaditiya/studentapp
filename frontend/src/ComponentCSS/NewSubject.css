@@ -1,4 +1,4 @@
-.container {
+.exam-preparation-container {
   padding: 20px;
   max-width: 1200px;
   margin: auto;
@@ -7,15 +7,17 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.title {
+.exam-main-title {
   font-size: 2.5em;
   text-align: center;
-  color: #2575fc;
+  color: #001f3f;
   margin-bottom: 30px;
   font-weight: 600;
 }
 
-.form-section {
+.subject-form-container,
+.topic-form-container,
+.resources-section-container {
   margin-bottom: 30px;
   background: #fdfdfd;
   padding: 20px;
@@ -23,8 +25,16 @@
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 }
 
-.input,
-.select {
+.subject-input-field,
+.topic-unit-input,
+.topic-names-input,
+.resource-name-input,
+.resource-url-input,
+.topic-subject-dropdown,
+.resource-subject-dropdown,
+.resource-type-dropdown,
+.topics-sort-dropdown,
+.topics-filter-dropdown {
   padding: 12px;
   width: 100%;
   margin: 15px 0;
@@ -35,16 +45,26 @@
   transition: border-color 0.3s ease;
 }
 
-.input:focus,
-.select:focus {
+.subject-input-field:focus,
+.topic-unit-input:focus,
+.topic-names-input:focus,
+.resource-name-input:focus,
+.resource-url-input:focus,
+.topic-subject-dropdown:focus,
+.resource-subject-dropdown:focus,
+.resource-type-dropdown:focus,
+.topics-sort-dropdown:focus,
+.topics-filter-dropdown:focus {
   border-color: #2575fc;
   outline: none;
 }
 
-.add-btn {
+.subject-add-button,
+.topic-add-button,
+.resource-add-button {
   display: inline-block;
-  padding: 12px 25px;
-  background-color: #2575fc;
+  padding: 8px 25px;
+  background-color: #001f3f;
   color: #fff;
   font-size: 1em;
   font-weight: bold;
@@ -55,20 +75,22 @@
   transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.add-btn:hover {
-  background-color: #1e5fc7;
+.subject-add-button:hover,
+.topic-add-button:hover,
+.resource-add-button:hover {
+  background-color: #003366;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.subjects-grid {
+.subjects-grid-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   padding: 20px 0;
 }
 
-.subject-item {
+.subject-card-container {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 10px;
@@ -77,19 +99,21 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.subject-item:hover {
+.subject-card-container:hover {
   background: #f0f2f5;
   transform: translateY(-5px);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px;
 }
 
-.subject-header {
+.subject-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.delete-btn {
+.subject-delete-button,
+.topic-delete-button,
+.resource-delete-button {
   background-color: #ff4757;
   color: white;
   border: none;
@@ -105,56 +129,60 @@
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.delete-btn:hover {
+.subject-delete-button:hover,
+.topic-delete-button:hover,
+.resource-delete-button:hover {
   background-color: #ff6b81;
   transform: rotate(90deg);
 }
 
+.topic-bulk-delete-button {
+  background-color: red;
+}
 
-/* Container for the ring */
-.completion-ring2{
+.topic-bulk-delete-button:hover {
+  background-color: #ff6b81;
+}
+
+.subject-completion-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px; /* Reduced size */
+  width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #fdfdfd; /* Soft off-white background */
+  background-color: #fdfdfd;
   border: 3px solid transparent;
   background-image: linear-gradient(#fdfdfd, #fdfdfd), 
-    linear-gradient(135deg, #6a11cb, #2575fc); /* Purple to blue gradient */
+    linear-gradient(135deg, #6a11cb, #2575fc);
   background-origin: border-box;
   background-clip: content-box, border-box;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 255, 255, 0.6);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   margin: 10px;
- /* position : relative;
-  top: 10px;
-  left:70px;*/
 }
 
-.completion-ring2:hover {
+.subject-completion-wrapper:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), 0 0 8px rgba(101, 134, 253, 0.6); /* Subtle glow */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), 0 0 8px rgba(101, 134, 253, 0.6);
 }
 
-.ring {
-  font-size: 1em; /* Adjusted size to fit the smaller ring */
+.subject-completion-ring {
+  font-size: 1em;
   font-weight: 600;
-  color: #4a4a4a; /* Dark grey for contrast */
+  color: #4a4a4a;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-
-.topics-strip {
+.topics-list-container {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   margin-top: 25px;
 }
 
-.topic-item {
+.topic-list-item {
   background: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -164,31 +192,30 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.topic-item:hover {
+.topic-list-item:hover {
   transform: translateY(-2px);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px;
 }
 
-.topic-details {
+.topic-item-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.topic-details input {
+.topic-select-checkbox,
+.topic-completion-checkbox {
   margin-right: 10px;
   cursor: pointer;
 }
 
-.topic-details .delete-btn {
-  font-size: 0.8em;
-}
-
-.floating-btn {
+.subject-toggle-floating-button,
+.topic-form-floating-button,
+.resource-form-floating-button {
   border-radius: 50%;
   position: relative;
   top: -10px;
-  background-color: #2575fc;
+  background-color: #001f3f;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -196,20 +223,27 @@
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
+.resource-form-floating-button{
+  position: relative;
+  top:0px;
+}
 
-.floating-btn:hover {
+.subject-toggle-floating-button:hover,
+.topic-form-floating-button:hover,
+.resource-form-floating-button:hover {
+  background-color: #003366;
   transform: rotate(180deg);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.resources-list {
+.resources-grid-container {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.resource-item {
+.resource-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -220,21 +254,23 @@
   transition: transform 0.2s ease;
 }
 
-.resource-item:hover {
+.resource-card:hover {
   transform: translateX(5px);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px;
 }
 
-.resource-title {
+.resource-pdf-title,
+.resource-youtube-title {
   font-size: 16px;
   font-weight: bold;
   color: #333;
 }
 
-.resource-link {
+.resource-pdf-open-button,
+.resource-youtube-link {
   font-size: 14px;
   font-weight: 500;
-  color: #2575fc;
+  color: #001f3f;
   text-decoration: none;
   padding: 8px 15px;
   background-color: #f8faff;
@@ -242,23 +278,24 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.resource-link:hover {
+.resource-pdf-open-button:hover,
+.resource-youtube-link:hover {
   background-color: #edf2ff;
-  color: #1e5fc7;
+  color: #003366;
 }
 
-.resource-pdf,
-.resource-youtube {
+.resource-pdf-container,
+.resource-youtube-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-#show-butt {
+.topics-visibility-toggle {
   position: relative;
   margin: 10px auto;
   display: block;
-  background: #2575fc;
+  background: #001f3f;
   color: #fff;
   border: none;
   padding: 8px 16px;
@@ -270,19 +307,20 @@
   transition: all 0.3s ease;
 }
 
-#show-butt:hover {
-  background: #1e5fc7;
+.topics-visibility-toggle:hover {
+  background: #003366;
   transform: translateY(-2px);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px;
 }
 
-.topics-controls {
+.topics-control-panel {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.select {
+.topics-sort-dropdown,
+.topics-filter-dropdown {
   padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #e1e1e1;
@@ -290,11 +328,18 @@
   transition: all 0.2s ease;
 }
 
-.select:focus {
+.topics-sort-dropdown:focus,
+.topics-filter-dropdown:focus {
   border-color: #2575fc;
   box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.1);
 }
-.button {
+
+.topic-select-mode-toggle,
+.topic-select-all-button,
+.topic-deselect-all-button,
+.topic-mark-complete-button,
+.topic-mark-incomplete-button,
+.topic-bulk-delete-button {
   padding: 8px 16px;
   margin: 4px;
   border: none;
@@ -305,56 +350,72 @@
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.button:hover {
+.topic-select-mode-toggle:hover,
+.topic-select-all-button:hover,
+.topic-deselect-all-button:hover,
+.topic-mark-complete-button:hover,
+.topic-mark-incomplete-button:hover,
+.topic-bulk-delete-button:hover {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.button:active {
+.topic-select-mode-toggle:active,
+.topic-select-all-button:active,
+.topic-deselect-all-button:active,
+.topic-mark-complete-button:active,
+.topic-mark-incomplete-button:active,
+.topic-bulk-delete-button:active {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
   transform: scale(0.98);
 }
 
-.button.select-all {
-  background-color: #4caf50;
+.topic-select-all-button {
+  background-color: #001f3f;
   color: white;
 }
 
-.button.select-all:hover {
-  background-color: #45a049;
+.topic-select-all-button:hover {
+  background-color: #003366;
 }
 
-.button.deselect-all {
-  background-color: #f44336;
+.topic-deselect-all-button {
+  background-color: #001f3f;
   color: white;
 }
 
-.button.deselect-all:hover {
-  background-color: #d32f2f;
+.topic-deselect-all-button:hover {
+  background-color: #003366;
 }
 
-.button.mark-complete {
-  background-color: #2196f3;
+.topic-mark-complete-button {
+  background-color: #001f3f;
   color: white;
 }
 
-.button.mark-complete:hover {
-  background-color: #1e88e5;
+.topic-mark-complete-button:hover {
+  background-color: #003366;
 }
 
-.button.mark-incomplete {
-  background-color: #ff9800;
+.topic-mark-incomplete-button {
+  background-color: #001f3f;
   color: white;
 }
 
-.button.mark-incomplete:hover {
-  background-color: #fb8c00;
+.topic-mark-incomplete-button:hover {
+  background-color: #003366;
 }
 
-.button.delete-selected {
-  background-color: #9c27b0;
+.topic-bulk-delete-button {
+  background-color: red;
   color: white;
 }
 
-.button.delete-selected:hover {
-  background-color: #7b1fa2;
+.topic-bulk-delete-button:hover {
+  background-color: orangered;
+}
+.topic-select-mode-toggle{
+  background-color: #001f3f;
+}
+.topic-select-mode-toggle:hover{
+  background-color: #003366;
 }

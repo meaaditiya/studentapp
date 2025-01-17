@@ -1,154 +1,370 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import * as XLSX from "xlsx"; // Import XLSX for Excel file handling
+import { Plus, Save, Table as TableIcon ,Download} from "lucide-react";
+import * as XLSX from 'xlsx';
 import '../ComponentCSS/WeeklyTimetable.css';
-function WeeklyTimetable() {
+
+const WeeklyTimetable = () => {
   const [excelData, setExcelData] = useState([]);
   const [columnHeaders, setColumnHeaders] = useState([]);
-  const [dragging, setDragging] = useState(false); // State to handle drag-and-drop events
-  const [showUploader, setShowUploader] = useState(false); // State to toggle file upload visibility
+  const [dragging, setDragging] = useState(false);
+  const [showUploader, setShowUploader] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showCreator, setShowCreator] = useState(false);
+  const [activeCell, setActiveCell] = useState({ row: -1, col: -1 });
+  const [newTableConfig, setNewTableConfig] = useState({
+    rows: 3,
+    columns: 5
+  });
 
-  // Fetch timetable data from the server when the component loads
   useEffect(() => {
-    const fetchTimetable = async () => {
-      try {
-        const response = await axios.get("http://192.168.1.41:5000/api/timetable");
-        const { headers, data } = response.data;
-
-        setColumnHeaders(headers);
-        setExcelData(data);
-      } catch (error) {
-        alert("Could not fetch timetable data.");
-      }
-    };
-
     fetchTimetable();
   }, []);
 
-  // Handle file upload and parse the Excel file
+  const fetchTimetable = async () => {
+    try {
+      const response = await fetch("http://192.168.1.41:5000/api/timetable");
+      const { headers, data } = await response.json();
+      setColumnHeaders(headers);
+      setExcelData(data);
+    } catch (error) {
+      console.error("Failed to fetch timetable:", error);
+      alert("Could not fetch timetable data.");
+    }
+  };
+
   const handleFileUpload = (file) => {
     const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName], {
-        header: 1,
-      });
-
-      if (worksheet.length > 0) {
-        const headers = worksheet[0];
-        const dataRows = worksheet.slice(1);
-
-        setColumnHeaders(headers);
-        setExcelData(dataRows);
-
-        saveTimetable(headers, dataRows);
+        if (jsonData.length > 0) {
+          const headers = jsonData[0];
+          const dataRows = jsonData.slice(1);
+          await saveTimetable(headers, dataRows);
+          setColumnHeaders(headers);
+          setExcelData(dataRows);
+        }
+      } catch (error) {
+        console.error("Error processing file:", error);
+        alert("Error processing the Excel file.");
       }
     };
-
     reader.readAsArrayBuffer(file);
   };
 
   const saveTimetable = async (headers, data) => {
     try {
-      await axios.post("http://192.168.1.41:5000/api/timetable", { headers, data });
-      alert("Timetable uploaded successfully!");
+      const response = await fetch("http://192.168.1.41:5000/api/timetable", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ headers, data }),
+      });
+      
+      if (!response.ok) throw new Error("Failed to save timetable");
+      alert("Timetable saved successfully!");
     } catch (error) {
-      alert("Could not upload timetable.");
+      console.error("Save error:", error);
+      alert("Could not save timetable.");
     }
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      handleFileUpload(file);
+  const handleCellEdit = async (rowIndex, colIndex, value) => {
+    try {
+      const newData = [...excelData];
+      newData[rowIndex][colIndex] = value;
+      setExcelData(newData);
+
+      const response = await fetch("http://192.168.1.41:5000/api/timetable/cell", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          row: rowIndex,
+          column: colIndex,
+          value: value,
+          headers: columnHeaders
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update cell");
+    } catch (error) {
+      console.error("Failed to save cell change:", error);
+      alert("Failed to save changes");
     }
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    setDragging(true);
-  };
+  const handleHeaderEdit = async (index, value) => {
+    try {
+      const newHeaders = [...columnHeaders];
+      newHeaders[index] = value;
+      setColumnHeaders(newHeaders);
 
-  const handleDragLeave = () => {
-    setDragging(false);
-  };
+      const response = await fetch("http://192.168.1.41:5000/api/timetable/header", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          headerIndex: index,
+          value: value,
+          headers: newHeaders
+        }),
+      });
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    setDragging(false);
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      handleFileUpload(file);
+      if (!response.ok) throw new Error("Failed to update header");
+    } catch (error) {
+      console.error("Failed to save header change:", error);
+      alert("Failed to save header changes");
     }
   };
 
-  const toggleUploader = () => {
-    setShowUploader(!showUploader);
+  const handleKeyDown = (event, rowIndex, colIndex) => {
+    const maxRow = excelData.length - 1;
+    const maxCol = columnHeaders.length - 1;
+    let nextRow = rowIndex;
+    let nextCol = colIndex;
+
+    switch (event.key) {
+      case 'Tab':
+        event.preventDefault();
+        if (!event.shiftKey) {
+          if (colIndex === maxCol) {
+            nextCol = 0;
+            nextRow = Math.min(rowIndex + 1, maxRow);
+          } else {
+            nextCol = colIndex + 1;
+          }
+        } else {
+          if (colIndex === 0) {
+            nextCol = maxCol;
+            nextRow = Math.max(rowIndex - 1, -1);
+          } else {
+            nextCol = colIndex - 1;
+          }
+        }
+        break;
+      case 'Enter':
+        event.preventDefault();
+        nextRow = Math.min(rowIndex + 1, maxRow);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        nextRow = Math.max(rowIndex - 1, -1);
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        nextRow = Math.min(rowIndex + 1, maxRow);
+        break;
+      case 'ArrowLeft':
+        nextCol = Math.max(colIndex - 1, 0);
+        break;
+      case 'ArrowRight':
+        nextCol = Math.min(colIndex + 1, maxCol);
+        break;
+      default:
+        return;
+    }
+
+    setActiveCell({ row: nextRow, col: nextCol });
+    const nextElement = document.querySelector(
+      `input[data-row="${nextRow}"][data-col="${nextCol}"]`
+    );
+    if (nextElement) nextElement.focus();
+  };
+
+  const createNewTable = async () => {
+    const newHeaders = Array(newTableConfig.columns)
+      .fill("")
+      .map((_, i) => `Column ${i + 1}`);
+    const newRows = Array(newTableConfig.rows)
+      .fill()
+      .map(() => Array(newTableConfig.columns).fill(""));
+    
+    try {
+      await saveTimetable(newHeaders, newRows);
+      setColumnHeaders(newHeaders);
+      setExcelData(newRows);
+      setShowCreator(false);
+    } catch (error) {
+      console.error("Failed to create new table:", error);
+      alert("Failed to create new table");
+    }
+  };
+  const exportTimetableToExcel = () => {
+    const worksheetData = [columnHeaders, ...excelData];
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Weekly Timetable");
+    XLSX.writeFile(workbook, "Weekly_Timetable.xlsx");
   };
 
   return (
-    <div className="weekly-timetable">
-      <h2>Weekly Timetable</h2>
+    <div className="w-full max-w-6xl mx-auto p-4">
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-2xl font-bold">Weekly Timetable</h2>
+      <div className="flex gap-2">
+        <button
+          title="Create table"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => setShowCreator(!showCreator)}
+        >
+          <TableIcon className="w-5 h-5" />
+        </button>
+        <button
+          title="Edit the table"
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          onClick={() => setIsEditing(!isEditing)}
+        >
+          {isEditing ? <Save className="w-5 h-5" /> : "Edit"}
+        </button>
+        <button
+          title="Add a table"
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          onClick={() => setShowUploader(!showUploader)}
+        >
+          {showUploader ? "−" : "+"}
+        </button>
+        <button
+          title="Download timetable"
+          className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          onClick={exportTimetableToExcel}
+        >
+          <Download className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
 
-      {/* Circular plus button to toggle file uploader */}
-      <button
-        className="plus-button"
-        onClick={toggleUploader}
-        title={showUploader ? "Hide Upload Area" : "Show Upload Area"}
-      >
-        {showUploader ? "−" : "+"} {/* Change the icon based on state */}
-      </button>
 
-      {/* Conditionally render file input and drag-drop area */}
+      {showCreator && (
+        <div className="mb-4 p-4 border rounded bg-gray-50">
+          <div className="flex gap-4">
+            <input
+              type="number"
+              min="1"
+              className="px-3 py-2 border rounded"
+              placeholder="Rows"
+              value={newTableConfig.rows}
+              onChange={(e) => setNewTableConfig(prev => ({
+                ...prev,
+                rows: Math.max(1, parseInt(e.target.value) || 1)
+              }))}
+            />
+            <input
+              type="number"
+              min="1"
+              className="px-3 py-2 border rounded"
+              placeholder="Columns"
+              value={newTableConfig.columns}
+              onChange={(e) => setNewTableConfig(prev => ({
+                ...prev,
+                columns: Math.max(1, parseInt(e.target.value) || 1)
+              }))}
+            />
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={createNewTable}
+            >
+              Create Table
+            </button>
+          </div>
+        </div>
+      )}
+
       {showUploader && (
-        <div className="upload-area">
-          {/* File input */}
+        <div className="mb-4 p-4 border rounded bg-gray-50">
           <input
             type="file"
             accept=".xlsx, .xls"
-            onChange={handleFileChange}
-            className="custom-file-input"
+            onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0])}
+            className="mb-2"
           />
-
-          {/* Drag and drop area */}
           <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`drag-drop-area ${dragging ? "dragging" : ""}`}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragging(true);
+            }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragging(false);
+              const file = e.dataTransfer.files[0];
+              if (file) handleFileUpload(file);
+            }}
+            className={`p-8 border-2 border-dashed rounded text-center ${
+              dragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+            }`}
           >
             {dragging ? "Drop the file here..." : "Or drag and drop an Excel file here"}
           </div>
         </div>
       )}
 
-      {/* Display Excel Data */}
-      {excelData.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              {columnHeaders.map((header, index) => (
-                <th key={index}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {excelData.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
+      {columnHeaders.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border">
+            <thead>
+              <tr>
+                {columnHeaders.map((header, index) => (
+                  <th key={index} className="border p-2 bg-gray-100">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={header}
+                        onChange={(e) => handleHeaderEdit(index, e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e, -1, index)}
+                        data-row="-1"
+                        data-col={index}
+                        className="w-full p-1 border rounded"
+                        autoFocus={activeCell.row === -1 && activeCell.col === index}
+                      />
+                    ) : (
+                      header
+                    )}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {excelData.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className="border p-2">
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={cell}
+                          onChange={(e) => handleCellEdit(rowIndex, cellIndex, e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(e, rowIndex, cellIndex)}
+                          data-row={rowIndex}
+                          data-col={cellIndex}
+                          className={`w-full p-1 border rounded ${
+                            activeCell.row === rowIndex && activeCell.col === cellIndex
+                              ? 'ring-2 ring-blue-500'
+                              : ''
+                          }`}
+                          autoFocus={activeCell.row === rowIndex && activeCell.col === cellIndex}
+                        />
+                      ) : (
+                        cell
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
-}
+};
 
 export default WeeklyTimetable;

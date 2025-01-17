@@ -1,0 +1,186 @@
+/* Container Styles */
+.my-marks-container {
+  max-width: 1000px; /* Reduced from 1200px */
+  margin: 1rem auto;  /* Reduced from 2rem */
+  padding: 1rem;      /* Reduced from 2rem */
+  background: #ffffff;
+  border-radius: 8px;  /* Reduced from 12px */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Headers */
+.marks-title,
+.recorded-exams-title,
+.examination-summary-title {
+  color: #1a365d;
+  font-size: 1.5rem;    /* Reduced from 1.875rem */
+  font-weight: 600;     /* Reduced from 700 */
+  margin-bottom: 1rem;  /* Reduced from 1.5rem */
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #2c5282;
+}
+
+/* Buttons */
+.toggle-exam-type-form-btn,
+.add-exam-type-btn,
+.exam-details-next-btn,
+.add-subject-btn,
+.final-submit-btn,
+.toggle-record-btn,
+.delete-record-btn ,
+.toggle-exam-form-btn{
+  background: #1a365d;
+  color: white;
+  padding: 0.5rem 1rem;  /* Reduced from 0.75rem 1.5rem */
+  border: none;
+  border-radius: 6px;    /* Reduced from 8px */
+  font-weight: 500;      /* Reduced from 600 */
+  font-size: 0.875rem;   /* Added smaller font size */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.toggle-exam-type-form-btn:hover,
+.add-exam-type-btn:hover,
+.exam-details-next-btn:hover,
+.add-subject-btn:hover,
+.final-submit-btn:hover,
+.toggle-record-btn:hover,
+.delete-record-btn:hover,
+.toggle-exam-form-btn:hover {
+background-color: #1a363d;
+}
+/* Forms */
+.exam-type-form,
+.exam-details-form,
+.subject-details-form {
+  background: #f7fafc;
+  padding: 1rem;        /* Reduced from 2rem */
+  border-radius: 8px;   /* Reduced from 12px */
+  margin: 1rem 0;       /* Reduced from 1.5rem */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 0.5rem;      /* Reduced from 0.75rem */
+  border: 1px solid #e2e8f0;  /* Reduced from 2px */
+  border-radius: 6px;   /* Reduced from 8px */
+  margin-top: 0.25rem;  /* Reduced from 0.5rem */
+  font-size: 0.875rem;  /* Added smaller font size */
+}
+
+label {
+  color: #2d3748;
+  font-weight: 500;     /* Reduced from 600 */
+  margin-bottom: 0.25rem;  /* Reduced from 0.5rem */
+  font-size: 0.875rem;    /* Added smaller font size */
+  display: block;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;      /* Reduced from 1.5rem */
+  font-size: 0.875rem; /* Added smaller font size */
+}
+
+th {
+  background: #1a365d;
+  color: white;
+  padding: 0.75rem;    /* Reduced from 1rem */
+  font-weight: 500;    /* Reduced from 600 */
+  text-align: left;
+  border-top: 1px solid #2c5282;
+}
+
+td {
+  padding: 0.75rem;    /* Reduced from 1rem */
+  border-bottom: 1px solid #e2e8f0;
+  background: white;
+}
+
+/* Ring Percentage Visualization */
+.ring-container,
+.ring-container-total,
+.ring-container-record {
+  width: 36px;         /* Reduced from 45px */
+  height: 36px;        /* Reduced from 45px */
+  position: relative;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #f7fafc;
+  padding: 2px;
+}
+
+.ring-percentage,
+.ring-percentage-total,
+.ring-percentage-record {
+  font-size: 0.7rem;   /* Reduced from 0.75rem */
+  font-weight: 500;    /* Reduced from 600 */
+  color: #1a365d;
+}
+
+/* Form Groups */
+.exam-type-name-container,
+.max-marks-container,
+.internal-marks-container,
+.exam-type-selection-container,
+.exam-name-container,
+.exam-date-container,
+.number-of-subjects-container,
+.subject-name-container,
+.subject-marks-container,
+.subject-attendance-container {
+  margin-bottom: 1rem;  /* Reduced from 1.5rem */
+}
+
+/* Exam Records */
+.exam-record-container {
+  background: #f7fafc;
+  border-radius: 8px;   /* Reduced from 12px */
+  padding: 1rem;        /* Reduced from 1.5rem */
+  margin: 0.75rem 0;    /* Reduced from 1rem */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.exam-record-title {
+  font-size: 1rem;      /* Reduced from 1.25rem */
+  font-weight: 500;     /* Reduced from 600 */
+  color: #1a365d;
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+}
+
+/* Spacing Utilities */
+.subject-details-form h3 {
+  font-size: 1.125rem;  /* Added smaller font size */
+  margin-bottom: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .my-marks-container {
+    padding: 0.75rem;
+    margin: 0.5rem;
+  }
+  
+  /* Keep table scrollable but with smaller text */
+  table {
+    font-size: 0.8125rem;
+  }
+  
+  /* Stack buttons more compactly */
+  .toggle-exam-type-form-btn,
+  .add-exam-type-btn,
+  .exam-details-next-btn,
+  .add-subject-btn,
+  .final-submit-btn {
+    margin: 0.25rem 0;
+  }
+}

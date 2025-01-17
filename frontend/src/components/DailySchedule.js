@@ -92,7 +92,7 @@ function DailySchedule() {
       setTasks(tasks.filter((_, i) => i !== index));
     } // eslint-disable-next-line no-console
     catch (error) {
-      /*console.error("Error deleting task:", error);*/
+      console.error("Error deleting task:", error);
     }
   };
 

@@ -45,7 +45,7 @@ function NewSubjectManager() {
         alert("Subject name cannot be empty.");
         return;
       }
-      const response = await axios.post("http:192.168.1.41:5000/newsubject", {
+      const response = await axios.post("http://192.168.1.41:5000/newsubject", {
         subjectName: newSubjectName,
       });
       setSubjects([...subjects, response.data]);
@@ -233,67 +233,110 @@ function NewSubjectManager() {
 
   // New function for handling multiple topic deletion
   const deleteMultipleTopics = async () => {
+    if (!selectedSubject || selectedTopics.size === 0) return;
+
     if (!window.confirm(`Are you sure you want to delete ${selectedTopics.size} topics?`)) {
       return;
     }
 
     try {
-      for (const topicId of selectedTopics) {
-        await axios.delete(
-          `http://192.168.1.41:5000/newsubject/${selectedSubject}/topics/${topicId}`
-        );
-      }
-
-      setSubjects(
-        subjects.map((subject) => {
-          if (subject._id === selectedSubject) {
-            return {
-              ...subject,
-              topics: subject.topics.filter(
-                (topic) => !selectedTopics.has(topic._id)
-              ),
-            };
-          }
-          return subject;
-        })
+      // Create an array of all deletion promises
+      const deletePromises = Array.from(selectedTopics).map(topicId => 
+        axios.delete(`http://192.168.1.41:5000/newsubject/${selectedSubject}/topics/${topicId}`)
       );
 
+      // Wait for all deletions to complete
+      await Promise.all(deletePromises);
+
+      // Update local state immediately
+      const updatedSubjects = subjects.map(subject => {
+        if (subject._id === selectedSubject) {
+          return {
+            ...subject,
+            topics: subject.topics.filter(topic => !selectedTopics.has(topic._id))
+          };
+        }
+        return subject;
+      });
+
+      // Update the state
+      setSubjects(updatedSubjects);
       setSelectedTopics(new Set());
       setSelectMode(false);
+
+      // Optional: Fetch fresh data to ensure consistency
+      await fetchSubjects();
     } catch (error) {
       console.error("Error deleting multiple topics:", error);
+      alert("Error deleting topics. Please try again.");
     }
   };
 
   // New function for handling multiple topic completion toggle
   const toggleMultipleCompletion = async (setCompleted) => {
+    if (!selectedSubject || selectedTopics.size === 0) return;
+
     try {
-      for (const topicId of selectedTopics) {
-        await axios.patch(
+      // Get the current subject's topics
+      const currentSubject = subjects.find(sub => sub._id === selectedSubject);
+      if (!currentSubject) return;
+
+      // Create an array of promises for all selected topics
+      const updatePromises = Array.from(selectedTopics).map(topicId => {
+        return axios.patch(
           `http://192.168.1.41:5000/newsubject/${selectedSubject}/topics/${topicId}`,
           { completed: setCompleted }
         );
-      }
-      fetchSubjects();
+      });
+
+      // Wait for all updates to complete
+      await Promise.all(updatePromises);
+
+      // Update the local state to reflect changes immediately
+      const updatedSubjects = subjects.map(subject => {
+        if (subject._id === selectedSubject) {
+          const updatedTopics = subject.topics.map(topic => {
+            if (selectedTopics.has(topic._id)) {
+              return { ...topic, completed: setCompleted };
+            }
+            return topic;
+          });
+          return { ...subject, topics: updatedTopics };
+        }
+        return subject;
+      });
+
+      setSubjects(updatedSubjects);
+      
+      // Clear selection state
       setSelectedTopics(new Set());
       setSelectMode(false);
+      
+      // Fetch fresh data to ensure consistency
+      await fetchSubjects();
     } catch (error) {
       console.error("Error toggling multiple topics completion:", error);
+      alert("Error updating topics. Please try again.");
     }
   };
+
   // Add this new function for handling select all functionality
-const handleSelectAll = (shouldSelectAll) => {
-  const currentTopics = getSortedAndFilteredTopics(
-    subjects.find((subject) => subject._id === selectedSubject)?.topics
-  );
-  
-  if (shouldSelectAll) {
-    const allTopicIds = new Set(currentTopics.map(topic => topic._id));
-    setSelectedTopics(allTopicIds);
-  } else {
-    setSelectedTopics(new Set());
-  }
-};
+  const handleSelectAll = (shouldSelectAll) => {
+    if (!selectedSubject) return;
+
+    const currentTopics = getSortedAndFilteredTopics(
+      subjects.find((subject) => subject._id === selectedSubject)?.topics
+    );
+    
+    if (shouldSelectAll) {
+      const allTopicIds = new Set(currentTopics.map(topic => topic._id));
+      setSelectedTopics(allTopicIds);
+    } else {
+      setSelectedTopics(new Set());
+    }
+  };
+
+  // Modified getSortedAndFilteredTopics to maintain consistency
   const getSortedAndFilteredTopics = (topics) => {
     if (!topics) return [];
     
@@ -329,44 +372,44 @@ const handleSelectAll = (shouldSelectAll) => {
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Prepare Your Exam</h1>
+    <div className="exam-preparation-container">
+      <h1 className="exam-main-title">Prepare Your Exam</h1>
 
       {isSubjectFormVisible && (
-        <div className="form-section">
+        <div className="subject-form-container">
           <input
             type="text"
-            className="input"
+            className="subject-input-field"
             placeholder="Add new subject..."
             value={newSubjectName}
             onChange={(e) => setNewSubjectName(e.target.value)}
           />
-          <button className="button add-btn" onClick={addSubject}>
+          <button className="subject-add-button" onClick={addSubject}>
             Add Subject
           </button>
         </div>
       )}
 
       <button
-        className="floating-btn"
+        className="subject-toggle-floating-button"
         onClick={() => setSubjectFormVisible(!isSubjectFormVisible)}
       >
         +
       </button>
 
-      <div className="form-section">
-        <h3 className="sub-title">Subjects</h3>
-        <div className="subjects-grid">
+      <div className="subjects-section-container">
+        <h3 className="subjects-section-title">Subjects</h3>
+        <div className="subjects-grid-layout">
           {subjects.map((subject) => (
             <div
               key={subject._id}
-              className="subject-item"
+              className="subject-card-container"
               onClick={() => setSelectedSubject(subject._id)}
             >
-              <div className="subject-header">
+              <div className="subject-card-header">
                 <span>{subject.subjectName}</span>
                 <button
-                  className="button delete-btn"
+                  className="subject-delete-button"
                   onClick={(e) => {
                     e.stopPropagation();
                     deleteSubject(subject._id);
@@ -375,8 +418,8 @@ const handleSelectAll = (shouldSelectAll) => {
                   ×
                 </button>
               </div>
-              <div className="completion-ring2">
-                <div className="ring">
+              <div className="subject-completion-wrapper">
+                <div className="subject-completion-ring">
                   {calculateCompletion(subject.topics)}%
                 </div>
               </div>
@@ -385,20 +428,19 @@ const handleSelectAll = (shouldSelectAll) => {
         </div>
       </div>
 
-      <div className="form-section">
-        <div className="section-header">
-          <h3 className="sub-title">Topics for Selected Subject</h3>
-          <div className="topics-controls">
-            {/* New search bar */}
+      <div className="topics-section-container">
+        <div className="topics-header-container">
+          <h3 className="topics-section-title">Topics for Selected Subject</h3>
+          <div className="topics-control-panel">
             <input
               type="text"
-              className="input search-input"
+              className="topics-search-input"
               placeholder="Search topics..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
-              className="select"
+              className="topics-sort-dropdown"
               value={sortCriteria}
               onChange={(e) => setSortCriteria(e.target.value)}
             >
@@ -406,7 +448,7 @@ const handleSelectAll = (shouldSelectAll) => {
               <option value="unit">Sort by Unit</option>
             </select>
             <select
-              className="select"
+              className="topics-filter-dropdown"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
@@ -415,7 +457,7 @@ const handleSelectAll = (shouldSelectAll) => {
               <option value="incomplete">Incomplete</option>
             </select>
             <button
-              className="button toggle-btn"
+              className="topics-visibility-toggle"
               onClick={() => setShowTopics(!showTopics)}
             >
               {showTopics ? "Hide" : "Show"}
@@ -426,9 +468,9 @@ const handleSelectAll = (shouldSelectAll) => {
         {showTopics && (
           <>
             {isTopicFormVisible && (
-              <div className="form-section">
+              <div className="topic-form-container">
                 <select
-                  className="select"
+                  className="topic-subject-dropdown"
                   value={selectedSubject || ""}
                   onChange={(e) => setSelectedSubject(e.target.value)}
                 >
@@ -441,89 +483,95 @@ const handleSelectAll = (shouldSelectAll) => {
                 </select>
                 <input
                   type="text"
-                  className="input"
+                  className="topic-unit-input"
                   placeholder="Unit Name"
                   value={newUnit}
                   onChange={(e) => setNewUnit(e.target.value)}
                 />
                 <input
                   type="text"
-                  className="input"
+                  className="topic-names-input"
                   placeholder="Topics (comma or full-stop separated)"
                   value={newTopics}
                   onChange={(e) => setNewTopics(e.target.value)}
                 />
-                <button className="button add-btn" onClick={addTopics}>
+                <button className="topic-add-button" onClick={addTopics}>
                   Add Topics
                 </button>
               </div>
             )}
 
             <button
-              className="floating-btn"
+              className="topic-form-floating-button"
               onClick={() => setTopicFormVisible(!isTopicFormVisible)}
             >
               +
             </button>
-
             {selectedSubject && (
-  <div className="multi-select-controls">
-    <button
-      className="button"
-      onClick={() => setSelectMode(!selectMode)}
-    >
-      {selectMode ? "Cancel" : "Select"}
-    </button>
-    {selectMode && (
-      <>
-        <button
-          className="button"
-          onClick={() => handleSelectAll(true)}
-        >
-          Select All
-        </button>
-        <button
-          className="button"
-          onClick={() => handleSelectAll(false)}
-        >
-          Deselect All
-        </button>
-        {selectedTopics.size > 0 && (
-          <>
-            <button
-              className="button"
-              onClick={() => toggleMultipleCompletion(true)}
-            >
-              Mark Complete ({selectedTopics.size})
-            </button>
-            <button
-              className="button"
-              onClick={() => toggleMultipleCompletion(false)}
-            >
-              Mark Incomplete ({selectedTopics.size})
-            </button>
-            <button
-              className="delete-btn"
-              onClick={deleteMultipleTopics}
-            >
-              × 
-            </button>
-          </>
-        )}
-      </>
-    )}
-  </div>
-)}
-
-            <div className="topics-strip">
+              <div className="topic-multiselect-controls">
+                <button
+                  className="topic-select-mode-toggle"
+                  onClick={() => {
+                    setSelectMode(!selectMode);
+                    if (!selectMode) {
+                      setSelectedTopics(new Set());
+                    }
+                  }}
+                >
+                  {selectMode ? "Cancel" : "Select"}
+                </button>
+                
+                {selectMode && (
+                  <>
+                    <button
+                      className="topic-select-all-button"
+                      onClick={() => handleSelectAll(true)}
+                    >
+                      Select All
+                    </button>
+                    <button
+                      className="topic-deselect-all-button"
+                      onClick={() => handleSelectAll(false)}
+                    >
+                      Deselect All
+                    </button>
+                    {selectedTopics.size > 0 && (
+                      <>
+                        <button
+                          className="topic-mark-complete-button"
+                          onClick={() => toggleMultipleCompletion(true)}
+                        >
+                          Mark Complete ({selectedTopics.size})
+                        </button>
+                        <button
+                          className="topic-mark-incomplete-button"
+                          onClick={() => toggleMultipleCompletion(false)}
+                        >
+                          Mark Incomplete ({selectedTopics.size})
+                        </button>
+                        <button
+                          className="topic-bulk-delete-button"
+                          onClick={deleteMultipleTopics}
+                        >
+                          ×({selectedTopics.size})
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+            
+            <div className="topics-list-container">
               {getSortedAndFilteredTopics(
                 subjects.find((subject) => subject._id === selectedSubject)?.topics
               ).map((topic) => (
-                <div key={topic._id} className="topic-item">
-                  <div className="topic-details">
+                <div key={topic._id} className="topic-list-item">
+                  <div className="topic-item-content">
                     {selectMode ? (
                       <input
                         type="checkbox"
+                        className="topic-select-checkbox"
                         checked={selectedTopics.has(topic._id)}
                         onChange={(e) => {
                           const newSelected = new Set(selectedTopics);
@@ -538,22 +586,19 @@ const handleSelectAll = (shouldSelectAll) => {
                     ) : (
                       <input
                         type="checkbox"
+                        className="topic-completion-checkbox"
                         checked={topic.completed}
-                        onChange={() =>
-                          toggleCompletion(
-                            selectedSubject,
-                            topic._id,
-                            topic.completed
-                          )
-                        }
+                        onChange={() => {
+                          toggleCompletion(selectedSubject, topic._id, topic.completed);
+                        }}
                       />
                     )}
-                    <span className={topic.completed ? "completed" : ""}>
+                    <span className={topic.completed ? "topic-completed-text" : "topic-incomplete-text"}>
                       {topic.topicName} - {topic.unitName}
                     </span>
                     {!selectMode && (
                       <button
-                        className="button delete-btn"
+                        className="topic-delete-button"
                         onClick={() => deleteTopic(selectedSubject, topic._id)}
                       >
                         ×
@@ -567,12 +612,12 @@ const handleSelectAll = (shouldSelectAll) => {
         )}
       </div>
 
-      <div className="form-section">
-        <h3 className="sub-title">Resources</h3>
+      <div className="resources-section-container">
+        <h3 className="resources-section-title">Resources</h3>
         {isResourceFormVisible && (
           <>
             <select
-              className="select"
+              className="resource-subject-dropdown"
               value={selectedSubject || ""}
               onChange={(e) => setSelectedSubject(e.target.value)}
             >
@@ -586,14 +631,14 @@ const handleSelectAll = (shouldSelectAll) => {
 
             <input
               type="text"
-              className="input"
+              className="resource-name-input"
               placeholder="Resource Name"
               value={newResourceName}
               onChange={(e) => setNewResourceName(e.target.value)}
             />
 
             <select
-              className="select"
+              className="resource-type-dropdown"
               value={newResourceType}
               onChange={(e) => setNewResourceType(e.target.value)}
             >
@@ -605,7 +650,7 @@ const handleSelectAll = (shouldSelectAll) => {
               <input
                 type="file"
                 accept="application/pdf"
-                className="input"
+                className="resource-file-input"
                 onChange={(e) => setNewResourceFile(e.target.files[0])}
               />
             )}
@@ -613,50 +658,50 @@ const handleSelectAll = (shouldSelectAll) => {
             {newResourceType === "YouTube" && (
               <input
                 type="text"
-                className="input"
+                className="resource-url-input"
                 placeholder="Enter YouTube URL"
                 value={newResourceURL}
                 onChange={(e) => setNewResourceURL(e.target.value)}
               />
             )}
 
-            <button className="button add-btn" onClick={addResource}>
+            <button className="resource-add-button" onClick={addResource}>
               Add Resource
             </button>
           </>
         )}
 
         <button
-          className="floating-btn"
+          className="resource-form-floating-button"
           onClick={() => setResourceFormVisible(!isResourceFormVisible)}
         >
           +
         </button>
 
-        <div className="resources-list">
+        <div className="resources-grid-container">
           {resources
             .filter((resource) => resource.subjectId === selectedSubject)
             .map((resource) => (
-              <div key={resource._id} className="resource-item">
-                <div className="resource-content">
+              <div key={resource._id} className="resource-card">
+                <div className="resource-card-content">
                   {resource.type === "PDF" ? (
-                    <div className="resource-pdf">
-                      <span className="resource-title">{resource.name}</span>
+                    <div className="resource-pdf-container">
+                      <span className="resource-pdf-title">{resource.name}</span>
                       <button
                         onClick={() => window.open(resource.url, '_blank')}
-                        className="resource-link button"
+                        className="resource-pdf-open-button"
                       >
                         Open PDF
                       </button>
                     </div>
                   ) : (
-                    <div className="resource-youtube">
-                      <span className="resource-title">{resource.name}</span>
+                    <div className="resource-youtube-container">
+                      <span className="resource-youtube-title">{resource.name}</span>
                       <a
                         href={resource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="resource-link"
+                        className="resource-youtube-link"
                       >
                         Watch Video
                       </a>
@@ -664,7 +709,7 @@ const handleSelectAll = (shouldSelectAll) => {
                   )}
                 </div>
                 <button
-                  className="button delete-btn"
+                  className="resource-delete-button"
                   onClick={() => deleteResource(resource._id)}
                 >
                   ×
@@ -674,7 +719,6 @@ const handleSelectAll = (shouldSelectAll) => {
         </div>
       </div>
     </div>
-  );
-}
+  );}
 
 export default NewSubjectManager;

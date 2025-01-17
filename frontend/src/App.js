@@ -13,7 +13,6 @@ import MyMarks from './components/MyMarks';
 import Header from './components/Header';
 import CGPACalculator from './components/CGPACalculator';
 import AttendanceManager from "./components/AttendanceManager";
-import MarkAttendance from "./components/MarkAttendance";
 import PDFManager from "./components/PDFManager";
 import Loading from './components/Loading';
 import YouTubeEmbed from "./components/YouTubeEmbed";
@@ -22,7 +21,8 @@ import CalendarComponent from './components/CalendarComponent';
 import DSALists from "./components/DSALists";
 import NewSubject from "./components/NewSubject";
 /*import JavaIDE from "./components/JavaIDE";*/
-
+import InternalMarks from "./components/InternalMarks";
+import WeightLossTracker from "./components/WeightLossTracker";
 
 
 const App = () => {
@@ -93,7 +93,7 @@ const App = () => {
               <Route path="/mymarks" element={<MyMarks />} />
               <Route path="/cgpacalculator" element={<CGPACalculator />} />
               <Route path="/attendancemanager" element={<AttendanceManager />} />
-              <Route path="/markattendance" element={<MarkAttendance />} />
+              <Route path="/weightlosstracker" element={<WeightLossTracker />} />
               <Route path="/pdfmanager" element={<PDFManager />} />
               <Route path="/youtubeembed" element={<YouTubeEmbed />} />
               <Route path="/exceltables" element={<ExcelTables/>}/>
@@ -101,7 +101,7 @@ const App = () => {
               <Route path="/dsalists" element={<DSALists/>}/> 
               <Route path ="/newsubject" element={<NewSubject/>}/>
               {/*<Route path="/javaide" element={<JavaIDE/>}/>*/}
-            
+              <Route path="internalmarks" element ={<InternalMarks/>}/>
             </Routes>
           </main>
         </div>

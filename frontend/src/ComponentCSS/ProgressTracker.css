@@ -33,7 +33,7 @@
   }
   
   .progress-form button {
-    background-color: #2a9d8f;
+    background-color: #2c5282;
     color: white;
     border: none;
     padding: 0.75rem;
@@ -44,7 +44,7 @@
   }
   
   .progress-form button:hover {
-    background-color: #21867a;
+    background-color: #1a365d;
   }
   
   /* Progress List */
@@ -57,7 +57,7 @@
     background-color: #f0f4f8;
     margin-bottom: 1rem;
     padding: 1rem;
-    border-left: 5px solid #2a9d8f;
+    border-left: 5px solid #2c5282;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -82,7 +82,7 @@
   
   .progress-list .percentage {
     font-weight: bold;
-    color: #2a9d8f;
+    color: #2c5282;
     font-size: 18px;
   }
   
@@ -164,19 +164,19 @@
     padding: 5px 10px;
     border: none;
     border-radius: 4px;
-    background-color: #2a9d8f;
+    background-color: #2c5282;
     color: white;
     cursor: pointer;
   }
   
   .progress-item button:hover {
-    background-color: #21867a;
+    background-color: #1a365d;
   }
   .toggle-form-button {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #45a049;
+    background-color: #2c5282;
     color: white;
     border: none;
   

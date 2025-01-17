@@ -4,22 +4,12 @@ import { AiOutlinePlus, AiOutlineDelete, AiOutlineLink } from "react-icons/ai";
 import "../ComponentCSS/Dashboard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faHome, 
-  faCalendar, 
-  faStickyNote, 
-  faTable, 
-  faChartBar, 
   faClock, 
   faGraduationCap, 
-  faCalculator, 
-  faUserCheck, 
-  faBook, 
-  faFilePdf, 
-  faVideo ,
-  faList,
-  faPencilAlt
+  faPencilAlt,
+  faDatabase,
+  faWeight
 } from '@fortawesome/free-solid-svg-icons'; 
-import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
   const [linkName, setLinkName] = useState("");
@@ -189,7 +179,7 @@ const Dashboard = () => {
               ))}
               <div className="add-quick-link">
                 <button
-                  className="add-link-button"
+                  className="add-link-button" title="Add a new link"
                   onClick={() => setShowForm(!showForm)}
                 >
                   <AiOutlinePlus />
@@ -221,14 +211,14 @@ const Dashboard = () => {
 
         {/* Feature Grid */}
         <div className="grid-container">
-          <Link to="/markattendance" className="box">
+          <Link to="/weightlosstracker" className="box">
             <div className="box-content">
-              <p className="box-text"><FontAwesomeIcon icon={faUserCheck} />  Attendance  </p>
+              <p className="box-text"><FontAwesomeIcon icon={faWeight} /> Weight Tracker </p>
             </div>
           </Link>
           <Link to="/mymarks" className="box">
             <div className="box-content">
-              <p className="box-text"><FontAwesomeIcon icon={faGraduationCap} />Marks</p>
+              <p className="box-text"><FontAwesomeIcon icon={faGraduationCap} /> Marks</p>
             </div>
           </Link>
           <Link to="/timer" className="box">
@@ -239,6 +229,11 @@ const Dashboard = () => {
           <Link to="/newsubject" className="box">
             <div className="box-content">
               <p className="box-text"><FontAwesomeIcon icon={faPencilAlt}/> Exam Planner</p>
+            </div>
+          </Link>
+          <Link to="/internalmarks" className="box">
+            <div className="box-content">
+              <p className="box-text"><FontAwesomeIcon icon={faDatabase}/> Internal Marks</p>
             </div>
           </Link>
         </div>

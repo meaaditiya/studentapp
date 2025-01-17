@@ -5,7 +5,7 @@ import {
   Eye, 
   EyeOff, 
    } from 'lucide-react';
-   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@4.8.69/build/pdf.worker.min.js`;
+   pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.worker.min.js';
 import '../ComponentCSS/PDFManager.css'
 const PDFManager = () => {
   const [pdfs, setPdfs] = useState([]);
@@ -17,21 +17,12 @@ const PDFManager = () => {
   const [rotation, setRotation] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [workerError, setWorkerError] = useState(false);
 
   useEffect(() => {
-    loadPDFWorker().catch(() => setWorkerError(true));
+    pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.worker.min.js';
     fetchPDFs();
   }, []);
-  const loadPDFWorker = async () => {
-    try {
-      await pdfjs.getDocument(`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`);
-    } catch (error) {
-      console.error('PDF Worker failed to load:', error);
-      // Fallback to local worker if CDN fails
-      pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
-    }
-  };
+
   const fetchPDFs = async () => {
     try {
       setLoading(true);

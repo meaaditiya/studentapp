@@ -236,6 +236,11 @@ const Dashboard = () => {
               <p className="box-text"><FontAwesomeIcon icon={faDatabase}/> Internal Marks</p>
             </div>
           </Link>
+          <Link to="/notes" className="box">
+            <div className="box-content">
+              <p className="box-text"><FontAwesomeIcon icon={faPencilAlt}/> Exam Planner</p>
+            </div>
+          </Link>
         </div>
       </div>
 

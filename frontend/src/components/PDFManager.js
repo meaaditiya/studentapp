@@ -5,7 +5,7 @@ import {
   Eye, 
   EyeOff, 
    } from 'lucide-react';
-   pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.worker.min.js';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 import '../ComponentCSS/PDFManager.css'
 const PDFManager = () => {
   const [pdfs, setPdfs] = useState([]);
@@ -19,14 +19,13 @@ const PDFManager = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.worker.min.js';
     fetchPDFs();
   }, []);
 
   const fetchPDFs = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/pdfs');
+      const response = await fetch('http://192.168.1.41:5000/api/pdfs');
       if (!response.ok) throw new Error('Failed to fetch PDFs');
       const data = await response.json();
       setPdfs(data);
@@ -58,7 +57,7 @@ const PDFManager = () => {
 
     try {
       setLoading(true);
-      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/upload', {
+      const response = await fetch('http://192.168.1.41:5000/api/upload', {
         method: 'POST',
         body: formData,
       });
@@ -77,7 +76,7 @@ const PDFManager = () => {
     if (window.confirm('Are you sure you want to delete this PDF?')) {
       try {
         setLoading(true);
-        const response = await fetch(`https://studentapp-backend-ccks.onrender.com/api/pdfs/${id}`, {
+        const response = await fetch(`http://192.168.1.41:5000/api/pdfs/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) throw new Error('Delete failed');
@@ -112,7 +111,7 @@ const PDFManager = () => {
 
   const downloadPDF = async (id, name) => {
     try {
-      const response = await fetch(`https://studentapp-backend-ccks.onrender.com/api/pdfs/${id}`);
+      const response = await fetch(`http://192.168.1.41:5000/api/pdfs/${id}`);
       if (!response.ok) throw new Error('Download failed');
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -214,7 +213,7 @@ const PDFManager = () => {
             </div>
             <div className="pdf-manager-document-container">
               <Document
-                file={`https://studentapp-backend-ccks.onrender.com/api/pdfs/${selectedPDF._id}`}
+                file={`http://192.168.1.41:5000/api/pdfs/${selectedPDF._id}`}
                 onLoadSuccess={handleDocumentLoadSuccess}
                 loading={
                   <div className="pdf-manager-loading">

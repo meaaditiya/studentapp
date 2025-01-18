@@ -22,7 +22,7 @@ const WeeklyTimetable = () => {
 
   const fetchTimetable = async () => {
     try {
-      const response = await fetch("https://studentapp-backend-ccks.onrender.com/api/timetable");
+      const response = await fetch("http://192.168.1.41:5000/api/timetable");
       const { headers, data } = await response.json();
       setColumnHeaders(headers);
       setExcelData(data);
@@ -59,7 +59,7 @@ const WeeklyTimetable = () => {
 
   const saveTimetable = async (headers, data) => {
     try {
-      const response = await fetch("https://studentapp-backend-ccks.onrender.com/api/timetable", {
+      const response = await fetch("http://192.168.1.41:5000/api/timetable", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const WeeklyTimetable = () => {
       newData[rowIndex][colIndex] = value;
       setExcelData(newData);
 
-      const response = await fetch("https://studentapp-backend-ccks.onrender.com/api/timetable/cell", {
+      const response = await fetch("http://192.168.1.41:5000/api/timetable/cell", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ const WeeklyTimetable = () => {
       newHeaders[index] = value;
       setColumnHeaders(newHeaders);
 
-      const response = await fetch("https://studentapp-backend-ccks.onrender.com/api/timetable/header", {
+      const response = await fetch("http://192.168.1.41:5000/api/timetable/header", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 const manifest = {
     short_name: "MyApp",
-    name: "My React App",
+    name: "Student Diary",
     icons: [
       {
         src: "icon-192x192.png",

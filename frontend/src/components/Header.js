@@ -35,10 +35,10 @@ function Header({ toggleSidebar }) {
       </button>
       </div>
       <h1 style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
-  <a href="/dashboard" style={{ textDecoration: 'none', color: 'white' }}>
+  <a href="/dashboard" style={{ textDecoration: 'none', color: 'white' }} className="logo">
     <FaOdnoklassnikiSquare size={40} style={{ marginRight: '10px', color: 'white' }} />
   </a>
-Personal Diary 
+PERSONAL DIARY 
 </h1>
 
      

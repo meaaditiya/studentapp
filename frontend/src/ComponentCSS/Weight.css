@@ -295,3 +295,89 @@
     padding: 10px;
     border-radius: 10px;
   }
+  /* Previous CSS remains the same until button styles */
+
+/* Button Container */
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* Button Styles */
+.toggle-button,
+.submit-button,
+.delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all 0.15s ease;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-width: 120px;
+}
+
+.toggle-button {
+  background: var(--card-background);
+  color: var(--neutral-color);
+  border: 1px solid var(--border-color);
+  margin: 0;
+}
+
+.toggle-button:hover {
+  background: var(--background-color);
+  color: var(--primary-color);
+}
+
+.submit-button {
+  background: var(--primary-color);
+  color: white;
+  margin: 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.submit-button:hover {
+  background: var(--primary-hover);
+}
+
+.delete-button {
+  background: transparent;
+  color: var(--danger-color);
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.delete-button:hover {
+  background: #fee2e2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .button-container {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    padding: 0 1rem;
+  }
+
+  .toggle-button,
+  .submit-button,
+  .delete-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .button-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+/* Rest of the CSS remains the same */

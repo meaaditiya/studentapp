@@ -230,6 +230,7 @@ return (
     </ul>
   </div>
 </div>
+<div class="button-container">
  <button 
       onClick={() => setShowTarget(!showtarget)} 
       className="toggle-button"
@@ -237,6 +238,34 @@ return (
       {showtarget ? <EyeOff className="icon" /> : <Eye className="icon" />}
       Set Target
     </button>
+ <button 
+      onClick={() => setShowHeightForm(!showHeightForm)} 
+      className="toggle-button"
+    >
+      {showHeightForm ? <EyeOff className="icon" /> : <Eye className="icon" />}
+      Update Height
+    </button>
+ <button 
+      onClick={() => setShowWeightForm(!showWeightForm)} 
+      className="toggle-button"
+    >
+      {showWeightForm ? <EyeOff className="icon" /> : <Eye className="icon" />}
+      Add Weight
+    </button>
+<button 
+      onClick={() => setShowTable(!showTable)} 
+      className="toggle-button"
+    >
+      {showTable ? <EyeOff className="icon" /> : <Eye className="icon" />}
+      Weight History
+    </button>
+<button 
+      onClick={() => setTotalSummary(!showTotalSummary)} 
+      className="toggle-button"
+    >
+      {showTotalSummary? <EyeOff className="icon" /> : <Eye className="icon" />}
+      Total Summary
+    </button></div>
 {showtarget &&(
 <form onSubmit={handleTargetWeightSubmit} className="target-weight-form">
 <div className="form-grid">
@@ -263,13 +292,7 @@ return (
       </form>)}
 
     {/* Height Form Toggle */}
-    <button 
-      onClick={() => setShowHeightForm(!showHeightForm)} 
-      className="toggle-button"
-    >
-      {showHeightForm ? <EyeOff className="icon" /> : <Eye className="icon" />}
-      Update Height
-    </button>
+    
 
     {/* Height Form */}
     {showHeightForm && (
@@ -328,13 +351,7 @@ return (
     )}
 
     {/* Weight Form Toggle */}
-    <button 
-      onClick={() => setShowWeightForm(!showWeightForm)} 
-      className="toggle-button"
-    >
-      {showWeightForm ? <EyeOff className="icon" /> : <Eye className="icon" />}
-      Add Weight
-    </button>
+   
 
     {/* Weight Form */}
     {showWeightForm && (
@@ -423,13 +440,7 @@ return (
     )}
 
     {/* History Toggle */}
-    <button 
-      onClick={() => setShowTable(!showTable)} 
-      className="toggle-button"
-    >
-      {showTable ? <EyeOff className="icon" /> : <Eye className="icon" />}
-      Weight History
-    </button>
+   
 
     {/* Weight History Table */}
     {showTable && (
@@ -511,13 +522,7 @@ return (
       </table>
     </div>
   )}
-  <button 
-      onClick={() => setTotalSummary(!showTotalSummary)} 
-      className="toggle-button"
-    >
-      {showTotalSummary? <EyeOff className="icon" /> : <Eye className="icon" />}
-      Total Summary
-    </button>
+  
   {showTotalSummary &&(
   <div className="bmi-snippet">
   <span><h1>Total Summary</h1>

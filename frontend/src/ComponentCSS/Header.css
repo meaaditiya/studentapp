@@ -190,7 +190,8 @@ header {
 
 @media (max-width: 400px) {
   .refresh-button {
-    display: none;
+   position:relative;
+   left:65px;
   }
 
   .header-buttons {
@@ -201,8 +202,13 @@ header {
   .header h1 {
     text-decoration: none;
     position: relative;
-    left:-10px;
-   top:-12px;
+   left:70px;
+
+  }
+  .logo{
+    position: relative;
+    top:0px;
+    left:230px;
   }
   .navigate-back{
     height:23px;

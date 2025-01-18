@@ -114,7 +114,7 @@ function MyMarks() {
       
       try {
         let existingSubject = existingSubjects.find(
-          subject => subject.name.toLowerCase() === currentSubject.toLowerCase()
+          subject => subject.name === currentSubject
         );
 
         // Convert mark to float for decimal point support

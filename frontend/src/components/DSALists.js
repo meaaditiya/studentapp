@@ -25,7 +25,7 @@ const DSALists = () => {
 
   const fetchLists = async () => {
     try {
-      const response = await fetch('https://studentapp-backend-ccks.onrender.com/api/lists');
+      const response = await fetch('https://personalstudentdiary.onrender.com/api/lists');
       const data = await response.json();
       setLists({
         list1: data.find((list) => list.name === 'list1')?.questions || [],
@@ -39,7 +39,7 @@ const DSALists = () => {
 
   const handleAddQuestion = async (listKey) => {
     try {
-      const response = await fetch(`https://studentapp-backend-ccks.onrender.com/api/lists/${listKey}/add`, {
+      const response = await fetch(`https://personalstudentdiary.onrender.com/api/lists/${listKey}/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const DSALists = () => {
   const handleMoveQuestion = async (fromList, questionId, toList) => {
     try {
       const response = await fetch(
-        `https://studentapp-backend-ccks.onrender.com/api/lists/${fromList}/move/${questionId}/${toList}`,
+        `https://personalstudentdiary.onrender.com/api/lists/${fromList}/move/${questionId}/${toList}`,
         { method: 'PUT' }
       );
 
@@ -91,7 +91,7 @@ const DSALists = () => {
     }
 
     try {
-      const response = await fetch(`https://studentapp-backend-ccks.onrender.com/api/lists/${listKey}/delete/${questionId}`, {
+      const response = await fetch(`https://personalstudentdiary.onrender.com/api/lists/${listKey}/delete/${questionId}`, {
         method: 'DELETE',
       });
 

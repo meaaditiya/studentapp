@@ -22,8 +22,8 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [tasksError, setTasksError] = useState("");
 
-  const API_BASE_URL = "http://192.168.1.41:5000/api/quick-links";
-  const TASKS_API_URL = "http://192.168.1.41:5000/tasks";
+  const API_BASE_URL = "https://personalstudentdiary.onrender.com/api/quick-links";
+  const TASKS_API_URL = "https://personalstudentdiary.onrender.com/tasks";
 
   useEffect(() => {
     const fetchLinks = async () => {

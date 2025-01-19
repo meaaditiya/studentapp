@@ -471,73 +471,11 @@ app.delete('/api/quick-links/:id', async (req, res) => {
   }
 });
 
-// Attendance schema for individual attendance records
-const attendanceSchema = new mongoose.Schema({
-  date: String,
-  status: String, // "present" or "absent"
-});
+
 
 // Subject schema, which includes an array of attendance records
-const newsubjectSchema = new mongoose.Schema({
-  name: String,
-  attendance: [attendanceSchema],
-});
 
-const newSubject = mongoose.model("Subject", subjectSchema);
 
-// Get all subjects
-app.get("/api/subjects", async (req, res) => {
-  try {
-    const subjects = await Subject.find();
-    res.json(subjects);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching subjects" });
-  }
-});
-
-// Add a new subject
-app.post("/api/subjects", async (req, res) => {
-  try {
-    const subject = new Subject({ name: req.body.name, attendance: [] });
-    await subject.save();
-    res.json(subject);
-  } catch (error) {
-    res.status(500).json({ message: "Error adding subject" });
-  }
-});
-
-// Delete a subject
-app.delete("/api/subjects/:id", async (req, res) => {
-  try {
-    await Subject.findByIdAndDelete(req.params.id);
-    res.json({ message: "Subject deleted" });
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting subject" });
-  }
-});
-
-// Mark attendance for multiple lectures at once
-app.post("/api/subjects/:id/attendance/batch", async (req, res) => {
-  const { attendanceRecords } = req.body; // Array of { date, status } objects
-
-  try {
-    const subject = await Subject.findById(req.params.id);
-
-    if (!subject) {
-      return res.status(404).json({ message: "Subject not found" });
-    }
-
-    // Push each attendance record into the subject's attendance array
-    attendanceRecords.forEach(record => {
-      subject.attendance.push({ date: record.date, status: record.status });
-    });
-
-    await subject.save();
-    res.json(subject);
-  } catch (error) {
-    res.status(500).json({ message: "Error marking attendance" });
-  }
-});
 // Define the PDF schema
 const pdfSchema = new mongoose.Schema({
   name: String,

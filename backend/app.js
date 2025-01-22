@@ -368,7 +368,44 @@ app.put('/api/subjects/:id', async (req, res) => {
     res.status(500).json({ error: 'Error updating subject' });
   }
 });
+// Exam API Routes
+app.get('/api/exams', async (req, res) => {
+  try {
+    const exams = await Exam.find().populate('examType');
+    res.json(exams);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching exams' });
+  }
+});
 
+app.get('/api/examTypes', async (req, res) => {
+  try {
+    const examTypes = await ExamType.find();
+    res.json(examTypes);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching exam types' });
+  }
+});
+
+app.post('/api/examTypes', async (req, res) => {
+  try {
+    const examType = new ExamType(req.body);
+    await examType.save();
+    res.status(201).json(examType);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating exam type' });
+  }
+});
+
+app.post('/api/exams', async (req, res) => {
+  try {
+    const exam = new Exam(req.body);
+    await exam.save();
+    res.status(201).json(exam);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating exam' });
+  }
+});
 // Update the exam deletion endpoint with better error handling
 app.delete('/api/exams/:id', async (req, res) => {
   try {

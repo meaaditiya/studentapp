@@ -471,9 +471,17 @@ app.delete('/api/quick-links/:id', async (req, res) => {
   }
 });
 
-
+// Attendance schema for individual attendance records
+const attendanceSchema = new mongoose.Schema({
+  date: String,
+  status: String, // "present" or "absent"
+});
 
 // Subject schema, which includes an array of attendance records
+const newsubjectSchema = new mongoose.Schema({
+  name: String,
+  attendance: [attendanceSchema],
+});
 
 
 // Define the PDF schema

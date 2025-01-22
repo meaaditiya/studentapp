@@ -1,167 +1,154 @@
-/* General Styles */
+/* Modern Mobile-First PDF Manager Styles */
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #f4f4f9;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f8fafc;
   margin: 0;
   padding: 0;
-  color: #333;
+  color: #1e293b;
 }
 
 .pdf-manager-container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 100%;
+  margin: 0;
+  padding: 16px;
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-/* Header Styles */
+/* Modern Header Styles */
 .pdf-manager-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .pdf-manager-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
 }
 
 .pdf-manager-upload-section {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.pdf-manager-file-input-wrapper {
+  width: 100%;
 }
 
 .pdf-manager-file-label {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #001f3f; /* Deep Navy Blue */
-  color: white;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #f1f5f9;
+  color: #1e293b;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.pdf-manager-file-label:hover {
-  background-color: #001a36; /* Slightly darker navy */
+  text-align: center;
+  border: 1px dashed #94a3b8;
 }
 
 .pdf-manager-btn-primary {
-  padding: 8px 16px;
-  background-color: #001f3f; /* Deep Navy Blue */
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
   color: white;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .pdf-manager-btn-primary:disabled {
-  background-color: #7f8c8d;
-  cursor: not-allowed;
+  background-color: #94a3b8;
 }
 
-.pdf-manager-btn-primary:hover:enabled {
-  background-color: #001a36; /* Slightly darker navy */
-}
-
-/* List Styles */
+/* List Container Styles */
 .pdf-manager-list-container {
-  margin-bottom: 30px;
-}
-
-.pdf-manager-list-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 10px;
+  margin-top: 16px;
 }
 
 .pdf-manager-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .pdf-manager-list-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  margin-bottom: 10px;
-  transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.pdf-manager-list-item:hover {
-  background-color: #f1f1f1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .pdf-manager-list-item-name {
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #2c3e50;
-  max-width: 60%;
-  word-wrap: break-word;
-  font-size: 0.9rem;
+  color: #0f172a;
+  word-break: break-word;
 }
 
 .pdf-manager-actions {
-  display: flex;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
 .pdf-manager-btn-secondary,
 .pdf-manager-btn-icon {
-  padding: 5px 10px;
-  border: none;
+  padding: 8px;
   border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
+  height: 36px;
+}
+
+/* Toggle Button */
+.toggle-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background-color: #f1f5f9;
+  border: none;
+  border-radius: 8px;
+  color: #1e293b;
+  font-weight: 500;
+  margin-bottom: 16px;
 }
 
-.pdf-manager-btn-secondary {
-  background-color: #001f3f; /* Deep Navy Blue */
-  color: white;
+.toggle-button .icon {
+  width: 18px;
+  height: 18px;
 }
 
-.pdf-manager-btn-secondary:hover {
-  background-color: #001a36;
-}
-
-.pdf-manager-btn-icon {
-  background-color: #001f3f; /* Deep Navy Blue */
-  color: white;
-}
-
-.pdf-manager-btn-icon:hover {
-  background-color: #001a36;
-}
-
-/* Viewer Styles */
+/* PDF Viewer Styles */
 .pdf-manager-viewer {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  margin-top: 20px;
-  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  z-index: 1000;
+  padding: 12px;
+  margin: 0;
+  border-radius: 0;
+  border: none;
   display: flex;
   flex-direction: column;
 }
@@ -170,99 +157,663 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .pdf-manager-viewer-title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #2c3e50;
-  max-width: 70%;
-  word-wrap: break-word;
+  margin: 0;
+  max-width: 60%;
+}
+
+.pdf-manager-viewer-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.pdf-manager-document-container {
+  flex: 1;
+  height: calc(100vh - 80px);
+  overflow: auto;
+  margin: 0;
+  padding: 8px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+/* Loading State */
+.pdf-manager-loading {
+  padding: 24px;
+  text-align: center;
+}
+
+.pdf-manager-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  margin: 0 auto;
+}
+
+.pdf-manager-loading-text {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+  .pdf-manager-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .pdf-manager-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pdf-manager-upload-section {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .pdf-manager-file-label,
+  .pdf-manager-btn-primary {
+    width: auto;
+  }
+
+  .pdf-manager-list-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pdf-manager-actions {
+    display: flex;
+    width: auto;
+  }
+
+  .pdf-manager-viewer {
+    padding: 24px;
+  }
+}
+/* ... (previous body and container styles remain the same) ... */
+
+/* Refined Button Styles */
+.pdf-manager-btn-primary,
+.pdf-manager-btn-secondary,
+.pdf-manager-btn-icon {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0 16px;
+  transition: all 0.2s ease;
+  border: none;
+  white-space: nowrap;
+}
+
+.pdf-manager-btn-primary {
+  background-color: #2563eb;
+  color: white;
+  min-width: 120px;
+}
+
+.pdf-manager-btn-primary:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.pdf-manager-btn-primary:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.pdf-manager-btn-secondary {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  min-width: 80px;
+}
+
+.pdf-manager-btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.pdf-manager-btn-icon {
+  padding: 0;
+  width: 40px;
+  min-width: 40px;
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.pdf-manager-btn-icon:hover {
+  background-color: #e2e8f0;
+}
+
+/* Refined Action Buttons Container */
+.pdf-manager-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Upload Section Refinements */
+.pdf-manager-upload-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.pdf-manager-file-label {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background-color: #f1f5f9;
+  border: 1px dashed #94a3b8;
+  border-radius: 6px;
+  min-width: 120px;
+}
+
+/* Toggle Button Refinements */
+.toggle-button {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background-color: #f1f5f9;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-button:hover {
+  background-color: #e2e8f0;
+}
+
+.toggle-button .icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+/* PDF Viewer Control Refinements */
+.pdf-manager-viewer-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* List Item Refinements */
+.pdf-manager-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+  .pdf-manager-actions {
+    gap: 4px;
+  }
+  
+  .pdf-manager-btn-secondary {
+    min-width: 60px;
+    padding: 0 8px;
+  }
+
+  .pdf-manager-btn-icon {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+  }
+  
+  .pdf-manager-list-item {
+    padding: 10px 12px;
+  }
+  
+  .pdf-manager-list-item-name {
+    max-width: 50%;
+  }
+}
+
+/* Larger Screen Optimizations */
+@media (min-width: 768px) {
+  .pdf-manager-list-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .pdf-manager-list-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .pdf-manager-actions {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+
+  .pdf-manager-list-item:hover .pdf-manager-actions {
+    opacity: 1;
+  }
+}
+/* Mobile-First PDF Manager Styles */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f8fafc;
+  margin: 0;
+  padding: 0;
+  color: #1e293b;
+  -webkit-text-size-adjust: 100%;
+}
+
+.pdf-manager-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 12px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Mobile-Optimized Header */
+.pdf-manager-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pdf-manager-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  padding: 0;
+  word-break: break-word;
+}
+
+/* Mobile-Optimized Upload Section */
+.pdf-manager-upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.pdf-manager-file-input-wrapper {
+  width: 100%;
+}
+
+.pdf-manager-file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  background-color: #f1f5f9;
+  border: 1px dashed #94a3b8;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+/* Mobile-Optimized Buttons */
+.pdf-manager-btn-primary,
+.pdf-manager-btn-secondary,
+.pdf-manager-btn-icon {
+  height: 44px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+.pdf-manager-btn-primary {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+}
+
+.pdf-manager-btn-secondary {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  padding: 0 12px;
+  min-width: auto;
+}
+
+.pdf-manager-btn-icon {
+  width: 44px;
+  min-width: 44px;
+  padding: 0;
+  background-color: #f1f5f9;
+}
+
+/* Mobile-Optimized List Items */
+.pdf-manager-list-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  padding: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.pdf-manager-list-item-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0f172a;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+
+.pdf-manager-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+/* Mobile-Optimized PDF Viewer */
+.pdf-manager-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  z-index: 1000;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.pdf-manager-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  min-height: 48px;
+}
+
+.pdf-manager-viewer-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 100px);
+}
+
+.pdf-manager-document-container {
+  flex: 1;
+  height: calc(100vh - 80px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 8px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .pdf-manager-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .pdf-manager-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+  }
+
+  .pdf-manager-upload-section {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .pdf-manager-file-label {
+    width: auto;
+    min-width: 200px;
+  }
+
+  .pdf-manager-btn-primary {
+    width: auto;
+    min-width: 120px;
+  }
+
+  .pdf-manager-list-item {
+    padding: 16px;
+    grid-template-columns: 1fr auto;
+  }
+
+  .pdf-manager-viewer {
+    padding: 24px;
+  }
+}
+/* Mobile-First PDF Manager Styles */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f8fafc;
+  margin: 0;
+  padding: 0;
+  color: #1e293b;
+  -webkit-text-size-adjust: 100%;
+}
+
+.pdf-manager-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 12px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Mobile-Optimized Header */
+.pdf-manager-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pdf-manager-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  padding: 0;
+  word-break: break-word;
+}
+
+/* Mobile-Optimized List Items with Better Text Wrapping */
+.pdf-manager-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.pdf-manager-list-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.pdf-manager-list-item-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0f172a;
+  line-height: 1.4;
+  /* Allow text to wrap naturally */
+  white-space: normal;
+  word-break: break-word;
+  /* Add ellipsis after 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pdf-manager-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Mobile-Optimized Buttons */
+.pdf-manager-btn-primary,
+.pdf-manager-btn-secondary,
+.pdf-manager-btn-icon {
+  height: 44px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.pdf-manager-btn-secondary {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  padding: 0 12px;
+  min-width: auto;
+  /* Prevent text from wrapping inside buttons */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(33.33% - 4px);
+}
+
+.pdf-manager-btn-icon {
+  width: 44px;
+  min-width: 44px;
+  padding: 0;
+  background-color: #f1f5f9;
+}
+
+/* PDF Viewer with Better Text Handling */
+.pdf-manager-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  min-height: 48px;
+  gap: 12px;
+}
+
+.pdf-manager-viewer-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  /* Allow text to wrap if needed */
+  white-space: normal;
+  word-break: break-word;
+  /* Limit to 2 lines with ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
 }
 
 .pdf-manager-viewer-controls {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
 }
 
-.pdf-manager-document-container {
-  flex-grow: 1;
-  height: 600px; /* Fixed height for one page */
-  overflow-y: auto;
-  overflow-x: hidden;
-  border: 1px solid #dcdde1;
-  border-radius: 8px;
-  background-color: white;
-  padding: 10px;
-  transform-origin: top center;
-  transition: transform 0.3s ease;
-}
-
-/* Zoom Effect */
-.pdf-manager-document-container.zoom-in {
-  transform: scale(1.2);
-}
-
-.pdf-manager-document-container.zoom-out {
-  transform: scale(0.8);
-}
-
-.pdf-manager-pages-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.pdf-manager-page {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-}
-
-/* Loading Styles */
-.pdf-manager-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.pdf-manager-spinner {
-  width: 30px;
-  height: 30px;
-  border: 4px solid #ccc;
-  border-top: 4px solid #001f3f; /* Deep Navy Blue */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.pdf-manager-loading-text {
-  font-size: 0.9rem;
-  color: #7f8c8d;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .pdf-manager-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+/* Desktop Enhancements */
+@media (min-width: 768px) {
+  .pdf-manager-list-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
   }
 
-  .pdf-manager-viewer-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+  .pdf-manager-list-item-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pdf-manager-list-item-name {
+    flex: 1;
+    margin-right: 16px;
+    /* Reset line clamp for desktop */
+    -webkit-line-clamp: 1;
+  }
+
+  .pdf-manager-actions {
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
+  .pdf-manager-btn-secondary {
+    max-width: none;
   }
 }

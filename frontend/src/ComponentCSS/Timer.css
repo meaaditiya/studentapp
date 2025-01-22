@@ -1,175 +1,202 @@
-/* Timer */
-/* Timer */
-/* Full-Screen Timer Container */
-.full-screen-timer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; /* Full height of the viewport */
-    background-color: #f4f4f4;
-    padding: 20px; /* Add some padding for smaller screens */
-    box-sizing: border-box; /* Include padding in height calculation */
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  
+  padding: 1rem;
+}
+
+.timer-wrapper {
+  width: 100%;
+  max-width: 28rem;
+  background-color: #2a2a2a;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+}
+
+.timer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.timer-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mode-toggle button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: #3a3a3a;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-toggle button.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+.timer-circle {
+  position: relative;
+  width: 16rem;
+  height: 16rem;
+  margin: 0 auto 2rem;
+}
+
+.timer-circle svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.timer-circle-bg {
+  fill: transparent;
+  stroke: #3a3a3a;
+  stroke-width: 4;
+}
+
+.timer-circle-progress {
+  fill: transparent;
+  stroke: #2563eb;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s ease;
+}
+
+.timer-display {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-display span {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.time-input-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.time-input-group input {
+  background-color: #3a3a3a;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.time-input-group input::placeholder {
+  color: #6b7280;
+}
+
+.time-input-group input::-webkit-inner-spin-button,
+.time-input-group input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.control-button {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.control-button.start {
+  background-color: #2563eb;
+}
+
+.control-button.start:hover {
+  background-color: #1d4ed8;
+}
+
+.control-button.pause {
+  background-color: #dc2626;
+}
+
+.control-button.pause:hover {
+  background-color: #b91c1c;
+}
+
+.control-button.reset {
+  background-color: #3a3a3a;
+}
+
+.control-button.reset:hover {
+  background-color: #4a4a4a;
+}
+
+.preset-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.preset-buttons button {
+  padding: 0.5rem 0.75rem;
+  background-color: #3a3a3a;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.preset-buttons button:hover {
+  background-color: #4a4a4a;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .timer-wrapper {
+    padding: 1rem;
   }
-  
-  /* Timer Type Toggle */
-  .timer-type-toggle {
-    margin-bottom: 20px;
+
+  .timer-circle {
+    width: 12rem;
+    height: 12rem;
   }
-  
-  .timer-type-toggle button {
-    margin: 0 10px;
-    padding: 10px;
-    font-size: 1.2rem;
-    background-color: #024CAA;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+
+  .timer-display span {
+    font-size: 2rem;
   }
-  
-  .timer-type-toggle button:hover {
-    background-color: #091057;
+
+  .mode-toggle button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
   }
-  
-  /* Time Inputs Container */
-  .time-inputs {
-    display: flex;
-    gap: 20px; /* Space between each input */
-    align-items: center;
-    margin: 20px 0;
-  }
-  
-  .time-inputs input {
-    width: 50px; /* Width for inputs */
-    height: 40px; /* Height to match label text size */
-    padding: 5px;
-    font-size: 1.2rem;
-    text-align: center;
-    border: 2px solid #024CAA;
-    border-radius: 8px;
-    color: #333;
-    transition: border-color 0.3s ease;
-  }
-  
-  .time-inputs input:focus {
-    border-color: #024CAA;
-  }
-  
-  .time-inputs input::placeholder {
-    color: #aaa; /* Placeholder color */
-  }
-  
-  /* Timer Display */
-  .timer-display {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .timer-ring {
-    width: 200px; /* Increased size of the ring */
-    height: 200px; /* Increased size of the ring */
-  }
-  
-  .time-text {
-    position: absolute;
-    font-size: 2.5rem; /* Size for the time text */
-    color: #333;
-  }
-  
-  /* Timer Controls */
-  .timer-controls {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-  }
-  
-  .timer-controls button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: #024CAA;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .timer-controls button:hover {
-    background-color: #091057;
-  }
-  
-  /* Preset Buttons */
-  .preset-buttons {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping for smaller screens */
-    justify-content: center; /* Center align buttons */
-    gap: 10px; /* Space between buttons */
-    margin-top: 15px;
-  }
-  
-  .preset-buttons button {
-    padding: 8px 15px;
-    font-size: 1rem;
-    background-color: #024CAA;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex: 1 0 45%; /* Allow buttons to grow/shrink and take up to 45% of the row */
-    min-width: 120px; /* Minimum width for buttons */
-  }
-  
-  .preset-buttons button:hover {
-    background-color: #091057;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .timer-ring {
-      width: 150px; /* Smaller ring for tablets */
-      height: 150px; /* Smaller ring for tablets */
-    }
-  
-    .time-text {
-      font-size: 2rem; /* Smaller font size for time display */
-    }
-  
-    .timer-controls button,
-    .preset-buttons button {
-      padding: 8px;
-      font-size: 1rem; /* Adjust font size */
-    }
-  
-    .time-inputs {
-      gap: 10px; /* Adjust gap between inputs */
-    }
-  
-    .time-inputs input {
-      width: 40px; /* Width for inputs on smaller screens */
-      font-size: 1rem; /* Decrease font size */
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .timer-ring {
-      width: 120px; /* Smaller ring for mobile */
-      height: 120px; /* Smaller ring for mobile */
-    }
-  
-    .time-text {
-      font-size: 1.5rem; /* Smaller font size for mobile time display */
-    }
-  
-    .timer-display {
-      width: 90%; /* Limit width for timer display on mobile */
-    }
-  
-    .preset-buttons button {
-      flex: 1 0 100%; /* Full width buttons on small screens */
-    }
-  }
+}

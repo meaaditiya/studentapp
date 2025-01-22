@@ -362,3 +362,82 @@ table tr:last-child {
 .plus-button:hover {
   background-color: #45a049;
 }
+.main-layout {
+  display: flex;
+  transition: margin-left 0.3s ease;
+  height: 100vh;
+}
+
+/* Content Styling */
+.content {
+  flex: 1;
+  margin-left: 240px;
+  padding: 2rem;
+  margin-top: 70px;
+  background-color: #ffffff;
+  min-height: 0;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+}
+
+/* When sidebar is hidden, content takes full width */
+.main-layout.sidebar-hidden .content {
+  margin-left: 0;
+  padding: 2rem;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1024px) {
+  .content {
+    padding: 1.5rem;
+  }
+  
+  .main-layout .content {
+    margin-left: 200px;
+  }
+  
+  .main-layout.sidebar-hidden .content {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem;
+    margin-left: 0;
+  }
+  
+  .main-layout .content {
+    margin-left: 0;
+  }
+  
+  .main-layout.sidebar-hidden .content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+  
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 0.75rem;
+  }
+  
+  .main-layout .content {
+    margin-left: 0;
+  }
+  
+  .main-layout.sidebar-hidden .content {
+    margin-left: 0;
+    padding: 0.75rem;
+  }
+}

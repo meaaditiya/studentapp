@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaOdnoklassnikiSquare } from 'react-icons/fa';
-import { FiRefreshCw } from "react-icons/fi";
-// You can choose any other icon as needed
+import { FiRefreshCw, FiMenu, FiArrowLeft } from "react-icons/fi";
 import '../ComponentCSS/Header.css';
-import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
+
 function Header({ toggleSidebar }) {
   const [time, setTime] = useState(new Date());
   const navigate = useNavigate();
@@ -17,35 +16,62 @@ function Header({ toggleSidebar }) {
   const handleNavigateBack = () => {
     navigate(-1);
   };
+
   const refreshPage = () => {
     window.location.reload();
   };
 
-  return (
-    <header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px' }}>
-      <div className="header-buttons">
-        <button className="menu-toggle" title="Menu toggle" onClick={toggleSidebar}>
-          |||
-        </button>
-        <button className="navigate-back" title="navigate back" onClick={handleNavigateBack}>
-          ← Back
-        </button>
-        <button onClick={refreshPage} className="refresh-button" title="refresh page">
-        <FiRefreshCw size={24} /> {/* Refresh icon with size */}
-      </button>
-      </div>
-      <h1 style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
-  <a href="/dashboard" style={{ textDecoration: 'none', color: 'white' }} className="logo">
-    <FaOdnoklassnikiSquare size={40} style={{ marginRight: '10px', color: 'white' }} />
-  </a>
-PERSONAL DIARY 
-</h1>
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
 
-     
-     
+  return (
+    <header className="modern-header">
+      <div className="header-left">
+        <button 
+          className="icon-button menu-button" 
+          onClick={toggleSidebar}
+          aria-label="Toggle Menu"
+        >
+          <FiMenu />
+        </button>
+        
+        <button 
+          className="icon-button back-button" 
+          onClick={handleNavigateBack}
+          aria-label="Go Back"
+        >
+          <FiArrowLeft />
+          <span>Back</span>
+        </button>
+
+        <button 
+          className="icon-button refresh-button" 
+          onClick={refreshPage}
+          aria-label="Refresh Page"
+        >
+          <FiRefreshCw />
+        </button>
+      </div>
+
+      <div className="header-center">
+        <Link to="/dashboard" className="logo-link">
+          <FaOdnoklassnikiSquare className="logo-icon" />
+          <h1>PERSONAL DIARY</h1>
+        </Link>
+      </div>
+
+      <div className="header-right">
+        <div className="clock">
+          {formatTime(time)}
+        </div>
+      </div>
     </header>
   );
 }
-
 
 export default Header;

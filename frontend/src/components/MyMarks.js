@@ -36,7 +36,7 @@ function MyMarks() {
 
   const fetchExistingSubjects = async () => {
     try {
-      const response = await axios.get("http://192.168.1.41:5000/api/subjects/");
+      const response = await axios.get("z/api/subjects/");
       setExistingSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);

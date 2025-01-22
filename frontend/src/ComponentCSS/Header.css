@@ -1,251 +1,171 @@
-.header {
-  background-color: #001F3F; /* Dark background for a modern look */
-  color: #ffffff; /* White text for contrast */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
- 
-  border-bottom: 10px solid #001F3F;
-}
-
-.header-buttons {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* Space between buttons */
-}
-
-.menu-toggle {
-  background-color: black; /* Light blue for buttons */
-  color: #282c34; /* Dark text for buttons */
-  border: none;
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 10pxpx; /* Button padding */
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
-}
-
-.menu-toggle:hover {
-  background-color: #21a1f1; /* Darker blue on hover */
-  transform: scale(1.05); /* Slight scale effect on hover */
- 
-}
-
-header h1 {
-  font-size: 20px; /* Adjusted size for responsiveness */
-  margin: 0; /* Remove default margin */
-  position: relative;
-  left: 500px;
-}
-
-.clock {
-  font-size: 16px; /* Clock font size */
-  font-weight: 300; /* Lighter weight for elegance */
-  opacity: 0.9; /* Slight transparency for a softer look */
-  margin-left: 20px; /* Space to the left for better positioning */
-}
-
-.navigate-back {
-  background-color: #ccc;
-  border: none;
-  padding: 2.5px 10px;
-  cursor: pointer;
-  font-size: 12px;
-  position: relative;
-  top: 6px; /* Move the button slightly lower */
-  margin-top: 14px;
-  margin-left: 20px;
-  background-color: #61dafb; /* Light blue for buttons */
-  color: #282c34; /* Dark text for buttons */
-  height:23px;
-}
-
-.navigate-back:hover {
-  background-color: #bbb;
-  background-color: #21a1f1; /* Darker blue on hover */
-  transform: scale(1.05); /* Slight scale effect on hover */
-}
-
-.refresh-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s;
-  position: relative;
-  top: 16px;
-  margin-left: -20px;
-}
-
-.refresh-button:hover {
-  color: #007bff; /* Change color on hover */
-  background: none;
-}
-
-header {
+.modern-header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  background-color: #2a9d8f;
+  right: 0;
+  height: 64px;
+  /* Updated modern gradient */
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d);
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  padding: 0 20px;
+  /* Updated shadow for more depth */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  transition: all 0.3s ease;
+  /* Added subtle border */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.header h1 {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin: 0;
-  padding-left: 1rem;
-  text-align: left;
-  flex: 1;
-  position:relative;
-  left:500px;
-  
- 
-}
-
-.header .clock-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.header .clock {
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  color: #e9c46a;
-  margin-left: -20px;
-  margin-right: 20px;
-}
-.theme-toggle-btn{
-  position:relative;
-  left:10px;
-}
-/* Updated Media Query for Mobile Devices */
-@media (max-width: 920px) {
-  header {
-    padding: 0.5rem 1rem;
-    border-bottom: 20px solid #282c34;
-    margin: 0;
-  }
-
-  .header h1 {
-    font-size: 0.9rem;
-    padding-left: 0;
-    text-align: center;
-    position: relative;
-    left: 70px;
-    top: 20px;
-  }
-
-  .header .clock-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 0.5rem;
-  }
-
-  .header .clock {
-    font-size: 0.9rem;
-    margin-left: 0;
-    margin-right: 0;
-    position: relative;
-    top: 25px;
-  }
-
-  .header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    position: relative;
-    top: 10px;
-    justify-content: center;
-  }
-
-  .navigate-back {
-    background-color: #61dafb;
-    border: none;
-    padding: 5px 12px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-top: 10px;
-    color: #282c34;
-    position: relative;
-    top:8px;
-    left: 11px;
-    height:23px;
-  }
-  .refresh-button{
-    position: relative;
-    left:30px;
-    padding:0px;
-  }
-}
-
-@media (max-width: 400px) {
-  .refresh-button {
-   position:relative;
-   left:65px;
-  }
-
-  .header-buttons {
-    position: relative;
-    right: 10px;
-  }
-
-  .header h1 {
-    text-decoration: none;
-    position: relative;
-   left:70px;
-
-  }
-  .logo{
-    position: relative;
-    top:0px;
-    left:230px;
-  }
-  .navigate-back{
-    height:23px;
-    display: none;
-    position:relative;
-    top:8px;
-  }
-  .clock-container{
-    display: none;
-  }
-  .clock{
-    display:none;
-  }
-}
-
-.menu-toggle {
-  position: absolute;
-  top: 50%;
-  left: -6px;
-  transform: translateY(-50%);
-  background-color: #61dafb;
-  color: black;
-  transform: rotate(90deg);
-  white-space: nowrap;
-  display: inline-block;
-  border: none;
-  padding: 4px 5px;
-  font-size: 16px;
-  cursor: pointer;
+/* Rest of the styles remain the same */
+.header-left {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: auto;
-  width: auto;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  gap: 12px;
 }
 
-.menu-toggle:hover {
-  background-color: #f0f0f0;
+.header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: white;
+  transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.9;
+}
+
+.logo-icon {
+  font-size: 32px;
+  color: #fff;
+}
+
+.modern-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.icon-button:hover {
+  /* Updated hover state for a more modern look */
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.icon-button svg {
+  font-size: 20px;
+}
+
+.menu-button {
+  padding: 8px;
+}
+
+.back-button span {
+  display: inline-block;
+}
+
+.clock {
+  /* Updated clock background for a more modern look */
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  /* Added subtle border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modern-header {
+    padding: 0 12px;
+  }
+
+  .back-button span {
+    display: none;
+  }
+
+  .header-center {
+    position: relative;
+    left: 0;
+    transform: none;
+  }
+
+  .modern-header h1 {
+    font-size: 16px;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clock {
+    display: none;
+  }
+
+  .header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu-button, .back-button, .refresh-button {
+    margin: -5px;
+  }
+
+  .modern-header {
+    justify-content: flex-start;
+  }
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.modern-header {
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
 }

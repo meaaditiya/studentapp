@@ -443,7 +443,21 @@ app.delete('/api/exams/:id', async (req, res) => {
     res.status(500).json({ error: 'Error deleting exam' });
   }
 });
+app.delete('/api/subjects/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const deletedSubject = await Subject.findByIdAndDelete(id);
+
+    if (!deletedSubject) {
+      return res.status(404).json({ error: 'Subject not found' });
+    }
+
+    res.status(200).json({ message: 'Subject deleted successfully', deletedSubject });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting the subject' });
+  }
+});
 // TA Marks Update Endpoint with better error handling
 app.put('/api/subjects/:id/ta-marks', async (req, res) => {
   try {

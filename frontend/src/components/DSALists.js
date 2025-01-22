@@ -37,19 +37,6 @@ const DSALists = () => {
     }
   };
 
-  const getListName = (listKey) => {
-    switch(listKey) {
-      case 'list1':
-        return 'Fully Prepared Questions';
-      case 'list2':
-        return 'Need Practice Questions';
-      case 'list3':
-        return 'Doubtful Questions';
-      default:
-        return listKey;
-    }
-  };
-
   const handleAddQuestion = async (listKey) => {
     try {
       const response = await fetch(`https://personalstudentdiary.onrender.com/api/lists/${listKey}/add`, {
@@ -79,31 +66,20 @@ const DSALists = () => {
 
   const handleMoveQuestion = async (fromList, questionId, toList) => {
     try {
-      // Log the parameters to verify correct values
-      console.log('Moving question:', { fromList, questionId, toList });
-      
       const response = await fetch(
         `https://personalstudentdiary.onrender.com/api/lists/${fromList}/move/${questionId}/${toList}`,
-        { 
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
+        { method: 'PUT' }
       );
 
       if (response.ok) {
-        await fetchLists(); // Refresh the lists
-        setMovePopup({ questionId: null, fromList: null }); // Reset move popup
-        alert(`Question moved to ${getListName(toList)} successfully.`);
+        fetchLists();
+        setMovePopup({ questionId: null, fromList: null });
+        alert(`Question moved to ${toList} successfully.`);
       } else {
-        const errorText = await response.text();
-        console.error('Error moving question:', errorText);
-        alert(`Error moving question: ${errorText}`);
+        console.error('Error moving question:', await response.text());
       }
     } catch (err) {
       console.error('Error moving question:', err);
-      alert('Error moving question. Please try again.');
     }
   };
 
@@ -179,13 +155,18 @@ const DSALists = () => {
   return (
     <div className="dsa-lists">
       <div className="list-boxes">
-        {['list1', 'list2', 'list3'].map((listKey) => (
-          <div className="list-box" key={listKey}>
-            <h3>{getListName(listKey)}</h3>
-            <button onClick={() => setActiveList(listKey)}>View List</button>
-          </div>
-        ))}
-      </div>
+  {['list1', 'list2', 'list3'].map((listKey) => (
+    <div className="list-box" key={listKey}>
+      <h3>
+        {listKey === 'list1' && 'Fully Prepared Questions'}
+        {listKey === 'list2' && 'Need Practice Questions'}
+        {listKey === 'list3' && 'Doubtful Questions'}
+      </h3>
+      <button onClick={() => setActiveList(listKey)}>View List</button>
+    </div>
+  ))}
+</div>
+
 
       {activeList && (
         <div className="list-detail">
@@ -197,7 +178,7 @@ const DSALists = () => {
 
       {showAddForm && (
         <div className="popup-form">
-          <h3>Add New Question to {getListName(activeList)}</h3>
+          <h2>Add New Question</h2>
           <input
             type="text"
             placeholder="Question Number"
@@ -222,10 +203,8 @@ const DSALists = () => {
             onChange={(e) => setNewQuestion({ ...newQuestion, description: e.target.value })}
             style={{ whiteSpace: 'pre-wrap' }}
           />
-          <div className="popup-buttons">
-            <button onClick={() => handleAddQuestion(activeList)}>Submit</button>
-            <button onClick={() => setShowAddForm(false)}>Cancel</button>
-          </div>
+          <button onClick={() => handleAddQuestion(activeList)}>Submit</button>
+          <button onClick={() => setShowAddForm(false)}>Cancel</button>
         </div>
       )}
 
@@ -235,7 +214,7 @@ const DSALists = () => {
             <button className="close-btn" onClick={() => setDescriptionPopup(null)}>
               &times;
             </button>
-            <h3>Description</h3>
+            <h2>Description</h2>
             <pre className="popup-description">{descriptionPopup.description}</pre>
           </div>
         </div>
@@ -247,19 +226,17 @@ const DSALists = () => {
             <button className="close-btn" onClick={() => setMovePopup({ questionId: null, fromList: null })}>
               &times;
             </button>
-            <h3>Move Question</h3>
-            <div className="move-buttons">
-              {['list1', 'list2', 'list3']
-                .filter((targetList) => targetList !== movePopup.fromList)
-                .map((targetList) => (
-                  <button
-                    key={targetList}
-                    onClick={() => handleMoveQuestion(movePopup.fromList, movePopup.questionId, targetList)}
-                  >
-                    Move to {getListName(targetList)}
-                  </button>
-                ))}
-            </div>
+            <h2>Move Question</h2>
+            {['list1', 'list2', 'list3']
+              .filter((targetList) => targetList !== movePopup.fromList)
+              .map((targetList) => (
+                <button
+                  key={targetList}
+                  onClick={() => handleMoveQuestion(movePopup.fromList, movePopup.questionId, targetList)}
+                >
+                 Move to {`List ${targetList.slice(-1)}`}
+                </button>
+              ))}
           </div>
         </div>
       )}

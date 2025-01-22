@@ -250,15 +250,21 @@ app.delete('/api/progress/:id', async (req, res) => {
 
 // Schema Definitions
 const examTypeSchema = new mongoose.Schema({
-  name: String,
-  maxMarks: Number,
-  internalMarks: Number
+  name: { type: String, required: true },
+  maxMarks: { type: Number, required: true },
+  internalMarks: { type: Number, required: true }
 });
 
 const subjectSchema = new mongoose.Schema({
   name: { 
     type: String, 
-    unique: true 
+    unique: true,
+    required: true
+  },
+  subjectName: { // Adding this for frontend compatibility
+    type: String,
+    unique: true,
+    required: true
   },
   marksBasedInternal: { 
     type: Number, 
@@ -274,17 +280,28 @@ const subjectSchema = new mongoose.Schema({
   }
 });
 
+// Pre-save middleware to sync name and subjectName
+subjectSchema.pre('save', function(next) {
+  if (this.name && !this.subjectName) {
+    this.subjectName = this.name;
+  } else if (this.subjectName && !this.name) {
+    this.name = this.subjectName;
+  }
+  next();
+});
+
 const examSchema = new mongoose.Schema({
   examType: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ExamType'
+    ref: 'ExamType',
+    required: true
   },
-  examName: String,
-  examDate: String,
-  subjects: [String],
-  marks: [Number],
-  maxMarks: [Number],
-  attendance: [Number]
+  examName: { type: String, required: true },
+  examDate: { type: String, required: true },
+  subjects: [{ type: String, required: true }],
+  marks: [{ type: Number, required: true }],
+  maxMarks: [{ type: Number, required: true }],
+  attendance: [{ type: Number, required: true }]
 });
 
 // Models
@@ -292,29 +309,7 @@ const ExamType = mongoose.model('ExamType', examTypeSchema);
 const Subject = mongoose.model('Subject', subjectSchema);
 const Exam = mongoose.model('Exam', examSchema);
 
-// API Routes
-
-// Exam Types
-app.get('/api/examTypes', async (req, res) => {
-  try {
-    const examTypes = await ExamType.find();
-    res.json(examTypes);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching exam types' });
-  }
-});
-
-app.post('/api/examTypes', async (req, res) => {
-  try {
-    const examType = new ExamType(req.body);
-    await examType.save();
-    res.status(201).json(examType);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating exam type' });
-  }
-});
-
-// Subjects
+// Subjects API Routes
 app.get('/api/subjects', async (req, res) => {
   try {
     const subjects = await Subject.find();
@@ -326,17 +321,27 @@ app.get('/api/subjects', async (req, res) => {
 
 app.post('/api/subjects', async (req, res) => {
   try {
-    const { name, marksBasedInternal,attendanceBasedInternal } = req.body;
+    const name = req.body.name || req.body.subjectName;
+    const { marksBasedInternal, attendanceBasedInternal } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Subject name is required' });
+    }
+
     const subject = new Subject({
       name,
+      subjectName: name,
       marksBasedInternal: marksBasedInternal || 0,
       attendanceBasedInternal: attendanceBasedInternal || 1
     });
+
     await subject.save();
     res.status(201).json(subject);
   } catch (error) {
     if (error.code === 11000) {
-      const existingSubject = await Subject.findOne({ name: req.body.name });
+      const existingSubject = await Subject.findOne({ 
+        $or: [{ name: req.body.name }, { subjectName: req.body.subjectName }] 
+      });
       res.json(existingSubject);
     } else {
       res.status(500).json({ error: 'Error creating subject' });
@@ -349,37 +354,22 @@ app.put('/api/subjects/:id', async (req, res) => {
     const { marksBasedInternal, attendanceBasedInternal } = req.body;
     const subject = await Subject.findByIdAndUpdate(
       req.params.id,
-      { marksBasedInternal, attendanceBasedInternal },
+      { 
+        marksBasedInternal, 
+        attendanceBasedInternal,
+      },
       { new: true }
     );
+    if (!subject) {
+      return res.status(404).json({ error: 'Subject not found' });
+    }
     res.json(subject);
   } catch (error) {
     res.status(500).json({ error: 'Error updating subject' });
   }
 });
 
-// Exams
-app.get('/api/exams', async (req, res) => {
-  try {
-    const exams = await Exam.find().populate('examType');
-    res.json(exams);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching exams' });
-  }
-});
-
-app.post('/api/exams', async (req, res) => {
-  try {
-    const exam = new Exam(req.body);
-    await exam.save();
-    const populatedExam = await Exam.findById(exam._id).populate('examType');
-    res.status(201).json(populatedExam);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating exam' });
-  }
-});
-
-// Update the delete exam endpoint to handle internal marks
+// Update the exam deletion endpoint with better error handling
 app.delete('/api/exams/:id', async (req, res) => {
   try {
     const exam = await Exam.findById(req.params.id);
@@ -393,13 +383,20 @@ app.delete('/api/exams/:id', async (req, res) => {
       const mark = exam.marks[i];
       const maxMark = exam.maxMarks[i];
       
-      const internalRatio = maxMark / examType.internalMarks; // internalRatio = 7
-      let internalToSubtract = Math.ceil(mark / internalRatio); // Round up to the nearest integer
+      if (examType.internalMarks === 0) continue;
+      
+      const internalRatio = maxMark / examType.internalMarks;
+      let internalToSubtract = Math.ceil(mark / internalRatio);
 
-      await Subject.findOneAndUpdate(
-        { name: subjectName },
-        { $inc: { marksBasedInternal: -internalToSubtract } }
-      );
+      const subject = await Subject.findOne({ 
+        $or: [{ name: subjectName }, { subjectName: subjectName }] 
+      });
+      
+      if (subject) {
+        await Subject.findByIdAndUpdate(subject._id, {
+          $inc: { marksBasedInternal: -internalToSubtract }
+        });
+      }
     }
 
     await Exam.findByIdAndDelete(req.params.id);
@@ -410,27 +407,29 @@ app.delete('/api/exams/:id', async (req, res) => {
   }
 });
 
-// TA Marks Update Endpoint
+// TA Marks Update Endpoint with better error handling
 app.put('/api/subjects/:id/ta-marks', async (req, res) => {
   try {
     const { taMarks } = req.body;
+    if (typeof taMarks !== 'number') {
+      return res.status(400).json({ error: 'TA marks must be a number' });
+    }
+
     const subject = await Subject.findByIdAndUpdate(
       req.params.id,
       { taMarks },
       { new: true }
     );
+    
+    if (!subject) {
+      return res.status(404).json({ error: 'Subject not found' });
+    }
+    
     res.json(subject);
   } catch (error) {
     res.status(500).json({ error: 'Error updating TA marks' });
   }
 });
-
-// Error Handling Middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something broke!' });
-});
-
 
 const quickLinkSchema = new mongoose.Schema({
   name: String,
@@ -471,17 +470,7 @@ app.delete('/api/quick-links/:id', async (req, res) => {
   }
 });
 
-// Attendance schema for individual attendance records
-const attendanceSchema = new mongoose.Schema({
-  date: String,
-  status: String, // "present" or "absent"
-});
 
-// Subject schema, which includes an array of attendance records
-const newsubjectSchema = new mongoose.Schema({
-  name: String,
-  attendance: [attendanceSchema],
-});
 
 
 // Define the PDF schema

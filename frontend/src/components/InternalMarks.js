@@ -19,7 +19,7 @@ function InternalMarks() {
   const fetchSubjects = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://192.168.1.41:5000/api/subjects');
+      const response = await fetch('https://personalstudentdiary.onrender.com/api/subjects');
       if (!response.ok) throw new Error('Failed to fetch subjects');
       
       const data = await response.json();
@@ -47,7 +47,7 @@ function InternalMarks() {
     if (!newSubject.trim()) return;
 
     try {
-      const response = await fetch('http://192.168.1.41:5000/api/subjects', {
+      const response = await fetch('https://personalstudentdiary.onrender.com/api/subjects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function InternalMarks() {
         return;
       }
 
-      const response = await fetch(`http://192.168.1.41:5000/api/subjects/${editingSubject}`, {
+      const response = await fetch(`https://personalstudentdiary.onrender.com/api/subjects/${editingSubject}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ function InternalMarks() {
         return;
       }
   
-      const response = await fetch(`http://192.168.1.41:5000/api/subjects/${subjectId}/ta-marks`, {
+      const response = await fetch(`https://personalstudentdiary.onrender.com/api/subjects/${subjectId}/ta-marks`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ function InternalMarks() {
   };
   const handleDelete = async (subjectId) => {
     try {
-      const response = await fetch(`http://192.168.1.41:5000/api/subjects/${subjectId}`, {
+      const response = await fetch(`https://personalstudentdiary.onrender.com/api/subjects/${subjectId}`, {
         method: 'DELETE',
       });
 

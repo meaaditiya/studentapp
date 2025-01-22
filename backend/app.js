@@ -803,32 +803,46 @@ app.put('/api/lists/:fromList/move/:questionId/:toList', async (req, res) => {
   const { fromList, questionId, toList } = req.params;
 
   try {
-    const sourceList = await List.findOne({ name: fromList });
-    const targetList = await List.findOne({ name: toList });
+    // First ensure both lists exist
+    let sourceList = await List.findOne({ name: fromList });
+    let targetList = await List.findOne({ name: toList });
 
-    if (!sourceList || !targetList) {
-      return res.status(404).json({ error: 'Source or target list not found' });
+    // If target list doesn't exist, create it
+    if (!targetList) {
+      targetList = new List({ name: toList, questions: [] });
+      await targetList.save();
     }
 
-    const question = sourceList.questions.id(questionId);
-    if (!question) {
+    if (!sourceList) {
+      return res.status(404).json({ error: 'Source list not found' });
+    }
+
+    // Find the question in the source list
+    const questionIndex = sourceList.questions.findIndex(q => q._id.toString() === questionId);
+    
+    if (questionIndex === -1) {
       return res.status(404).json({ error: 'Question not found in source list' });
     }
 
-    // Remove question from source list
-    sourceList.questions.pull(questionId);
+    // Remove question from source list and get its data
+    const [question] = sourceList.questions.splice(questionIndex, 1);
     await sourceList.save();
 
     // Add question to target list
-    targetList.questions.push(question);
+    targetList.questions.push({
+      number: question.number,
+      name: question.name,
+      link: question.link,
+      description: question.description
+    });
     await targetList.save();
 
     res.json({ message: 'Question moved successfully' });
   } catch (err) {
+    console.error('Move error:', err);
     res.status(500).json({ error: 'Failed to move question' });
   }
 });
-
 // Delete a question from a list
 app.delete('/api/lists/:listKey/delete/:questionId', async (req, res) => {
   const { listKey, questionId } = req.params;

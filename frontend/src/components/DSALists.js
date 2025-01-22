@@ -68,18 +68,25 @@ const DSALists = () => {
     try {
       const response = await fetch(
         `https://personalstudentdiary.onrender.com/api/lists/${fromList}/move/${questionId}/${toList}`,
-        { method: 'PUT' }
+        { 
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
-
-      if (response.ok) {
-        fetchLists();
-        setMovePopup({ questionId: null, fromList: null });
-        alert(`Question moved to ${toList} successfully.`);
-      } else {
-        console.error('Error moving question:', await response.text());
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to move question');
       }
+  
+      await fetchLists(); // Refresh all lists after successful move
+      setMovePopup({ questionId: null, fromList: null });
+      alert(`Question moved to ${toList} successfully.`);
     } catch (err) {
       console.error('Error moving question:', err);
+      alert(`Failed to move question: ${err.message}`);
     }
   };
 

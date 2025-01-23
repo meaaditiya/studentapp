@@ -431,6 +431,45 @@ function NewSubjectManager() {
       <div className="topics-section-container">
         <div className="topics-header-container">
           <h3 className="topics-section-title">Topics for Selected Subject</h3>
+          <button
+              className="topic-form-floating-button"
+              onClick={() => setTopicFormVisible(!isTopicFormVisible)}
+            >
+              +
+            </button>
+            {isTopicFormVisible && (
+              <div className="topic-form-container">
+                <select
+                  className="topic-subject-dropdown"
+                  value={selectedSubject || ""}
+                  onChange={(e) => setSelectedSubject(e.target.value)}
+                >
+                  <option value="">Select Subject</option>
+                  {subjects.map((subject) => (
+                    <option key={subject._id} value={subject._id}>
+                      {subject.subjectName}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  className="topic-unit-input"
+                  placeholder="Unit Name"
+                  value={newUnit}
+                  onChange={(e) => setNewUnit(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="topic-names-input"
+                  placeholder="Topics (comma or full-stop separated)"
+                  value={newTopics}
+                  onChange={(e) => setNewTopics(e.target.value)}
+                />
+                <button className="topic-add-button" onClick={addTopics}>
+                  Add Topics
+                </button>
+              </div>
+            )}
           <div className="topics-control-panel">
             <input
               type="text"
@@ -467,46 +506,9 @@ function NewSubjectManager() {
 
         {showTopics && (
           <>
-            {isTopicFormVisible && (
-              <div className="topic-form-container">
-                <select
-                  className="topic-subject-dropdown"
-                  value={selectedSubject || ""}
-                  onChange={(e) => setSelectedSubject(e.target.value)}
-                >
-                  <option value="">Select Subject</option>
-                  {subjects.map((subject) => (
-                    <option key={subject._id} value={subject._id}>
-                      {subject.subjectName}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  className="topic-unit-input"
-                  placeholder="Unit Name"
-                  value={newUnit}
-                  onChange={(e) => setNewUnit(e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="topic-names-input"
-                  placeholder="Topics (comma or full-stop separated)"
-                  value={newTopics}
-                  onChange={(e) => setNewTopics(e.target.value)}
-                />
-                <button className="topic-add-button" onClick={addTopics}>
-                  Add Topics
-                </button>
-              </div>
-            )}
+            
 
-            <button
-              className="topic-form-floating-button"
-              onClick={() => setTopicFormVisible(!isTopicFormVisible)}
-            >
-              +
-            </button>
+           
             {selectedSubject && (
               <div className="topic-multiselect-controls">
                 <button

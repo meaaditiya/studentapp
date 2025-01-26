@@ -19,6 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'; 
 import { FaStar } from 'react-icons/fa';
 import { AiOutlineCalendar, AiOutlineTable } from 'react-icons/ai';
+import { MdCalculate } from "react-icons/md";
 import '../ComponentCSS/Slidebar.css';
 
 const Sidebar = ({ isVisible }) => {
@@ -110,6 +111,11 @@ const Sidebar = ({ isVisible }) => {
           <FontAwesomeIcon icon={faDatabase} /> Internal marks
           </a>
         </li>
+        <li>
+        <a href="/newjs">
+          <MdCalculate /> Calculator
+        </a>
+      </li>
         {/* Star Icon at the Bottom */}
         <li className="center-icon">
           <FaStar className="star-icon" />

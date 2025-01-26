@@ -7,9 +7,11 @@ import {
   faGraduationCap, 
   faPencilAlt,
   faDatabase,
-  faWeight
+  faWeight,
+  faCalculator
 } from '@fortawesome/free-solid-svg-icons';
 import '../ComponentCSS/Dashboard.css';
+import { MdCalculate } from "react-icons/md";
 
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
@@ -142,7 +144,8 @@ const Dashboard = () => {
     { to: "/mymarks", icon: faGraduationCap, text: "Marks" },
     { to: "/timer", icon: faClock, text: "Timer" },
     { to: "/newsubject", icon: faPencilAlt, text: "Exam Planner" },
-    { to: "/internalmarks", icon: faDatabase, text: "Internal Marks" }
+    { to: "/internalmarks", icon: faDatabase, text: "Internal Marks" },
+    { to: "/newjs",icon: faCalculator, text:"Calculator"}
   ];
 
   return (

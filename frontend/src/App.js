@@ -20,9 +20,9 @@ import ExcelTables from "./components/ExcelTables";
 import CalendarComponent from './components/CalendarComponent';
 import DSALists from "./components/DSALists";
 import NewSubject from "./components/NewSubject";
-/*import JavaIDE from "./components/JavaIDE";*/
 import InternalMarks from "./components/InternalMarks";
 import WeightLossTracker from "./components/WeightLossTracker";
+import Newjs from "./components/Newjs";
 
 
 const App = () => {
@@ -100,8 +100,8 @@ const App = () => {
               <Route path="/calendarcomponent" element={<CalendarComponent/>}/>
               <Route path="/dsalists" element={<DSALists/>}/> 
               <Route path ="/newsubject" element={<NewSubject/>}/>
-              {/*<Route path="/javaide" element={<JavaIDE/>}/>*/}
-              <Route path="internalmarks" element ={<InternalMarks/>}/>
+              <Route path="/internalmarks" element ={<InternalMarks/>}/>
+              <Route path="/newjs" element ={<Newjs/>}/>
             </Routes>
           </main>
         </div>

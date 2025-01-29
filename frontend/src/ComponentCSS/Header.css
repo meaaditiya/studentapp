@@ -169,3 +169,121 @@
   background-size: 200% 200%;
   animation: gradientShift 15s ease infinite;
 }
+.modern-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Existing styles remain the same */
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Added gap between clock and logout button */
+}
+
+/* Updated clock styles to accommodate logout button */
+.clock {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-right: 8px;
+}
+
+/* Added specific styles for logout button */
+.logout-button {
+  padding: 8px;
+  color: white; /* Slight red tint for the logout icon */
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 87, 87, 0.1);
+  transform: scale(1.05);
+}
+
+.logout-button:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modern-header {
+    padding: 0 12px;
+  }
+
+  .back-button span {
+    display: none;
+  }
+
+  .header-center {
+    position: relative;
+    left: 0;
+    transform: none;
+  }
+
+  .modern-header h1 {
+    font-size: 16px;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clock {
+    display: none;
+  }
+
+  .header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu-button, .back-button, .refresh-button, .logout-button {
+    margin: -5px;
+  }
+
+  .modern-header {
+    justify-content: flex-start;
+  }
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.modern-header {
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+}

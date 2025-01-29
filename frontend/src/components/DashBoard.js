@@ -8,7 +8,11 @@ import {
   faPencilAlt,
   faDatabase,
   faWeight,
-  faCalculator
+  faCalculator,
+  faCheckCircle,
+  faTimesCircle,
+  faChevronLeft,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import '../ComponentCSS/Dashboard.css';
 import { MdCalculate } from "react-icons/md";
@@ -24,6 +28,48 @@ const Dashboard = () => {
   const [locationError, setLocationError] = useState("");
   const [tasks, setTasks] = useState([]);
   const [tasksError, setTasksError] = useState("");
+ 
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Enhanced task navigation with smooth transitions
+  const handleNextTask = () => {
+    if (isTransitioning || !tasks.length) return;
+    setIsTransitioning(true);
+    setCurrentTaskIndex((prev) => (prev === tasks.length - 1 ? 0 : prev + 1));
+    setTimeout(() => setIsTransitioning(false), 300);
+  };
+
+  const handlePrevTask = () => {
+    if (isTransitioning || !tasks.length) return;
+    setIsTransitioning(true);
+    setCurrentTaskIndex((prev) => (prev === 0 ? tasks.length - 1 : prev - 1));
+    setTimeout(() => setIsTransitioning(false), 300);
+  };
+
+  // New function to handle task completion toggle
+  const handleTaskCompletion = async (taskId, completed) => {
+    try {
+      const response = await fetch(`${TASKS_API_URL}/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          completed: !completed,
+          lastUpdated: new Date().toLocaleString()
+        })
+      });
+      
+      if (!response.ok) throw new Error('Failed to update task');
+      
+      setTasks(tasks.map(task => 
+        task._id === taskId 
+          ? { ...task, completed: !completed, lastUpdated: new Date().toLocaleString() }
+          : task
+      ));
+    } catch (error) {
+      setTasksError('Failed to update task status');
+    }
+  };
 
   // API endpoints
   const API_BASE_URL = "https://personalstudentdiary.onrender.com/api/quick-links";
@@ -238,24 +284,75 @@ const Dashboard = () => {
         </section>
 
         {/* Tasks Section */}
-        <section className="tasks-section">
-  <h2>Today's Tasks</h2>
-  {tasksError ? (
-    <div className="error-text">{tasksError}</div>
-  ) : tasks.length > 0 ? (
-    <div className="tasks-slider">
-      <div className="tasks-track">
-        {[...tasks, ...tasks].map((task, index) => (
-          <div key={index} className="task-item">
-            {task.text}
+        <div className="tasks-section">
+        <h2>Today's Tasks</h2>
+        {tasks.length > 0 ? (
+          <div className="tasks-carousel">
+            <button 
+              className="carousel-nav-button prev"
+              onClick={handlePrevTask}
+              disabled={isTransitioning}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+
+            <div className="tasks-slider">
+              <div className={`task-card ${isTransitioning ? 'transitioning' : ''}`}>
+                <div className="task-header">
+                  <h3>Task {currentTaskIndex + 1}/{tasks.length}</h3>
+                  <button
+                    className={`completion-toggle ${tasks[currentTaskIndex].completed ? 'completed' : ''}`}
+                    onClick={() => handleTaskCompletion(
+                      tasks[currentTaskIndex]._id,
+                      tasks[currentTaskIndex].completed
+                    )}
+                  >
+                    <FontAwesomeIcon 
+                      icon={tasks[currentTaskIndex].completed ? faCheckCircle : faTimesCircle}
+                    />
+                  </button>
+                </div>
+                <div className="task-content">
+                  <p>{tasks[currentTaskIndex].text}</p>
+                </div>
+                <div className="task-footer">
+                  <span className="last-updated">
+                    Last updated: {tasks[currentTaskIndex].lastUpdated}
+                  </span>
+                  <span className={`status-badge ${tasks[currentTaskIndex].completed ? 'completed' : 'pending'}`}>
+                    {tasks[currentTaskIndex].completed ? 'Completed' : 'Pending'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              className="carousel-nav-button next"
+              onClick={handleNextTask}
+              disabled={isTransitioning}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+
+            <div className="carousel-dots">
+              {tasks.map((_, index) => (
+                <button
+                  key={index}
+                  className={`dot ${index === currentTaskIndex ? 'active' : ''}`}
+                  onClick={() => {
+                    setIsTransitioning(true);
+                    setCurrentTaskIndex(index);
+                    setTimeout(() => setIsTransitioning(false), 300);
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        ))}
+        ) : (
+          <div className="no-tasks">No tasks for today</div>
+        )}
+        {tasksError && <div className="error-text">{tasksError}</div>}
       </div>
-    </div>
-  ) : (
-    <div className="no-tasks">No tasks for today</div>
-  )}
-</section>
       </main>
     </div>
   );

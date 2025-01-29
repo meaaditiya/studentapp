@@ -116,6 +116,11 @@ const Sidebar = ({ isVisible }) => {
           <MdCalculate /> Calculator
         </a>
       </li>
+      <li>
+        <a href="/verify">
+          <MdCalculate />Verify
+        </a>
+      </li>
         {/* Star Icon at the Bottom */}
         <li className="center-icon">
           <FaStar className="star-icon" />

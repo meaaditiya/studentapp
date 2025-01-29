@@ -25,6 +25,7 @@ import WeightLossTracker from "./components/WeightLossTracker";
 import Newjs from "./components/Newjs";
 
 
+
 const App = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -102,6 +103,7 @@ const App = () => {
               <Route path ="/newsubject" element={<NewSubject/>}/>
               <Route path="/internalmarks" element ={<InternalMarks/>}/>
               <Route path="/newjs" element ={<Newjs/>}/>
+             
             </Routes>
           </main>
         </div>

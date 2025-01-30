@@ -28,9 +28,12 @@ const Dashboard = () => {
   const [locationError, setLocationError] = useState("");
   const [tasks, setTasks] = useState([]);
   const [tasksError, setTasksError] = useState("");
- 
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // API endpoints
+  const API_BASE_URL = "https://personalstudentdiary.onrender.com/api/quick-links";
+  const TASKS_API_URL = "https://personalstudentdiary.onrender.com/tasks";
 
   // Enhanced task navigation with smooth transitions
   const handleNextTask = () => {
@@ -47,23 +50,26 @@ const Dashboard = () => {
     setTimeout(() => setIsTransitioning(false), 300);
   };
 
-  // New function to handle task completion toggle
-  const handleTaskCompletion = async (taskId, completed) => {
+  // Updated toggleTask function similar to DailySchedule
+  const toggleTask = async (taskId, currentStatus) => {
     try {
+      const updatedTask = {
+        completed: !currentStatus,
+        lastUpdated: new Date().toLocaleString()
+      };
+
       const response = await fetch(`${TASKS_API_URL}/${taskId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          completed: !completed,
-          lastUpdated: new Date().toLocaleString()
-        })
+        body: JSON.stringify(updatedTask)
       });
-      
+
       if (!response.ok) throw new Error('Failed to update task');
-      
+
+      // Update tasks state with the new completion status
       setTasks(tasks.map(task => 
         task._id === taskId 
-          ? { ...task, completed: !completed, lastUpdated: new Date().toLocaleString() }
+          ? { ...task, ...updatedTask }
           : task
       ));
     } catch (error) {
@@ -71,10 +77,20 @@ const Dashboard = () => {
     }
   };
 
-  // API endpoints
-  const API_BASE_URL = "https://personalstudentdiary.onrender.com/api/quick-links";
-  const TASKS_API_URL = "https://personalstudentdiary.onrender.com/tasks";
-
+  // Fetch tasks
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(TASKS_API_URL);
+        if (!response.ok) throw new Error("Failed to fetch tasks");
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        setTasksError("Failed to load today's tasks");
+      }
+    };
+    fetchTasks();
+  }, []);
   // Fetch quick links
   useEffect(() => {
     const fetchLinks = async () => {
@@ -92,20 +108,7 @@ const Dashboard = () => {
     fetchLinks();
   }, []);
 
-  // Fetch tasks
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(TASKS_API_URL);
-        if (!response.ok) throw new Error("Failed to fetch tasks");
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        setTasksError("Failed to load today's tasks");
-      }
-    };
-    fetchTasks();
-  }, []);
+  
 
   // Handle quick link operations
   const handleAddLink = async (e) => {
@@ -272,7 +275,7 @@ const Dashboard = () => {
                   <button
                     className="delete-button"
                     onClick={() => handleDeleteLink(link._id)}
-                    aria-label="Delete link"
+                    
                   >
                     <AiOutlineDelete />
                   </button>
@@ -283,76 +286,77 @@ const Dashboard = () => {
           {error && <div className="error-text">{error}</div>}
         </section>
 
-        {/* Tasks Section */}
-        <div className="tasks-section">
-        <h2>Today's Tasks</h2>
-        {tasks.length > 0 ? (
-          <div className="tasks-carousel">
-            <button 
-              className="carousel-nav-button prev"
-              onClick={handlePrevTask}
-              disabled={isTransitioning}
+       {/* Tasks Section */}
+<div className="tasks-section">
+  <h2>Today's Tasks</h2>
+  {tasks.length > 0 ? (
+    <div className="tasks-carousel">
+      <div className="tasks-slider">
+        <div className={`task-card ${isTransitioning ? 'transitioning' : ''}`}>
+          <div className="task-header">
+            <h3>Task {currentTaskIndex + 1}/{tasks.length}</h3>
+            <button
+              className={`completion-toggle ${tasks[currentTaskIndex]?.completed ? 'completed' : ''}`}
+              onClick={() => toggleTask(
+                tasks[currentTaskIndex]._id,
+                tasks[currentTaskIndex].completed
+              )}
             >
-              <FontAwesomeIcon icon={faChevronLeft} />
+              <FontAwesomeIcon 
+                icon={tasks[currentTaskIndex]?.completed ? faCheckCircle : faTimesCircle}
+              />
             </button>
-
-            <div className="tasks-slider">
-              <div className={`task-card ${isTransitioning ? 'transitioning' : ''}`}>
-                <div className="task-header">
-                  <h3>Task {currentTaskIndex + 1}/{tasks.length}</h3>
-                  <button
-                    className={`completion-toggle ${tasks[currentTaskIndex].completed ? 'completed' : ''}`}
-                    onClick={() => handleTaskCompletion(
-                      tasks[currentTaskIndex]._id,
-                      tasks[currentTaskIndex].completed
-                    )}
-                  >
-                    <FontAwesomeIcon 
-                      icon={tasks[currentTaskIndex].completed ? faCheckCircle : faTimesCircle}
-                    />
-                  </button>
-                </div>
-                <div className="task-content">
-                  <p>{tasks[currentTaskIndex].text}</p>
-                </div>
-                <div className="task-footer">
-                  <span className="last-updated">
-                    Last updated: {tasks[currentTaskIndex].lastUpdated}
-                  </span>
-                  <span className={`status-badge ${tasks[currentTaskIndex].completed ? 'completed' : 'pending'}`}>
-                    {tasks[currentTaskIndex].completed ? 'Completed' : 'Pending'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <button 
-              className="carousel-nav-button next"
-              onClick={handleNextTask}
-              disabled={isTransitioning}
-            >
-              <FontAwesomeIcon icon={faChevronRight} />
-            </button>
-
-            <div className="carousel-dots">
-              {tasks.map((_, index) => (
-                <button
-                  key={index}
-                  className={`dot ${index === currentTaskIndex ? 'active' : ''}`}
-                  onClick={() => {
-                    setIsTransitioning(true);
-                    setCurrentTaskIndex(index);
-                    setTimeout(() => setIsTransitioning(false), 300);
-                  }}
-                />
-              ))}
-            </div>
           </div>
-        ) : (
-          <div className="no-tasks">No tasks for today</div>
-        )}
-        {tasksError && <div className="error-text">{tasksError}</div>}
+          <div className="task-content">
+            <p>{tasks[currentTaskIndex]?.text}</p>
+          </div>
+          <div className="task-footer">
+            <span className="last-updated">
+              Last updated: {tasks[currentTaskIndex]?.lastUpdated}
+            </span>
+            <span className={`status-badge ${tasks[currentTaskIndex]?.completed ? 'completed' : 'pending'}`}>
+              {tasks[currentTaskIndex]?.completed ? 'Completed' : 'Pending'}
+            </span>
+          </div>
+        </div>
       </div>
+
+      <div className="navigation-controls">
+        <button 
+          className="carousel-nav-button prev"
+          onClick={handlePrevTask}
+          disabled={isTransitioning}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </button>
+        <button 
+          className="carousel-nav-button next"
+          onClick={handleNextTask}
+          disabled={isTransitioning}
+        >
+          <FontAwesomeIcon icon={faChevronRight} />
+        </button>
+      </div>
+
+      <div className="carousel-dots">
+        {tasks.map((_, index) => (
+          <button
+            key={index}
+            className={`dot ${index === currentTaskIndex ? 'active' : ''}`}
+            onClick={() => {
+              setIsTransitioning(true);
+              setCurrentTaskIndex(index);
+              setTimeout(() => setIsTransitioning(false), 300);
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="no-tasks">No tasks for today</div>
+  )}
+  {tasksError && <div className="error-text">{tasksError}</div>}
+</div>
       </main>
     </div>
   );

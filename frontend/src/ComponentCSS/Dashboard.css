@@ -60,7 +60,7 @@
 /* Feature Grid */
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -128,10 +128,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 200%;
 }
 
 .add-button::before {
-  content: '+';
+ border-radius: 100px;
   font-size: 20px;
   line-height: 1;
 }
@@ -192,7 +193,7 @@
   align-items: center;
   padding: 0.75rem 1rem;
   background: white;
-  border-radius: 8px;
+  border-radius: 100px;
   border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
 }
@@ -207,12 +208,12 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
+ 
   transition: all 0.2s ease;
   opacity: 0.7;
   margin-right: 0.75rem;
   font-size: 0.9rem;
-  width: 20px;
+  width: 10px;
   height: 20px;
   display: flex;
   align-items: center;
@@ -359,6 +360,9 @@
   }
 
   .feature-card {
+    display: grid;
+    grid-template-columns: repeat(50px, 1fr);
+    gap: 1.5rem;
     padding: 1rem;
   }
 
@@ -366,6 +370,8 @@
     font-size: 1.5rem;
   }
 }
+/* Previous CSS remains the same until tasks section */
+
 .tasks-section {
   margin: 2rem 0;
   padding: 1.5rem;
@@ -377,6 +383,7 @@
 .tasks-carousel {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1rem 0;
@@ -385,8 +392,8 @@
 
 .tasks-slider {
   width: 100%;
-  max-width: 600px;
-  margin: 0 3rem;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
 }
 
@@ -396,6 +403,8 @@
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .task-card.transitioning {
@@ -416,21 +425,9 @@
   font-size: 1.1rem;
 }
 
-.completion-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  color: #666;
-  transition: color 0.2s ease;
-}
-
-.completion-toggle.completed {
-  color: #4CAF50;
-}
-
 .task-content {
   margin: 1rem 0;
+  word-wrap: break-word;
 }
 
 .task-content p {
@@ -445,33 +442,23 @@
   align-items: center;
   margin-top: 1rem;
   font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.last-updated {
-  color: #666;
-}
-
-.status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-weight: 500;
-}
-
-.status-badge.completed {
-  background: #E8F5E9;
-  color: #2E7D32;
-}
-
-.status-badge.pending {
-  background: #FFF3E0;
-  color: #E65100;
+.navigation-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  width: 100%;
 }
 
 .carousel-nav-button {
   background: white;
-  color:black;
-  border: none;
-  border-radius: 50%;
+  color: black;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   width: 40px;
   height: 40px;
   display: flex;
@@ -479,13 +466,13 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .carousel-nav-button:hover {
-  color:white;
-
-  transform: scale(1.1);
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-2px);
 }
 
 .carousel-nav-button:disabled {
@@ -494,34 +481,134 @@
 }
 
 .carousel-dots {
-  position: absolute;
-  bottom: -1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 1rem;
 }
 
 .dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 100%;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
   background: #DDD;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .dot.active {
-  background: #666;
+  background: #3b82f6;
+  transform: scale(1.2);
 }
 
 @media (max-width: 768px) {
-  .tasks-slider {
-    margin: 0 2rem;
+  .tasks-section {
+    padding: 1rem;
   }
   
   .task-card {
     padding: 1rem;
+  }
+
+  .task-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .carousel-dots {
+    max-width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .carousel-dots::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tasks-section {
+    padding: 0.75rem;
+  }
+
+  .task-card {
+    padding: 0.75rem;
+  }
+
+  .task-header h3 {
+    font-size: 1rem;
+  }
+
+  .carousel-nav-button {
+    width: 36px;
+    height: 36px;
+  }
+}
+/* Previous CSS remains the same */
+
+.completion-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.completion-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.completion-toggle svg {
+  font-size: 1.5rem;
+}
+
+/* Uncompleted task (red cross) */
+.completion-toggle:not(.completed) {
+  color: #dc2626; /* red-600 */
+}
+
+.completion-toggle:not(.completed):hover {
+  color: #b91c1c; /* red-700 */
+}
+
+/* Completed task (green check) */
+.completion-toggle.completed {
+  color: #16a34a; /* green-600 */
+}
+
+.completion-toggle.completed:hover {
+  color: #15803d; /* green-700 */
+}
+
+/* Rest of your CSS remains the same */
+@media (max-width: 480px) {
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
   }
 }
